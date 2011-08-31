@@ -8,4 +8,5 @@
  * Author URI: http://dxw.com
  */
 
-require(dirname(__FILE__).'/admin.php');
+require(dirname(__FILE__).'/metasettings.php');
+require(dirname(__FILE__).'/settings.php');

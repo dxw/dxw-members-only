@@ -1,20 +1,7 @@
 <?php
 
-add_action('admin_menu', 'new_members_only_admin_menu');
-add_filter('whitelist_options', 'new_members_only_whitelist_options');
-
-function new_members_only_admin_menu() {
-  add_options_page(__('New Members Only'), __('New Members Only'), 8, __FILE__, 'new_members_only_options_page');
-}
-
-function new_members_only_whitelist_options($whitelist_options) {
-  $whitelist_options['new-members-only'] = array();
-  $whitelist_options['new-members-only'][] = 'new_members_only_whitelist';
-  $whitelist_options['new-members-only'][] = 'new_members_only_redirect_root';
-  $whitelist_options['new-members-only'][] = 'new_members_only_redirect_elsewhere';
-  $whitelist_options['new-members-only'][] = 'new_members_only_redirect_return';
-  return $whitelist_options;
-}
+$ms = new MetaSettings(__FILE__, 'new_members_only');
+$ms->add_settings(__('New Members Only'), array('whitelist', 'redirect_root', 'redirect_elsewhere', 'redirect_return'), 'new_members_only_options_page');
 
 function new_members_only_options_page() {
 ?>
@@ -22,7 +9,7 @@ function new_members_only_options_page() {
   <h2><?php _e('New Members Only') ?></h2>
 
   <form method="post" action="options.php">
-    <?php settings_fields('new-members-only') ?>
+    <?php settings_fields('new_members_only') ?>
 
     <table class="form-table">
 
