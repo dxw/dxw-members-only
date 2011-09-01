@@ -1,7 +1,7 @@
 <?php
 
 $ms = new MetaSettings(__FILE__, 'new_members_only');
-$ms->add_settings(__('New Members Only'), array('whitelist', 'redirect_root', 'redirect_elsewhere', 'redirect_return'), 'new_members_only_options_page');
+$ms->add_settings(__('New Members Only'), array('whitelist', 'redirect_root', 'redirect_elsewhere'), 'new_members_only_options_page');
 
 function new_members_only_options_page() {
 ?>
@@ -25,6 +25,7 @@ function new_members_only_options_page() {
     </table>
 
     <h3><?php _e('Redirection') ?></h3>
+    <p>In both the following options, <code>%return_path%</code> will be converted to the URL that was originally visited. i.e. <code>/wp-login.php?redirect_to=%return_path%</code></p>
 
     <table class="form-table">
 
@@ -35,20 +36,8 @@ function new_members_only_options_page() {
 
       <tr valign="top">
         <th scope="row"><label for="new_members_only_redirect_elsewhere"><?php _e('Redirect visitors to elsewhere to') ?></label></th>
-        <td><input type="text" name="new_members_only_redirect_elsewhere" id="new_members_only_redirect_elsewhere" value="<?php form_option('new_members_only_redirect_elsewhere') ?>"></td>
-      </tr>
-
-      <tr valign="top">
-        <th scope="row"><?php _e('After login') ?></th>
-
         <td>
-          <fieldset>
-            <legend class="screen-reader-text"><span><?php _e('After login') ?></span></legend>
-
-            <?php $o=get_option('new_members_only_redirect_return') ?>
-            <label><input type="radio" name="new_members_only_redirect_return" value="return" <?php checked('return',$o) ?>> Redirect to original destination</label><br>
-            <label><input type="radio" name="new_members_only_redirect_return" value="homepage" <?php checked('homepage',$o) ?>> Redirect to homepage</label>
-          </fieldset>
+          <input type="text" name="new_members_only_redirect_elsewhere" id="new_members_only_redirect_elsewhere" value="<?php form_option('new_members_only_redirect_elsewhere') ?>">
         </td>
       </tr>
 

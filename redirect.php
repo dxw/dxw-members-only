@@ -24,6 +24,9 @@ function new_members_only_redirect() {
   else
     $redirect = get_option('new_members_only_redirect_elsewhere');
 
+  // %return_path%
+  $redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
+
   header('HTTP/1.1 303 See Other');
   header('Location: '.$redirect);
   die();
