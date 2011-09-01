@@ -19,6 +19,12 @@ function new_members_only_redirect() {
       return;
 
   // Redirect (die ATM)
-  print_r($path);
-  wp_die('');
+  if ($path === '/')
+    $redirect = get_option('new_members_only_redirect_root');
+  else
+    $redirect = get_option('new_members_only_redirect_elsewhere');
+
+  header('HTTP/1.1 303 See Other');
+  header('Location: '.$redirect);
+  die();
 }
