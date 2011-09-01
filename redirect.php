@@ -3,8 +3,9 @@
 add_action('init', 'new_members_only_redirect');
 
 function new_members_only_redirect() {
-  if (is_admin())          return;
-  if (is_user_logged_in()) return;
+  if (defined('NEW_MEMBERS_ONLY_PASSTHROUGH')) return;
+  if (is_admin())                              return;
+  if (is_user_logged_in())                     return;
 
   // Get path component
   $path = $_SERVER['REQUEST_URI'];
@@ -18,7 +19,7 @@ function new_members_only_redirect() {
     if ($w === $path)
       return;
 
-  // Redirect (die ATM)
+  // Redirect
   if ($path === '/')
     $redirect = get_option('new_members_only_redirect_root');
   else
