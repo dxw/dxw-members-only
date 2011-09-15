@@ -1,12 +1,12 @@
 <?php
 
 $ms = new MetaSettings(__FILE__, 'new_members_only');
-$ms->add_settings(__('New Members Only'), array('whitelist', 'redirect_root', 'redirect_elsewhere'), 'new_members_only_options_page');
+$ms->add_settings(__('GCN Members Only'), array('whitelist', 'redirect_root', 'redirect_elsewhere'), 'new_members_only_options_page');
 
 function new_members_only_options_page() {
 ?>
 <div class="wrap">
-  <h2><?php _e('New Members Only') ?></h2>
+  <h2><?php _e('GCN Members Only') ?></h2>
 
   <form method="post" action="options.php">
     <?php settings_fields('new_members_only') ?>

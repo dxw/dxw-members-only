@@ -1,6 +1,6 @@
 <?php
 /*
- * Plugin Name: New Members Only
+ * Plugin Name: GCN Members Only
  * Plugin URI: http://dxw.com
  * Description: Forces users to log in
  * Version: 1.0
