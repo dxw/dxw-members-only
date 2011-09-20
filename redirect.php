@@ -3,11 +3,11 @@
 add_action('init', 'new_members_only_redirect');
 
 function new_members_only_redirect() {
-  if (defined('NEW_MEMBERS_ONLY_PASSTHROUGH'))             return;
-  if (is_admin())                                          return;
-  if (is_user_logged_in())                                 return;
+  if (defined('NEW_MEMBERS_ONLY_PASSTHROUGH'))                   return;
+  if (is_admin())                                                return;
+  if (is_user_logged_in())                                       return;
 
-  if (apply_filters('new_members_only_redirect') === true) return;
+  if (apply_filters('new_members_only_redirect', null) === true) return;
 
   // Get path component
   $path = $_SERVER['REQUEST_URI'];
