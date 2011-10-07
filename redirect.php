@@ -7,7 +7,7 @@ function new_members_only_redirect() {
   if (is_admin())                                                return;
   if (is_user_logged_in())                                       return;
 
-  if (apply_filters('new_members_only_redirect', null) === true) return;
+  if (apply_filters('new_members_only_redirect', false) === true) return;
 
   // Get path component
   $path = $_SERVER['REQUEST_URI'];
