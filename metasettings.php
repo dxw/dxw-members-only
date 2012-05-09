@@ -7,6 +7,22 @@ class MetaSettings {
     $this->namespace = $namespace;
 
     $this->settings = (object)array();
+
+    $this->set_defaults();
+  }
+
+  function set_defaults() {
+    if(!get_option('new_members_only_whitelist')) {
+      add_option('new_members_only_whitelist', "/wp-login.php\r\n/wp-signup.php\r\n/wp-cron.php\r\n/register\r\n/activate\r\n");
+    }
+
+    if(!get_option('new_members_only_redirect_root')) {
+      add_option('new_members_only_redirect_root', '/wp-login.php');
+    }
+
+    if(!get_option('new_members_only_redirect_elsewhere')) {
+      add_option('new_members_only_redirect_elsewhere', '/wp-login.php');
+    }
   }
 
   function add_settings($title, $options, $callback) {
