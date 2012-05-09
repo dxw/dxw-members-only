@@ -17,9 +17,17 @@ function new_members_only_redirect() {
 
   // Whitelist
   $whitelist = explode("\r\n",get_option('new_members_only_whitelist'));
-  foreach ($whitelist as $w)
-    if ($w === $path)
+  foreach ($whitelist as $w) {
+    $w = trim($w);
+
+    if(empty($w)) {
+      continue;
+    }
+
+    if ($w === $path || $w . '/' === $path) {
       return;
+    }
+  }
 
   // Redirect
   if ($path === '/')
