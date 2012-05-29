@@ -2,6 +2,14 @@
 
 add_action('init', 'new_members_only_redirect');
 
+function startswith($haystack, $needle) {
+  return substr($haystack, 0, strlen($needle)) === $needle;
+}
+
+function endswith($haystack, $needle) {
+  return substr($haystack, -strlen($needle)) === $needle;
+}
+
 function new_members_only_redirect() {
   if (defined('NEW_MEMBERS_ONLY_PASSTHROUGH'))                   return;
   if (is_admin())                                                return;
@@ -24,7 +32,23 @@ function new_members_only_redirect() {
       continue;
     }
 
-    if ($w === $path || $w . '/' === $path) {
+    # /welcome => /welcome, /welcome/
+    if ($path === $w || $path === $w . '/') {
+      return;
+    }
+
+    # /welcome/ => /welcome
+    if (endswith($w, '/') && $path === substr($w, 0, -1)) {
+      return;
+    }
+
+    # /welcome/* => /welcome
+    if (endswith($w, '/*') && $path === substr($w, 0, -2)) {
+      return;
+    }
+
+    # /welcome/* => /welcome/.*
+    if (endswith($w, '*') && startswith($path, substr($w, 0, -1))) {
       return;
     }
   }
