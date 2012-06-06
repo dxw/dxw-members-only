@@ -2,12 +2,16 @@
 
 add_action('init', 'new_members_only_redirect');
 
-function startswith($haystack, $needle) {
-  return substr($haystack, 0, strlen($needle)) === $needle;
+if (!function_exists('startswith')) {
+  function startswith($haystack, $needle) {
+    return substr($haystack, 0, strlen($needle)) === $needle;
+  }
 }
 
-function endswith($haystack, $needle) {
-  return substr($haystack, -strlen($needle)) === $needle;
+if (!function_exists('endswith')) {
+  function endswith($haystack, $needle) {
+    return substr($haystack, -strlen($needle)) === $needle;
+  }
 }
 
 function new_members_only_redirect() {
