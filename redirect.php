@@ -28,6 +28,7 @@ function new_members_only_redirect() {
     $path = substr($path, 0, $pos);
 
   // Blacklist
+  $block = false;
   $blacklist = explode("\r\n",get_option('new_members_only_blacklist'));
   foreach ($blacklist as $w) {
     $w = trim($w);
@@ -38,24 +39,30 @@ function new_members_only_redirect() {
 
     # /welcome => /welcome, /welcome/
     if ($path === $w || $path === $w . '/') {
+      $block = true;
       break;
     }
 
     # /welcome/ => /welcome
     if (endswith($w, '/') && $path === substr($w, 0, -1)) {
+      $block = true;
       break;
     }
 
     # /welcome/* => /welcome
     if (endswith($w, '/*') && $path === substr($w, 0, -2)) {
+      $block = true;
       break;
     }
 
     # /welcome/* => /welcome/.*
     if (endswith($w, '*') && startswith($path, substr($w, 0, -1))) {
+      $block = true;
       break;
     }
+  }
 
+  if (!$block) {
     return;
   }
 
