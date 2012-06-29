@@ -1,7 +1,7 @@
 <?php
 
 $ms = new MetaSettings(__FILE__, 'new_members_only');
-$ms->add_settings(__('GCN Members Only'), array('whitelist', 'redirect_root', 'redirect_elsewhere'), 'new_members_only_options_page');
+$ms->add_settings(__('GCN Members Only'), array('blacklist', 'redirect'), 'new_members_only_options_page');
 
 function new_members_only_options_page() {
 ?>
@@ -14,9 +14,9 @@ function new_members_only_options_page() {
     <table class="form-table">
 
       <tr valign="top">
-        <th scope="row"><label for="new_members_only_whitelist"><?php _e('Whitelist') ?></label></th>
+        <th scope="row"><label for="new_members_only_blacklist"><?php _e('Blacklist') ?></label></th>
         <td>
-          <textarea cols="30" rows="5" name="new_members_only_whitelist" id="new_members_only_whitelist"><?php echo esc_html(get_option('new_members_only_whitelist')) ?></textarea>
+          <textarea cols="30" rows="5" name="new_members_only_blacklist" id="new_members_only_blacklist"><?php echo esc_html(get_option('new_members_only_blacklist')) ?></textarea>
           <br>
           <span class="description"><?php _e('One host-relative URI per line. No regular expression syntax supported, query string ignored.') ?></span>
         </td>
@@ -30,14 +30,9 @@ function new_members_only_options_page() {
     <table class="form-table">
 
       <tr valign="top">
-        <th scope="row"><label for="new_members_only_redirect_root"><?php _e('Redirect visitors to / to') ?></label></th>
-        <td><input type="text" name="new_members_only_redirect_root" id="new_members_only_redirect_root" value="<?php form_option('new_members_only_redirect_root') ?>"></td>
-      </tr>
-
-      <tr valign="top">
-        <th scope="row"><label for="new_members_only_redirect_elsewhere"><?php _e('Redirect visitors to elsewhere to') ?></label></th>
+        <th scope="row"><label for="new_members_only_redirect"><?php _e('Redirect visitors to') ?></label></th>
         <td>
-          <input type="text" name="new_members_only_redirect_elsewhere" id="new_members_only_redirect_elsewhere" value="<?php form_option('new_members_only_redirect_elsewhere') ?>">
+          <input type="text" name="new_members_only_redirect" id="new_members_only_redirect" value="<?php form_option('new_members_only_redirect') ?>">
         </td>
       </tr>
 

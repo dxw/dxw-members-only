@@ -27,9 +27,9 @@ function new_members_only_redirect() {
   if ($pos !== false)
     $path = substr($path, 0, $pos);
 
-  // Whitelist
-  $whitelist = explode("\r\n",get_option('new_members_only_whitelist'));
-  foreach ($whitelist as $w) {
+  // Blacklist
+  $blacklist = explode("\r\n",get_option('new_members_only_blacklist'));
+  foreach ($blacklist as $w) {
     $w = trim($w);
 
     if(empty($w)) {
@@ -38,30 +38,29 @@ function new_members_only_redirect() {
 
     # /welcome => /welcome, /welcome/
     if ($path === $w || $path === $w . '/') {
-      return;
+      break;
     }
 
     # /welcome/ => /welcome
     if (endswith($w, '/') && $path === substr($w, 0, -1)) {
-      return;
+      break;
     }
 
     # /welcome/* => /welcome
     if (endswith($w, '/*') && $path === substr($w, 0, -2)) {
-      return;
+      break;
     }
 
     # /welcome/* => /welcome/.*
     if (endswith($w, '*') && startswith($path, substr($w, 0, -1))) {
-      return;
+      break;
     }
+
+    return;
   }
 
   // Redirect
-  if ($path === '/')
-    $redirect = get_option('new_members_only_redirect_root');
-  else
-    $redirect = get_option('new_members_only_redirect_elsewhere');
+  $redirect = get_option('new_members_only_redirect');
 
   // %return_path%
   $redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);

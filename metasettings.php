@@ -12,16 +12,12 @@ class MetaSettings {
   }
 
   function set_defaults() {
-    if(!get_option('new_members_only_whitelist')) {
-      add_option('new_members_only_whitelist', "/wp-login.php\r\n/wp-signup.php\r\n/wp-cron.php\r\n/register\r\n/activate\r\n");
+    if(!get_option('new_members_only_blacklist')) {
+      add_option('new_members_only_blacklist', "");
     }
 
-    if(!get_option('new_members_only_redirect_root')) {
-      add_option('new_members_only_redirect_root', '/wp-login.php');
-    }
-
-    if(!get_option('new_members_only_redirect_elsewhere')) {
-      add_option('new_members_only_redirect_elsewhere', '/wp-login.php');
+    if(!get_option('new_members_only_redirect')) {
+      add_option('new_members_only_redirect', '/wp-login.php');
     }
   }
 
