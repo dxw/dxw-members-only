@@ -7,7 +7,8 @@
  * Author: dxw
  * Author URI: http://dxw.com
  */
-
-require(dirname(__FILE__).'/metasettings.php');
-require(dirname(__FILE__).'/settings.php');
-require(dirname(__FILE__).'/redirect.php');
+if (!defined('DOING_CRON')) {
+  require(dirname(__FILE__).'/metasettings.php');
+  require(dirname(__FILE__).'/settings.php');
+  require(dirname(__FILE__).'/redirect.php');
+}
