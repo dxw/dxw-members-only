@@ -12,8 +12,12 @@ class MetaSettings {
   }
 
   function set_defaults() {
-    if(!get_option('new_members_only_blacklist')) {
-      add_option('new_members_only_blacklist', "");
+    if(!get_option('new_members_only_list_type')) {
+      add_option('new_members_only_list_type', "whitelist");
+    }
+
+    if(!get_option('new_members_only_list_content')) {
+      add_option('new_members_only_list_content', "");
     }
 
     if(!get_option('new_members_only_redirect')) {

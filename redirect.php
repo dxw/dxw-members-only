@@ -27,10 +27,11 @@ function new_members_only_redirect() {
   if ($pos !== false)
     $path = substr($path, 0, $pos);
 
-  // Blacklist
-  $block = false;
-  $blacklist = explode("\r\n",get_option('new_members_only_blacklist'));
-  foreach ($blacklist as $w) {
+  // List
+  $hit = false;
+  $list_type = get_option('new_members_only_list_type');
+  $list = explode("\r\n",get_option('new_members_only_list_content'));
+  foreach ($list as $w) {
     $w = trim($w);
 
     if(empty($w)) {
@@ -39,30 +40,31 @@ function new_members_only_redirect() {
 
     # /welcome => /welcome, /welcome/
     if ($path === $w || $path === $w . '/') {
-      $block = true;
+      $hit = true;
       break;
     }
 
     # /welcome/ => /welcome
     if (endswith($w, '/') && $path === substr($w, 0, -1)) {
-      $block = true;
+      $hit = true;
       break;
     }
 
     # /welcome/* => /welcome
     if (endswith($w, '/*') && $path === substr($w, 0, -2)) {
-      $block = true;
+      $hit = true;
       break;
     }
 
     # /welcome/* => /welcome/.*
     if (endswith($w, '*') && startswith($path, substr($w, 0, -1))) {
-      $block = true;
+      $hit = true;
       break;
     }
   }
 
-  if (!$block) {
+  if (($list_type === 'whitelist' && $hit) ||
+      ($list_type === 'blacklist' && !$hit)) {
     return;
   }
 

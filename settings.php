@@ -1,7 +1,7 @@
 <?php
 
 $ms = new MetaSettings(__FILE__, 'new_members_only');
-$ms->add_settings(__('GCN Members Only'), array('blacklist', 'redirect'), 'new_members_only_options_page');
+$ms->add_settings(__('GCN Members Only'), array('list_type', 'list_content', 'redirect'), 'new_members_only_options_page');
 
 function new_members_only_options_page() {
 ?>
@@ -14,9 +14,26 @@ function new_members_only_options_page() {
     <table class="form-table">
 
       <tr valign="top">
-        <th scope="row"><label for="new_members_only_blacklist"><?php _e('Blacklist') ?></label></th>
+        <th scope="row"><?php _e('List type') ?></th>
         <td>
-          <textarea cols="30" rows="5" name="new_members_only_blacklist" id="new_members_only_blacklist"><?php echo esc_html(get_option('new_members_only_blacklist')) ?></textarea>
+          <fieldset>
+            <label>
+              <input type="radio" name="new_members_only_list_type" value="whitelist" <?php echo get_option('new_members_only_list_type') === 'whitelist' ? 'checked' : '' ?>>
+              <?php _e('Whitelist') ?>
+            </label>
+            <br>
+            <label>
+              <input type="radio" name="new_members_only_list_type" value="blacklist" <?php echo get_option('new_members_only_list_type') === 'blacklist' ? 'checked' : '' ?>>
+              <?php _e('Blacklist') ?>
+            </label>
+          </fieldset>
+        </td>
+      </tr>
+
+      <tr valign="top">
+        <th scope="row"><label for="new_members_only_list_content"><?php _e('List') ?></label></th>
+        <td>
+          <textarea cols="30" rows="5" name="new_members_only_list_content" id="new_members_only_list_content"><?php echo esc_html(get_option('new_members_only_list_content')) ?></textarea>
           <br>
           <span class="description"><?php _e('One host-relative URI per line. A * may be used at the end of a line. Query string ignored.') ?></span>
         </td>
