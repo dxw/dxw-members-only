@@ -24,5 +24,4 @@ if (!defined('DOING_CRON')) {
   require(dirname(__FILE__).'/metasettings.php');
   require(dirname(__FILE__).'/settings.php');
   require(dirname(__FILE__).'/redirect.php');
-  require(dirname(__FILE__).'/uploads.php');
 }
