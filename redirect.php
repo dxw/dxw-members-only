@@ -3,10 +3,9 @@
 add_action('init', 'new_members_only_redirect');
 
 function new_members_only_redirect() {
-  if (defined('NEW_MEMBERS_ONLY_PASSTHROUGH'))                   return;
-  if (is_admin())                                                return;
-  if (is_user_logged_in())                                       return;
-
+  if (defined('NEW_MEMBERS_ONLY_PASSTHROUGH'))                    return;
+  if (is_admin())                                                 return;
+  if (is_user_logged_in())                                        return;
   if (apply_filters('new_members_only_redirect', false) === true) return;
 
   // Get path component
@@ -19,6 +18,11 @@ function new_members_only_redirect() {
   $hit = false;
   $list_type = get_option('new_members_only_list_type');
   $list = explode("\r\n",get_option('new_members_only_list_content'));
+
+  if ($list_type === 'whitelist') {
+    $list[] = '/wp-login.php';
+  }
+
   foreach ($list as $w) {
     $w = trim($w);
 
