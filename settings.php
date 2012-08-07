@@ -33,7 +33,7 @@ function new_members_only_options_page() {
       <tr valign="top">
         <th scope="row"><label for="new_members_only_list_content"><?php _e('List') ?></label></th>
         <td>
-          <textarea cols="30" rows="5" name="new_members_only_list_content" id="new_members_only_list_content"><?php echo esc_html(get_option('new_members_only_list_content')) ?></textarea>
+          <textarea cols="30" rows="5" name="new_members_only_list_content" id="new_members_only_list_content" class="large-text code"><?php echo esc_html(get_option('new_members_only_list_content')) ?></textarea>
           <br>
           <span class="description"><?php _e('One host-relative URI per line. A * may be used at the end of a line. Query string ignored.') ?></span>
         </td>
@@ -49,7 +49,7 @@ function new_members_only_options_page() {
       <tr valign="top">
         <th scope="row"><label for="new_members_only_redirect"><?php _e('Redirect visitors to') ?></label></th>
         <td>
-          <input type="text" name="new_members_only_redirect" id="new_members_only_redirect" value="<?php form_option('new_members_only_redirect') ?>">
+          <input type="text" name="new_members_only_redirect" id="new_members_only_redirect" value="<?php form_option('new_members_only_redirect') ?>" class="regular-text">
         </td>
       </tr>
 
