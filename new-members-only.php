@@ -1,6 +1,6 @@
 <?php
 /*
- * Plugin Name: GCN Members Only
+ * Plugin Name: New Members Only
  * Plugin URI: http://dxw.com
  * Description: Whitelist or blacklist content from logged-out users. Also, block uploads dir from logged-out users. Do not disable.
  * Version: 1.0
