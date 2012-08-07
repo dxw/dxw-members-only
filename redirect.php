@@ -50,6 +50,11 @@ add_action('init', function () {
   if ($pos !== false)
     $path = substr($path, 0, $pos);
 
+  // Always allow wp-login.php
+  if ($path === '/wp-login.php') {
+    return;
+  }
+
   // List
   $hit = false;
   $list_type = get_option('new_members_only_list_type');
