@@ -13,7 +13,7 @@ class MetaSettings {
 
   function set_defaults() {
     if(!get_option('new_members_only_list_type')) {
-      add_option('new_members_only_list_type', "whitelist");
+      add_option('new_members_only_list_type', "blacklist");
     }
 
     if(!get_option('new_members_only_list_content')) {
@@ -21,7 +21,7 @@ class MetaSettings {
     }
 
     if(!get_option('new_members_only_redirect')) {
-      add_option('new_members_only_redirect', '/wp-login.php');
+      add_option('new_members_only_redirect', '/wp-login.php?redirect_to=%return_path%');
     }
   }
 

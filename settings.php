@@ -18,13 +18,13 @@ function new_members_only_options_page() {
         <td>
           <fieldset>
             <label>
-              <input type="radio" name="new_members_only_list_type" value="whitelist" <?php echo get_option('new_members_only_list_type') === 'whitelist' ? 'checked' : '' ?>>
-              <?php _e('Whitelist') ?>
+              <input type="radio" name="new_members_only_list_type" value="blacklist" <?php echo get_option('new_members_only_list_type') === 'blacklist' ? 'checked' : '' ?>>
+              <?php _e('Blacklist') ?>
             </label>
             <br>
             <label>
-              <input type="radio" name="new_members_only_list_type" value="blacklist" <?php echo get_option('new_members_only_list_type') === 'blacklist' ? 'checked' : '' ?>>
-              <?php _e('Blacklist') ?>
+              <input type="radio" name="new_members_only_list_type" value="whitelist" <?php echo get_option('new_members_only_list_type') === 'whitelist' ? 'checked' : '' ?>>
+              <?php _e('Whitelist') ?>
             </label>
           </fieldset>
         </td>
