@@ -14,8 +14,6 @@ function new_members_only_serve_uploads() {
       header('Content-type: '.$type);
       echo file_get_contents($file);
       die();
-    } else {
-      new_members_only_redirect();
     }
 
   }
