@@ -49,7 +49,7 @@ add_action('init', function () {
     $path = substr($path, 0, $pos);
 
   // Always allow wp-login.php
-  if ($path === '/wp-login.php') {
+  if (endswith($path, 'wp-login.php')) {
     return;
   }
 
