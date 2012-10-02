@@ -53,6 +53,14 @@ function new_members_only_options_page() {
         </td>
       </tr>
 
+      <tr valign="top">
+        <th scope="row"><label for="new_members_only_redirect_root"><?php _e('Redirect visitors to / to') ?></label></th>
+        <td>
+          <input type="text" name="new_members_only_redirect_root" id="new_members_only_redirect_root" value="<?php form_option('new_members_only_redirect_root') ?>" class="regular-text">
+          <span class="description"><?php _e('Only applies in whitelist mode or if "/" is blacklisted.') ?></span>
+        </td>
+      </tr>
+
     </table>
 
     <?php submit_button() ?>

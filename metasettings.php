@@ -23,6 +23,10 @@ class MetaSettings {
     if(!get_option('new_members_only_redirect')) {
       add_option('new_members_only_redirect', '/wp-login.php?redirect_to=%return_path%');
     }
+
+    if(!get_option('new_members_only_redirect_root')) {
+      add_option('new_members_only_redirect_root', '/wp-login.php?redirect_to=%return_path%');
+    }
   }
 
   function add_settings($title, $options, $callback) {

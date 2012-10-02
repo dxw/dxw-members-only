@@ -19,9 +19,13 @@ function new_members_only_serve_uploads() {
   }
 }
 
-function new_members_only_redirect() {
+function new_members_only_redirect($root) {
   // Redirect
-  $redirect = get_option('new_members_only_redirect');
+  if ($root) {
+    $redirect = get_option('new_members_only_redirect_root');
+  } else {
+    $redirect = get_option('new_members_only_redirect');
+  }
 
   // %return_path%
   $redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
@@ -96,5 +100,5 @@ add_action('init', function () {
     return;
   }
 
-  new_members_only_redirect();
+  new_members_only_redirect($path === '/');
 });
