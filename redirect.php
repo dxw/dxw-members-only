@@ -42,6 +42,7 @@ add_action('init', function () {
       is_user_logged_in() ||
       apply_filters('new_members_only_redirect', false) === true
      ) {
+    header('Cache-control: private');
     new_members_only_serve_uploads();
     return;
   }
@@ -96,9 +97,11 @@ add_action('init', function () {
 
   if (($list_type === 'whitelist' && $hit) ||
       ($list_type === 'blacklist' && !$hit)) {
+    header('Cache-control: public');
     new_members_only_serve_uploads();
     return;
   }
 
+  header('Cache-control: private');
   new_members_only_redirect($path === '/');
 });
