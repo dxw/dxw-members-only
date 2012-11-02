@@ -40,7 +40,6 @@ class MetaSettings {
   }
 
   function plugin_action_links($links, $file) {
-    // Assumption: the plugin will be in its own directory, not a single file inside wp-content/plugins/
     if (dirname($file) === dirname($this->plugin))
       array_unshift($links, '<a href="'.get_admin_url(null, 'options-general.php?page='.$this->plugin).'">'.__("Settings", $this->plugin).'</a>');
     return $links;
