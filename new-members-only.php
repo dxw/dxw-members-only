@@ -23,5 +23,6 @@ if (!function_exists('endswith')) {
 if (!defined('DOING_CRON')) {
   require(dirname(__FILE__).'/metasettings.php');
   require(dirname(__FILE__).'/settings.php');
+  require(dirname(__FILE__).'/upload.php');
   require(dirname(__FILE__).'/redirect.php');
 }
