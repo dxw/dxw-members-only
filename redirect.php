@@ -104,4 +104,4 @@ add_action('init', function () {
 
   header('Cache-control: private');
   new_members_only_redirect($path === '/');
-});
+}, -99999999999);
