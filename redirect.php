@@ -36,6 +36,7 @@ function new_members_only_redirect($root) {
 }
 
 add_action('init', function () {
+  do_action('new_members_only_redirect');
   if (
       defined('NEW_MEMBERS_ONLY_PASSTHROUGH') ||
       is_admin() ||
