@@ -1,7 +1,7 @@
 <?php
 
 $ms = new MetaSettings(__FILE__, 'new_members_only');
-$ms->add_settings(__('New Members Only'), array('list_type', 'list_content', 'redirect', 'upload_default'), 'new_members_only_options_page');
+$ms->add_settings(__('New Members Only'), array('list_type', 'list_content', 'redirect', 'redirect_root', 'upload_default'), 'new_members_only_options_page');
 
 function new_members_only_options_page() {
 ?>
