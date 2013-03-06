@@ -61,7 +61,6 @@ add_action('init', function () {
 
   // IP whitelist
   $ip_list = explode("\r\n",get_option('new_members_only_ip_whitelist'));
-  print_r($_SERVER['REMOTE_ADDR']);
   foreach ($ip_list as $ip) {
     if ($_SERVER['REMOTE_ADDR'] === $ip) {
       return;
