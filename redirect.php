@@ -59,6 +59,15 @@ add_action('init', function () {
     return;
   }
 
+  // IP whitelist
+  $ip_list = explode("\r\n",get_option('new_members_only_ip_whitelist'));
+  print_r($_SERVER['REMOTE_ADDR']);
+  foreach ($ip_list as $ip) {
+    if ($_SERVER['REMOTE_ADDR'] === $ip) {
+      return;
+    }
+  }
+
   // List
   $hit = false;
   $list_type = get_option('new_members_only_list_type');
