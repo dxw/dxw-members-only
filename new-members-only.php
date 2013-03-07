@@ -21,8 +21,9 @@ if (!function_exists('endswith')) {
 }
 
 if (!defined('DOING_CRON')) {
-  require(dirname(__FILE__).'/metasettings.php');
-  require(dirname(__FILE__).'/settings.php');
-  require(dirname(__FILE__).'/upload.php');
-  require(dirname(__FILE__).'/redirect.php');
+  require(__DIR__.'/metasettings.php');
+  require(__DIR__.'/settings.php');
+  require(__DIR__.'/upload.php');
+  require(__DIR__.'/Net_IPv4-1.3.4/Net/IPv4.php');
+  require(__DIR__.'/redirect.php');
 }

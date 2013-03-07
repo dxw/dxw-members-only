@@ -1,7 +1,7 @@
 <?php
 
 $ms = new MetaSettings(__FILE__, 'new_members_only');
-$ms->add_settings(__('New Members Only'), array('list_type', 'list_content', 'redirect', 'redirect_root', 'upload_default'), 'new_members_only_options_page');
+$ms->add_settings(__('New Members Only'), array('list_type', 'list_content', 'ip_whitelist', 'redirect', 'redirect_root', 'upload_default'), 'new_members_only_options_page');
 
 function new_members_only_options_page() {
 ?>
@@ -36,6 +36,22 @@ function new_members_only_options_page() {
           <textarea cols="30" rows="5" name="new_members_only_list_content" id="new_members_only_list_content" class="large-text code"><?php echo esc_html(get_option('new_members_only_list_content')) ?></textarea>
           <br>
           <span class="description"><?php _e('One host-relative URI per line. A * may be used at the end of a line. Query string ignored. /wp-login.php will always be allowed.') ?></span>
+        </td>
+      </tr>
+
+    </table>
+
+    <h3><?php _e('IP whitelist') ?></h3>
+    <p><?php _e('Certain IP addresses can be allowed to view the site without logging in.') ?></p>
+
+    <table class="form-table">
+
+      <tr valign="top">
+        <th scope="row"><label for="new_members_only_ip_whitelist"><?php _e('IP whitelist') ?></label></th>
+        <td>
+          <textarea cols="30" rows="5" name="new_members_only_ip_whitelist" id="new_members_only_ip_whitelist" class="large-text code"><?php echo esc_html(get_option('new_members_only_ip_whitelist')) ?></textarea>
+          <br>
+          <span class="description"><?php _e('One IPv4 address or CIDRv4 address range per line.') ?></span>
         </td>
       </tr>
 
