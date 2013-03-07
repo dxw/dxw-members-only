@@ -40,6 +40,10 @@ function ip_in_range($ip, $range) {
     # Fix 4-in-6 addresses
     $ip = $m[1];
   }
+  if ($ip === $range) {
+    # Raw IP addresses in config
+    return true;
+  }
   return Net_IPv4::ipInNetwork($ip, $range);
 }
 
