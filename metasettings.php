@@ -46,7 +46,7 @@ class MetaSettings {
   }
 
   function admin_menu() {
-    add_options_page($this->settings->title, $this->settings->title, 8, $this->file, $this->settings->callback);
+    add_options_page($this->settings->title, $this->settings->title, 'edit_users', $this->file, $this->settings->callback);
   }
 
   function whitelist_options($whitelist_options) {
