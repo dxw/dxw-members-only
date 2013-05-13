@@ -35,7 +35,7 @@ function new_members_only_redirect($root) {
   die();
 }
 
-function ip_in_range($ip, $range) {
+function new_members_only_ip_in_range($ip, $range) {
   if (preg_match('_^::ffff:(.*)$_', $ip, $m)) {
     # Fix 4-in-6 addresses
     $ip = $m[1];
@@ -45,6 +45,17 @@ function ip_in_range($ip, $range) {
     return true;
   }
   return Net_IPv4::ipInNetwork($ip, $range);
+}
+
+function new_members_only_current_ip_in_whitelist() {
+  $ip_list = explode("\r\n",get_option('new_members_only_ip_whitelist'));
+  foreach ($ip_list as $ip) {
+    if (new_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 add_action('init', function () {
@@ -72,11 +83,8 @@ add_action('init', function () {
   }
 
   // IP whitelist
-  $ip_list = explode("\r\n",get_option('new_members_only_ip_whitelist'));
-  foreach ($ip_list as $ip) {
-    if (ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
-      return;
-    }
+  if (new_members_only_current_ip_in_whitelist()) {
+    return;
   }
 
   // List
