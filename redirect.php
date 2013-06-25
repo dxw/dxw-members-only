@@ -50,7 +50,7 @@ function new_members_only_ip_in_range($ip, $range) {
 function new_members_only_current_ip_in_whitelist() {
   $ip_list = explode("\r\n",get_option('new_members_only_ip_whitelist'));
   foreach ($ip_list as $ip) {
-    if (new_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
+    if (!empty($ip) && new_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
       return true;
     }
   }
