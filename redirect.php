@@ -10,8 +10,8 @@ function new_members_only_serve_uploads() {
     $file = preg_replace("[^{$baseurl}]", $basedir, $req);
 
     if (is_file($file) && is_readable($file)) {
-      list($ext, $type) = wp_check_filetype($file);
-      header('Content-type: '.$type);
+      $mime = wp_check_filetype($file);
+      header('Content-type: ' . $mime['type']);
       echo file_get_contents($file);
       die();
     }
