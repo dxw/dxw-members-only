@@ -35,6 +35,29 @@ function new_members_only_redirect($root) {
   die();
 }
 
+function new_members_only_ip_in_range($ip, $range) {
+  if (preg_match('_^::ffff:(.*)$_', $ip, $m)) {
+    # Fix 4-in-6 addresses
+    $ip = $m[1];
+  }
+  if ($ip === $range) {
+    # Raw IP addresses in config
+    return true;
+  }
+  return Net_IPv4::ipInNetwork($ip, $range);
+}
+
+function new_members_only_current_ip_in_whitelist() {
+  $ip_list = explode("\r\n",get_option('new_members_only_ip_whitelist'));
+  foreach ($ip_list as $ip) {
+    if (!empty($ip) && new_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 add_action('init', function () {
   do_action('new_members_only_redirect');
   if (
@@ -56,6 +79,11 @@ add_action('init', function () {
 
   // Always allow wp-login.php
   if (endswith($path, 'wp-login.php')) {
+    return;
+  }
+
+  // IP whitelist
+  if (new_members_only_current_ip_in_whitelist()) {
     return;
   }
 
