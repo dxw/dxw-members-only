@@ -36,6 +36,8 @@ function new_members_only_redirect($root) {
 }
 
 function new_members_only_ip_in_range($ip, $range) {
+  $range = trim($range);
+
   if (preg_match('_^::ffff:(.*)$_', $ip, $m)) {
     # Fix 4-in-6 addresses
     $ip = $m[1];
