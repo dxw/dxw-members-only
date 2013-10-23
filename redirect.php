@@ -11,7 +11,13 @@ function new_members_only_serve_uploads() {
 
     if (is_file($file) && is_readable($file)) {
       $mime = wp_check_filetype($file);
-      header('Content-type: ' . $mime['type']);
+
+      $type = 'application/octet-stream';
+      if ($mime['type'] !== false) {
+        $type = $mime['type'];
+      }
+
+      header('Content-type: ' . $type);
       echo file_get_contents($file);
       die();
     }
