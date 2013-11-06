@@ -14,23 +14,6 @@ function new_members_only_options_page() {
     <table class="form-table">
 
       <tr valign="top">
-        <th scope="row"><?php _e('List type') ?></th>
-        <td>
-          <fieldset>
-            <label>
-              <input type="radio" name="new_members_only_list_type" value="blacklist" <?php echo get_option('new_members_only_list_type') === 'blacklist' ? 'checked' : '' ?>>
-              <?php _e('Blacklist') ?>
-            </label>
-            <br>
-            <label>
-              <input type="radio" name="new_members_only_list_type" value="whitelist" <?php echo get_option('new_members_only_list_type') === 'whitelist' ? 'checked' : '' ?>>
-              <?php _e('Whitelist') ?>
-            </label>
-          </fieldset>
-        </td>
-      </tr>
-
-      <tr valign="top">
         <th scope="row"><label for="new_members_only_list_content"><?php _e('List') ?></label></th>
         <td>
           <textarea cols="30" rows="5" name="new_members_only_list_content" id="new_members_only_list_content" class="large-text code"><?php echo esc_html(get_option('new_members_only_list_content')) ?></textarea>
@@ -73,7 +56,7 @@ function new_members_only_options_page() {
         <th scope="row"><label for="new_members_only_redirect_root"><?php _e('Redirect visitors to / to') ?></label></th>
         <td>
           <input type="text" name="new_members_only_redirect_root" id="new_members_only_redirect_root" value="<?php form_option('new_members_only_redirect_root') ?>" class="regular-text">
-          <span class="description"><?php _e('Only applies in whitelist mode or if "/" is blacklisted.') ?></span>
+          <span class="description"><?php _e("Only applies if / isn't whitelisted.") ?></span>
         </td>
       </tr>
 

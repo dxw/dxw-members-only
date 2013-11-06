@@ -3,12 +3,11 @@
 add_filter('attachment_fields_to_edit', function ($fields, $post) {
 
   if (realpath($_SERVER['SCRIPT_FILENAME']) === ABSPATH.'wp-admin/async-upload.php') {
-    $list_type = get_option('new_members_only_list_type');
     $upload_default = get_option('new_members_only_upload_default');
 
     $fields['nmo_add_to_list'] = array(
       'input' => 'html',
-      'label' => $list_type === 'blacklist' ? _('Add to blacklist') : _('Add to whitelist'),
+      'label' => __('Add to whitelist'),
       'html' => '<input type="checkbox" name="attachments['.$post->ID.'][nmo_add_to_list]" '.($upload_default==='true'?'checked':'').'>',
     );
   }

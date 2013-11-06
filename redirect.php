@@ -97,7 +97,6 @@ add_action('init', function () {
 
   // List
   $hit = false;
-  $list_type = get_option('new_members_only_list_type');
   $list = explode("\r\n",get_option('new_members_only_list_content'));
 
   foreach ($list as $w) {
@@ -132,8 +131,7 @@ add_action('init', function () {
     }
   }
 
-  if (($list_type === 'whitelist' && $hit) ||
-      ($list_type === 'blacklist' && !$hit)) {
+  if ($hit) {
     header('Cache-control: public');
     new_members_only_serve_uploads();
     return;

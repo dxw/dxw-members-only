@@ -2,7 +2,7 @@
 /*
  * Plugin Name: New Members Only
  * Plugin URI: http://dxw.com
- * Description: Whitelist or blacklist content from logged-out users. Also, block uploads dir from logged-out users. Do not disable.
+ * Description: Whitelist content that logged-out users can see
  * Version: 1.0
  * Author: dxw
  * Author URI: http://dxw.com

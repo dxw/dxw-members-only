@@ -12,10 +12,6 @@ class MetaSettings {
   }
 
   function set_defaults() {
-    if(!get_option('new_members_only_list_type')) {
-      add_option('new_members_only_list_type', "blacklist");
-    }
-
     if(!get_option('new_members_only_list_content')) {
       add_option('new_members_only_list_content', "");
     }
