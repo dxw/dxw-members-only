@@ -1,0 +1,11 @@
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@git.dxw.net:libs/cidr"
+        }
+    ],
+    "require": {
+        "dxw/cidr": "dev-master"
+    }
+}

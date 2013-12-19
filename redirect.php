@@ -44,15 +44,12 @@ function new_members_only_redirect($root) {
 function new_members_only_ip_in_range($ip, $range) {
   $range = trim($range);
 
+  # Fix 4-in-6 addresses
   if (preg_match('_^::ffff:(.*)$_', $ip, $m)) {
-    # Fix 4-in-6 addresses
     $ip = $m[1];
   }
-  if ($ip === $range) {
-    # Raw IP addresses in config
-    return true;
-  }
-  return Net_IPv4::ipInNetwork($ip, $range);
+
+  return \CIDR\IPv4::match($range, $ip);
 }
 
 function new_members_only_current_ip_in_whitelist() {

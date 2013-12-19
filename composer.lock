@@ -1,0 +1,50 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "ed4e0e545681d89ce9c473155bd20f7f",
+    "packages": [
+        {
+            "name": "dxw/cidr",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@git.dxw.net:libs/cidr",
+                "reference": "9ed8e657910222069181de12408f0c6cea7b7635"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "CIDR": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Tom Adams",
+                    "email": "tom@dxw.com",
+                    "homepage": "http://dxw.com"
+                }
+            ],
+            "description": "CIDR functions",
+            "homepage": "https://github.com/dxw/cidr",
+            "time": "2013-12-19 15:25:50"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "dxw/cidr": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
