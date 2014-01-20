@@ -49,7 +49,9 @@ function new_members_only_ip_in_range($ip, $range) {
     $ip = $m[1];
   }
 
-  return \CIDR\IPv4::match($range, $ip);
+  list($match, $error) = \CIDR\IPv4::match($range, $ip);
+
+  return $match;
 }
 
 function new_members_only_current_ip_in_whitelist() {
