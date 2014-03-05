@@ -66,6 +66,11 @@ function new_members_only_current_ip_in_whitelist() {
 }
 
 add_action('init', function () {
+  // Fix for wp-cli
+  if (defined('WP_CLI_ROOT')) {
+    return;
+  }
+
   do_action('new_members_only_redirect');
   if (
       defined('NEW_MEMBERS_ONLY_PASSTHROUGH') ||
