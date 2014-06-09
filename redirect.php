@@ -96,6 +96,8 @@ add_action('init', function () {
 
   // IP whitelist
   if (new_members_only_current_ip_in_whitelist()) {
+    header('Cache-control: private');
+    new_members_only_serve_uploads();
     return;
   }
 
