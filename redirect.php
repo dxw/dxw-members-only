@@ -2,7 +2,11 @@
 
 function new_members_only_serve_uploads() {
   $req = $_SERVER['REQUEST_URI'];
-  if ($req === '/wp-content/uploads' || startswith($req, '/wp-content/uploads/')) {
+  if (
+    $req === '/wp-content/uploads' || startswith($req, '/wp-content/uploads/')
+    ||
+    $req === '/wp-content/blogs.dir' || startswith($req, '/wp-content/blogs.dir/')
+  ) {
 
     $upload_dir = wp_upload_dir();
     $baseurl = preg_replace('%^https?://[^/]+(/.*)$%', '$1', $upload_dir['baseurl']);
