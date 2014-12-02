@@ -82,7 +82,7 @@ add_action('init', function () {
       is_user_logged_in() ||
       apply_filters('new_members_only_redirect', false) === true
      ) {
-    header('Cache-control: private');
+    header('Cache-Control: private');
     new_members_only_serve_uploads();
     return;
   }
@@ -100,7 +100,7 @@ add_action('init', function () {
 
   // IP whitelist
   if (new_members_only_current_ip_in_whitelist()) {
-    header('Cache-control: private');
+    header('Cache-Control: private');
     new_members_only_serve_uploads();
     return;
   }
@@ -142,11 +142,11 @@ add_action('init', function () {
   }
 
   if ($hit) {
-    header('Cache-control: public');
+    header('Cache-Control: public');
     new_members_only_serve_uploads();
     return;
   }
 
-  header('Cache-control: private');
+  header('Cache-Control: private');
   new_members_only_redirect($path === '/');
 }, -99999999999);
