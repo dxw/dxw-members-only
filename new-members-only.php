@@ -20,6 +20,15 @@ if (!function_exists('endswith')) {
   }
 }
 
+function nmo_strip_query($path) {
+  $pos = strpos($path, '?');
+  if ($pos !== false) {
+    $path = substr($path, 0, $pos);
+  }
+
+  return $path;
+}
+
 if (!defined('DOING_CRON')) {
   require(__DIR__.'/vendor.phar');
   require(__DIR__.'/metasettings.php');

@@ -1,7 +1,7 @@
 <?php
 
 function new_members_only_serve_uploads() {
-  $req = $_SERVER['REQUEST_URI'];
+  $req = nmo_strip_query($_SERVER['REQUEST_URI']);
   if (
     $req === '/wp-content/uploads' || startswith($req, '/wp-content/uploads/')
     ||
@@ -88,10 +88,7 @@ add_action('init', function () {
   }
 
   // Get path component
-  $path = $_SERVER['REQUEST_URI'];
-  $pos = strpos($path, '?');
-  if ($pos !== false)
-    $path = substr($path, 0, $pos);
+  $path = nmo_strip_query($_SERVER['REQUEST_URI']);
 
   // Always allow wp-login.php
   if (endswith($path, 'wp-login.php')) {
