@@ -8,18 +8,6 @@
  * Author URI: http://dxw.com
  */
 
-if (!function_exists('startswith')) {
-  function startswith($haystack, $needle) {
-    return substr($haystack, 0, strlen($needle)) === $needle;
-  }
-}
-
-if (!function_exists('endswith')) {
-  function endswith($haystack, $needle) {
-    return substr($haystack, -strlen($needle)) === $needle;
-  }
-}
-
 function nmo_strip_query($path) {
   $pos = strpos($path, '?');
   if ($pos !== false) {

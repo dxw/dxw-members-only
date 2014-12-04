@@ -3,9 +3,9 @@
 function new_members_only_serve_uploads() {
   $req = nmo_strip_query($_SERVER['REQUEST_URI']);
   if (
-    $req === '/wp-content/uploads' || startswith($req, '/wp-content/uploads/')
+    $req === '/wp-content/uploads' || \Missing\String::starts_with($req, '/wp-content/uploads/')
     ||
-    $req === '/wp-content/blogs.dir' || startswith($req, '/wp-content/blogs.dir/')
+    $req === '/wp-content/blogs.dir' || \Missing\String::starts_with($req, '/wp-content/blogs.dir/')
   ) {
 
     $upload_dir = wp_upload_dir();
@@ -91,7 +91,7 @@ add_action('init', function () {
   $path = nmo_strip_query($_SERVER['REQUEST_URI']);
 
   // Always allow wp-login.php
-  if (endswith($path, 'wp-login.php')) {
+  if (\Missing\String::ends_with($path, 'wp-login.php')) {
     return;
   }
 
@@ -120,19 +120,19 @@ add_action('init', function () {
     }
 
     # /welcome/ => /welcome
-    if (endswith($w, '/') && $path === substr($w, 0, -1)) {
+    if (\Missing\String::ends_with($w, '/') && $path === substr($w, 0, -1)) {
       $hit = true;
       break;
     }
 
     # /welcome/* => /welcome
-    if (endswith($w, '/*') && $path === substr($w, 0, -2)) {
+    if (\Missing\String::ends_with($w, '/*') && $path === substr($w, 0, -2)) {
       $hit = true;
       break;
     }
 
     # /welcome/* => /welcome/.*
-    if (endswith($w, '*') && startswith($path, substr($w, 0, -1))) {
+    if (\Missing\String::ends_with($w, '*') && \Missing\String::starts_with($path, substr($w, 0, -1))) {
       $hit = true;
       break;
     }

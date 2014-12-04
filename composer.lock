@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "ed4e0e545681d89ce9c473155bd20f7f",
+    "hash": "c7ed59edce09de84f46006c1a0a7d816",
     "packages": [
         {
             "name": "dxw/cidr",
@@ -11,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@git.dxw.net:libs/cidr",
-                "reference": "9ed8e657910222069181de12408f0c6cea7b7635"
+                "reference": "ee9434c5c9160c98434de5b5c6a32b2769d47d59"
             },
             "type": "library",
             "autoload": {
@@ -28,23 +29,52 @@
             ],
             "description": "CIDR functions",
             "homepage": "https://github.com/dxw/cidr",
-            "time": "2013-12-19 15:25:50"
+            "time": "2014-08-22 18:02:14"
+        },
+        {
+            "name": "dxw/php-missing",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dxw/php-missing.git",
+                "reference": "ff60201e34bf14915a991b11c1a2c791758714dc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dxw/php-missing/zipball/ff60201e34bf14915a991b11c1a2c791758714dc",
+                "reference": "ff60201e34bf14915a991b11c1a2c791758714dc",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Missing": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tom Adams",
+                    "email": "tom@dxw.com",
+                    "homepage": "http://dxw.com"
+                }
+            ],
+            "description": "The stdlib you wish PHP had",
+            "homepage": "https://github.com/dxw/php-missing",
+            "time": "2014-08-22 17:56:39"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "dxw/cidr": 20
+        "dxw/cidr": 20,
+        "dxw/php-missing": 20
     },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "prefer-stable": false,
+    "platform": [],
+    "platform-dev": []
 }
