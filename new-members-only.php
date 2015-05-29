@@ -9,6 +9,12 @@
  * Text Domain: membersonly
  */
 
+/**
+ * Strip query string from URL
+ * 
+ * @param  string $path URL
+ * @return string       Sanitised URL
+ */
 function nmo_strip_query($path) {
   $pos = strpos($path, '?');
   if ($pos !== false) {
