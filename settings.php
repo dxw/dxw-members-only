@@ -11,8 +11,10 @@ function new_members_only_options_page() {
   <form method="post" action="options.php">
     <?php settings_fields('new_members_only') ?>
 
-    <table class="form-table">
+    <h3><?php _e('Content whitelist', 'membersonly'); ?></h3>
+    <p><?php _e('Enter a list of content that all users can view without logging in.', 'membersonly'); ?></p>
 
+    <table class="form-table">
       <tr valign="top">
         <th scope="row"><label for="new_members_only_list_content"><?php _e('List', 'membersonly') ?></label></th>
         <td>
@@ -25,12 +27,12 @@ function new_members_only_options_page() {
     </table>
 
     <h3><?php _e('IP whitelist') ?></h3>
-    <p><?php _e('Certain IP addresses can be allowed to view the site without logging in.', 'membersonly') ?></p>
+    <p><?php _e('Enter a list of IP addresses that can be allowed to view the site without logging in.', 'membersonly') ?></p>
 
     <table class="form-table">
 
       <tr valign="top">
-        <th scope="row"><label for="new_members_only_ip_whitelist"><?php _e('IP whitelist') ?></label></th>
+        <th scope="row"><label for="new_members_only_ip_whitelist"><?php _e('List') ?></label></th>
         <td>
           <textarea cols="30" rows="5" name="new_members_only_ip_whitelist" id="new_members_only_ip_whitelist" class="large-text code"><?php echo esc_html(get_option('new_members_only_ip_whitelist')) ?></textarea>
           <br>
@@ -41,7 +43,7 @@ function new_members_only_options_page() {
     </table>
 
     <h3><?php _e('Redirection', 'membersonly') ?></h3>
-    <p><?php _e('In both the following options, <code>%return_path%</code> will be converted to the URL that was originally visited. i.e. <code>/wp-login.php?redirect_to=%return_path%</code>', 'membersonly') ?></p>
+    <p><?php _e('In both the following options, <code>%return_path%</code> will be converted to the URL that was originally visited. i.e. <code>/wp-login.php?redirect_to=http://example.com/private-page</code>', 'membersonly') ?></p>
 
     <table class="form-table">
 
