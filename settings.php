@@ -16,7 +16,7 @@ function new_members_only_options_page() {
 
     <table class="form-table">
       <tr valign="top">
-        <th scope="row"><label for="new_members_only_list_content"><?php _e('List', 'membersonly') ?></label></th>
+        <th scope="row"><label for="new_members_only_list_content"><?php _e('List of content URIs', 'membersonly') ?></label></th>
         <td>
           <textarea cols="30" rows="5" name="new_members_only_list_content" id="new_members_only_list_content" class="large-text code"><?php echo esc_html(get_option('new_members_only_list_content')) ?></textarea>
           <br>
@@ -32,7 +32,7 @@ function new_members_only_options_page() {
     <table class="form-table">
 
       <tr valign="top">
-        <th scope="row"><label for="new_members_only_ip_whitelist"><?php _e('List') ?></label></th>
+        <th scope="row"><label for="new_members_only_ip_whitelist"><?php _e('List of IP addresses', 'membersonly') ?></label></th>
         <td>
           <textarea cols="30" rows="5" name="new_members_only_ip_whitelist" id="new_members_only_ip_whitelist" class="large-text code"><?php echo esc_html(get_option('new_members_only_ip_whitelist')) ?></textarea>
           <br>
