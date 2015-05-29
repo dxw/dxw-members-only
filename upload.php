@@ -7,7 +7,7 @@ add_filter('attachment_fields_to_edit', function ($fields, $post) {
 
     $fields['nmo_add_to_list'] = array(
       'input' => 'html',
-      'label' => __('Add to whitelist'),
+      'label' => __('Add to whitelist', 'membersonly'),
       'html' => '<input type="checkbox" name="attachments['.$post->ID.'][nmo_add_to_list]" '.($upload_default==='true'?'checked':'').'>',
     );
   }
