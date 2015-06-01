@@ -9,23 +9,9 @@
  * Text Domain: membersonly
  */
 
-/**
- * Strip query string from URL
- * 
- * @param  string $path URL
- * @return string       Sanitised URL
- */
-function nmo_strip_query($path) {
-  $pos = strpos($path, '?');
-  if ($pos !== false) {
-    $path = substr($path, 0, $pos);
-  }
-
-  return $path;
-}
-
 if (!defined('DOING_CRON')) {
   require(__DIR__.'/vendor.phar');
+  require(__DIR__.'/helpers.php');
   require(__DIR__.'/metasettings.php');
   require(__DIR__.'/settings.php');
   require(__DIR__.'/upload.php');

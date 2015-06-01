@@ -5,7 +5,7 @@
  * @return void
  */
 function new_members_only_serve_uploads() {
-  $req = nmo_strip_query($_SERVER['REQUEST_URI']);
+  $req = NmoHelpers::strip_query($_SERVER['REQUEST_URI']);
   if (
     $req === '/wp-content/uploads' || \Missing\String::starts_with($req, '/wp-content/uploads/')
     ||
@@ -98,7 +98,7 @@ add_action('init', function () {
   }
 
   // Get path component
-  $path = nmo_strip_query($_SERVER['REQUEST_URI']);
+  $path = NmoHelpers::strip_query($_SERVER['REQUEST_URI']);
 
   // Always allow wp-login.php
   if (\Missing\String::ends_with($path, 'wp-login.php')) {
