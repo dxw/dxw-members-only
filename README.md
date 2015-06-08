@@ -1,6 +1,6 @@
 # new-members-only
 
-WordPress plugin that allows whitelisting certain content and certain IP addresses
+WordPress plugin that blocks access to site when user is not logged in. Allows for whitelisting of certain content and certain IP addresses.
 
 ## Usage
 

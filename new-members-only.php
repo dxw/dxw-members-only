@@ -2,12 +2,19 @@
 /*
  * Plugin Name: New Members Only
  * Plugin URI: http://dxw.com
- * Description: Whitelist content that logged-out users can see
+ * Description: Make your WordPress site visible to signed-in users only with the added ability to whitelist specific content for access by all users.
  * Version: 1.0
  * Author: dxw
  * Author URI: http://dxw.com
+ * Text Domain: membersonly
  */
 
+/**
+ * Strip query string from URL
+ * 
+ * @param  string $path URL
+ * @return string       Sanitised URL
+ */
 function nmo_strip_query($path) {
   $pos = strpos($path, '?');
   if ($pos !== false) {
