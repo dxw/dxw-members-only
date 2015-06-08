@@ -1,18 +1,24 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c7ed59edce09de84f46006c1a0a7d816",
+    "hash": "fb2c0b96e4fc0f8ba3171dc8b7c47f81",
     "packages": [
         {
             "name": "dxw/cidr",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@git.dxw.net:libs/cidr",
-                "reference": "ee9434c5c9160c98434de5b5c6a32b2769d47d59"
+                "url": "https://github.com/dxw/cidr.git",
+                "reference": "30a5741741f7adb9d945abdcc6f7f3665fcb608c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dxw/cidr/zipball/30a5741741f7adb9d945abdcc6f7f3665fcb608c",
+                "reference": "30a5741741f7adb9d945abdcc6f7f3665fcb608c",
+                "shasum": ""
             },
             "type": "library",
             "autoload": {
@@ -20,6 +26,7 @@
                     "CIDR": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
                     "name": "Tom Adams",
@@ -29,7 +36,7 @@
             ],
             "description": "CIDR functions",
             "homepage": "https://github.com/dxw/cidr",
-            "time": "2014-08-22 18:02:14"
+            "time": "2015-05-14 20:54:30"
         },
         {
             "name": "dxw/php-missing",
@@ -75,6 +82,7 @@
         "dxw/php-missing": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": [],
     "platform-dev": []
 }
