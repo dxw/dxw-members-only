@@ -88,7 +88,6 @@ add_action('init', function () {
   do_action('new_members_only_redirect');
   if (
       defined('NEW_MEMBERS_ONLY_PASSTHROUGH') ||
-      is_admin() ||
       is_user_logged_in() ||
       apply_filters('new_members_only_redirect', false) === true
      ) {
