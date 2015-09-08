@@ -99,8 +99,13 @@ add_action('init', function () {
   // Get path component
   $path = nmo_strip_query($_SERVER['REQUEST_URI']);
 
-  // Always allow wp-login.php
+  // Always allow /wp-login.php
   if (\Missing\String::ends_with($path, 'wp-login.php')) {
+    return;
+  }
+
+  // Always allow POST /wp-admin/admin-ajax.php with action=heartbeat
+  if (\Missing\String::ends_with($path, 'wp-admin/admin-ajax.php') && isset($_POST['action']) && $_POST['action'] === 'heartbeat') {
     return;
   }
 
