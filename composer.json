@@ -2,5 +2,8 @@
     "require": {
         "dxw/cidr": "dev-master",
         "dxw/php-missing": "dev-master"
+    },
+    "require-dev": {
+        "dxw/phar-install": "dev-master"
     }
 }

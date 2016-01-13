@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fb2c0b96e4fc0f8ba3171dc8b7c47f81",
+    "hash": "b8d57e6eab491524296b485beb1c44ba",
     "packages": [
         {
             "name": "dxw/cidr",
@@ -12,18 +12,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dxw/cidr.git",
-                "reference": "30a5741741f7adb9d945abdcc6f7f3665fcb608c"
+                "reference": "4d3d25e7dafb07b1edabe69b439ebe7dd316aba2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dxw/cidr/zipball/30a5741741f7adb9d945abdcc6f7f3665fcb608c",
-                "reference": "30a5741741f7adb9d945abdcc6f7f3665fcb608c",
+                "url": "https://api.github.com/repos/dxw/cidr/zipball/4d3d25e7dafb07b1edabe69b439ebe7dd316aba2",
+                "reference": "4d3d25e7dafb07b1edabe69b439ebe7dd316aba2",
                 "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "CIDR": "src/"
+                "psr-4": {
+                    "CIDR\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -36,7 +39,7 @@
             ],
             "description": "CIDR functions",
             "homepage": "https://github.com/dxw/cidr",
-            "time": "2015-05-14 20:54:30"
+            "time": "2015-10-27 13:24:37"
         },
         {
             "name": "dxw/php-missing",
@@ -44,18 +47,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dxw/php-missing.git",
-                "reference": "ff60201e34bf14915a991b11c1a2c791758714dc"
+                "reference": "a631e75586e9278fe60dde7c32daf4cde47c0056"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dxw/php-missing/zipball/ff60201e34bf14915a991b11c1a2c791758714dc",
-                "reference": "ff60201e34bf14915a991b11c1a2c791758714dc",
+                "url": "https://api.github.com/repos/dxw/php-missing/zipball/a631e75586e9278fe60dde7c32daf4cde47c0056",
+                "reference": "a631e75586e9278fe60dde7c32daf4cde47c0056",
                 "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "Missing": "src/"
+                "psr-4": {
+                    "Missing\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -71,15 +77,49 @@
             ],
             "description": "The stdlib you wish PHP had",
             "homepage": "https://github.com/dxw/php-missing",
-            "time": "2014-08-22 17:56:39"
+            "time": "2015-11-03 17:20:40"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "dxw/phar-install",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dxw/phar-install.git",
+                "reference": "6eeff66fa5063c13bd913c50f766f96573fa6d41"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dxw/phar-install/zipball/6eeff66fa5063c13bd913c50f766f96573fa6d41",
+                "reference": "6eeff66fa5063c13bd913c50f766f96573fa6d41",
+                "shasum": ""
+            },
+            "bin": [
+                "bin/phar-install"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tom Adams",
+                    "email": "tom@dxw.com",
+                    "homepage": "http://dxw.com"
+                }
+            ],
+            "homepage": "https://github.com/dxw/phar-install",
+            "time": "2015-10-22 15:30:27"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "dxw/cidr": 20,
-        "dxw/php-missing": 20
+        "dxw/php-missing": 20,
+        "dxw/phar-install": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
