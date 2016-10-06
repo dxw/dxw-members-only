@@ -4,7 +4,7 @@
  * ??
  */
 class MetaSettings {
-  
+
   function __construct($file, $namespace) {
     $this->file = $file;
     $this->plugin = plugin_basename($file);
@@ -30,11 +30,15 @@ class MetaSettings {
     if(!get_option('new_members_only_redirect_root')) {
       add_option('new_members_only_redirect_root', '/wp-login.php?redirect_to=%return_path%');
     }
+
+    if(!get_option('new_members_only_max_age')) {
+        add_option('new_members_only_max_age', 0);
+    }
   }
 
   /**
    * Wrapper for adding settings with the WP Settings API
-   * 
+   *
    * @param string $title    Name of the setting
    * @param array  $options  Setting options array
    * @param string $callback Callback function
@@ -50,8 +54,8 @@ class MetaSettings {
   }
 
   /**
-   * Insert action links for plugin 
-   * 
+   * Insert action links for plugin
+   *
    * @param  array  $links Existing action links for the plugin
    * @param  string $file  File to link to in the actions
    * @return array         New action links
@@ -64,7 +68,7 @@ class MetaSettings {
 
   /**
    * Create admin menu for plugin
-   * 
+   *
    * @return void
    */
   function admin_menu() {
@@ -73,7 +77,7 @@ class MetaSettings {
 
   /**
    * Prefix options with namespace
-   * 
+   *
    * @param  array  $whitelist_options Options to whitelist
    * @return array                     Whitelisted options
    */

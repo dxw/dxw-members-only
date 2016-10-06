@@ -35,7 +35,7 @@ function new_members_only_serve_uploads() {
 
 /**
  * Handle redirect for users when not logged in or viewing whitelisted content
- * 
+ *
  * @param  boolean $root Whether attempting to view root or not
  * @return void
  */
@@ -85,13 +85,15 @@ add_action('init', function () {
     return;
   }
 
+  $max_age = new_members_only_get_max_age();
+
   do_action('new_members_only_redirect');
   if (
       defined('NEW_MEMBERS_ONLY_PASSTHROUGH') ||
       is_user_logged_in() ||
       apply_filters('new_members_only_redirect', false) === true
      ) {
-    header('Cache-Control: private');
+    header('Cache-Control: private, max-age=' . $max_age);
     new_members_only_serve_uploads();
     return;
   }
@@ -111,7 +113,7 @@ add_action('init', function () {
 
   // IP whitelist
   if (new_members_only_current_ip_in_whitelist()) {
-    header('Cache-Control: private');
+    header('Cache-Control: private, max-age=' . $max_age);
     new_members_only_serve_uploads();
     return;
   }
@@ -158,6 +160,15 @@ add_action('init', function () {
     return;
   }
 
-  header('Cache-Control: private');
+  header('Cache-Control: private, max-age=' . $max_age);
   new_members_only_redirect($path === '/');
 }, -99999999999);
+
+function new_members_only_get_max_age()
+{
+    $max_age = (int) get_option('new_members_only_max_age');
+    if($max_age < 0 || $max_age==='') {
+        $max_age = 0;
+    }
+    return $max_age;
+}
