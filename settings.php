@@ -1,11 +1,11 @@
 <?php
 
 $ms = new MetaSettings(__FILE__, 'new_members_only');
-$ms->add_settings(__('New Members Only', 'membersonly'), array('list_type', 'list_content', 'ip_whitelist', 'redirect', 'redirect_root', 'upload_default'), 'new_members_only_options_page');
+$ms->add_settings(__('New Members Only', 'membersonly'), array('list_type', 'list_content', 'ip_whitelist', 'redirect', 'redirect_root', 'upload_default', 'max_age'), 'new_members_only_options_page');
 
 /**
  * Output settings page content
- * 
+ *
  * @return void
  */
 function new_members_only_options_page() {
@@ -91,6 +91,18 @@ function new_members_only_options_page() {
         </td>
       </tr>
 
+    </table>
+
+    <h3><?php _e('Max Age', 'membersonly') ?></h3>
+
+    <table class="form-table">
+        <tr valign="top">
+            <th scope="row"><label for="new_members_only_max_age"><?php _e('Max age for cache-control header', 'membersonly') ?></label></th>
+            <td>
+                <input type="number" min="0" step="1" name="new_members_only_max_age" id="new_members_only_max_age" value="<?php form_option('new_members_only_max_age') ?>" class="regular-text">
+                <span class="description">Defaults to 0 if not set.</span>
+            </td>
+        </tr>
     </table>
 
     <?php submit_button() ?>
