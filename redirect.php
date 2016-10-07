@@ -85,7 +85,7 @@ add_action('init', function () {
     return;
   }
 
-  $max_age = new_members_only_get_max_age();
+  $max_age = absint(get_option('new_members_only_max_age'));
 
   do_action('new_members_only_redirect');
   if (
@@ -163,12 +163,3 @@ add_action('init', function () {
   header('Cache-Control: private, max-age=' . $max_age);
   new_members_only_redirect($path === '/');
 }, -99999999999);
-
-function new_members_only_get_max_age()
-{
-    $max_age = (int) get_option('new_members_only_max_age');
-    if($max_age < 0 || $max_age==='') {
-        $max_age = 0;
-    }
-    return $max_age;
-}
