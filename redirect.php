@@ -4,9 +4,9 @@
  * Handle request for uploaded content
  * @return void
  */
-function new_members_only_serve_uploads()
+function dxw_members_only_serve_uploads()
 {
-    $req = nmo_strip_query($_SERVER['REQUEST_URI']);
+    $req = dmo_strip_query($_SERVER['REQUEST_URI']);
     if (
         $req === '/wp-content/uploads' || \Missing\Strings::startsWith($req, '/wp-content/uploads/')
         ||
@@ -33,29 +33,30 @@ function new_members_only_serve_uploads()
         }
     }
 }
-
-// Handle redirect for users when not logged in or viewing whitelisted content
-//
-// @param  boolean $root Whether attempting to view root or not
-// @return void
-function new_members_only_redirect($root)
+/**
+ * Handle redirect for users when not logged in or viewing whitelisted content
+ *
+ * @param  boolean $root Whether attempting to view root or not
+ * @return void
+ */
+function dxw_members_only_redirect($root)
 {
     // Redirect
-    if ($root) {
-        $redirect = get_option('new_members_only_redirect_root');
-    } else {
-        $redirect = get_option('new_members_only_redirect');
-    }
+  if ($root) {
+      $redirect = get_option('dxw_members_only_redirect_root');
+  } else {
+      $redirect = get_option('dxw_members_only_redirect');
+  }
 
-    // %return_path%
-    $redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
+  // %return_path%
+  $redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
 
     header('HTTP/1.1 303 See Other');
     header('Location: '.$redirect);
     die();
 }
 
-function new_members_only_ip_in_range($ip, $range)
+function dxw_members_only_ip_in_range($ip, $range)
 {
     $range = trim($range);
 
@@ -72,60 +73,59 @@ function new_members_only_ip_in_range($ip, $range)
     return $result->unwrap();
 }
 
-function new_members_only_current_ip_in_whitelist()
+function dxw_members_only_current_ip_in_whitelist()
 {
-    $ip_list = explode("\r\n", get_option('new_members_only_ip_whitelist'));
+    $ip_list = explode("\r\n", get_option('dxw_members_only_ip_whitelist'));
     foreach ($ip_list as $ip) {
-        if (!empty($ip) && new_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
+        if (!empty($ip) && dxw_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
             return true;
         }
     }
-
     return false;
 }
 
 add_action('init', function () {
-    // Fix for wp-cli
-    if (defined('WP_CLI_ROOT')) {
-        return;
-    }
+  // Fix for wp-cli
+  if (defined('WP_CLI_ROOT')) {
+      return;
+  }
 
-    $max_age = absint(get_option('new_members_only_max_age'));
+  $max_age = absint(get_option('dxw_members_only_max_age'));
 
-    do_action('new_members_only_redirect');
-    if (
-        defined('NEW_MEMBERS_ONLY_PASSTHROUGH') ||
-        is_user_logged_in() ||
-        apply_filters('new_members_only_redirect', false) === true
-    ) {
-        header('Cache-Control: private, max-age=' . $max_age);
-        new_members_only_serve_uploads();
-        return;
-    }
+  do_action('dxw_members_only_redirect');
+  if (
+      defined('dxw_members_ONLY_PASSTHROUGH') ||
+      is_user_logged_in() ||
+      apply_filters('dxw_members_only_redirect', false) === true
+     ) {
+      header('Cache-Control: private, max-age=' . $max_age);
+      dxw_members_only_serve_uploads();
+      return;
+  }
 
-    // Get path component
-    $path = nmo_strip_query($_SERVER['REQUEST_URI']);
+  // Get path component
+  $path = dmo_strip_query($_SERVER['REQUEST_URI']);
 
-    // Always allow /wp-login.php
-    if (\Missing\Strings::endsWith($path, 'wp-login.php')) {
-        return;
-    }
+  // Always allow /wp-login.php
+  if (\Missing\Strings::endsWith($path, 'wp-login.php')) {
+      return;
+  }
 
-    // Always allow POST /wp-admin/admin-ajax.php with action=heartbeat
-    if (\Missing\Strings::endsWith($path, 'wp-admin/admin-ajax.php') && isset($_POST['action']) && $_POST['action'] === 'heartbeat') {
-        return;
-    }
+  // Always allow POST /wp-admin/admin-ajax.php with action=heartbeat
+  if (\Missing\Strings::endsWith($path, 'wp-admin/admin-ajax.php') && isset($_POST['action']) && $_POST['action'] === 'heartbeat') {
+      return;
+  }
 
-    // IP whitelist
-    if (new_members_only_current_ip_in_whitelist()) {
-        header('Cache-Control: private, max-age=' . $max_age);
-        new_members_only_serve_uploads();
-        return;
-    }
+  // IP whitelist
+  if (dxw_members_only_current_ip_in_whitelist()) {
+      header('Cache-Control: private, max-age=' . $max_age);
+      dxw_members_only_serve_uploads();
+      return;
+  }
 
-    // List
-    $hit = false;
-    $list = explode("\r\n", get_option('new_members_only_list_content'));
+  // List
+  $hit = false;
+  $list = explode("\r\n", get_option('dxw_members_only_list_content'));
 
     foreach ($list as $w) {
         $w = trim($w);
@@ -159,12 +159,12 @@ add_action('init', function () {
         }
     }
 
-    if ($hit) {
-        header('Cache-Control: public');
-        new_members_only_serve_uploads();
-        return;
-    }
+  if ($hit) {
+      header('Cache-Control: public');
+      dxw_members_only_serve_uploads();
+      return;
+  }
 
-    header('Cache-Control: private, max-age=' . $max_age);
-    new_members_only_redirect($path === '/');
+  header('Cache-Control: private, max-age=' . $max_age);
+  dxw_members_only_redirect($path === '/');
 }, -99999999999);

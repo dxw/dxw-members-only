@@ -12,25 +12,27 @@ class metasettings
         $this->set_defaults();
     }
 
-    // Set default options settings for plugin
-    public function set_defaults()
-    {
-        if (!get_option('new_members_only_list_content')) {
-            add_option('new_members_only_list_content', '');
-        }
+  /**
+   * Set default options settings for plugin
+   */
+  public function set_defaults()
+  {
+      if (!get_option('dxw_members_only_list_content')) {
+          add_option('dxw_members_only_list_content', '');
+      }
 
-        if (!get_option('new_members_only_redirect')) {
-            add_option('new_members_only_redirect', '/wp-login.php?redirect_to=%return_path%');
-        }
+      if (!get_option('dxw_members_only_redirect')) {
+          add_option('dxw_members_only_redirect', '/wp-login.php?redirect_to=%return_path%');
+      }
 
-        if (!get_option('new_members_only_redirect_root')) {
-            add_option('new_members_only_redirect_root', '/wp-login.php?redirect_to=%return_path%');
-        }
+      if (!get_option('dxw_members_only_redirect_root')) {
+          add_option('dxw_members_only_redirect_root', '/wp-login.php?redirect_to=%return_path%');
+      }
 
-        if (!get_option('new_members_only_max_age')) {
-            add_option('new_members_only_max_age', 0);
-        }
-    }
+      if (!get_option('dxw_members_only_max_age')) {
+          add_option('dxw_members_only_max_age', 0);
+      }
+  }
 
     // Wrapper for adding settings with the WP Settings API
     //
@@ -48,18 +50,20 @@ class metasettings
         add_filter('whitelist_options', array($this, 'whitelist_options'));
     }
 
-    // Insert action links for plugin
-    //
-    // @param  array  $links Existing action links for the plugin
-    // @param  string $file  File to link to in the actions
-    // @return array         New action links
-    public function plugin_action_links($links, $file)
-    {
-        if (dirname($file) === dirname($this->plugin)) {
-            array_unshift($links, '<a href="'.get_admin_url(null, 'options-general.php?page='.$this->plugin).'">'.__('Settings', 'membersonly').'</a>');
-        }
-        return $links;
-    }
+  /**
+   * Insert action links for plugin
+   *
+   * @param  array  $links Existing action links for the plugin
+   * @param  string $file  File to link to in the actions
+   * @return array         New action links
+   */
+  public function plugin_action_links($links, $file)
+  {
+      if (dirname($file) === dirname($this->plugin)) {
+          array_unshift($links, '<a href="'.get_admin_url(null, 'options-general.php?page='.$this->plugin).'">'.__('Settings', 'dxwmembersonly').'</a>');
+      }
+      return $links;
+  }
 
     // Create admin menu for plugin
     //
