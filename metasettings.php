@@ -34,21 +34,23 @@ class metasettings
       }
   }
 
-    // Wrapper for adding settings with the WP Settings API
-    //
-    // @param string $title    Name of the setting
-    // @param array  $options  Setting options array
-    // @param string $callback Callback function
-    public function add_settings($title, $options, $callback)
-    {
-        $this->settings->title = $title;
-        $this->settings->options = $options;
-        $this->settings->callback = $callback;
+  /**
+   * Wrapper for adding settings with the WP Settings API
+   *
+   * @param string $title    Name of the setting
+   * @param array  $options  Setting options array
+   * @param string $callback Callback function
+   */
+  public function add_settings($title, $options, $callback)
+  {
+      $this->settings->title = $title;
+      $this->settings->options = $options;
+      $this->settings->callback = $callback;
 
-        add_filter('plugin_action_links', array($this, 'plugin_action_links'), 10, 2);
-        add_action('admin_menu', array($this, 'admin_menu'));
-        add_filter('whitelist_options', array($this, 'whitelist_options'));
-    }
+      add_filter('plugin_action_links', array($this, 'plugin_action_links'), 10, 2);
+      add_action('admin_menu', array($this, 'admin_menu'));
+      add_filter('whitelist_options', array($this, 'whitelist_options'));
+  }
 
   /**
    * Insert action links for plugin
@@ -65,24 +67,28 @@ class metasettings
       return $links;
   }
 
-    // Create admin menu for plugin
-    //
-    // @return void
-    public function admin_menu()
-    {
-        add_options_page($this->settings->title, $this->settings->title, 'edit_users', $this->file, $this->settings->callback);
-    }
+  /**
+   * Create admin menu for plugin
+   *
+   * @return void
+   */
+  public function admin_menu()
+  {
+      add_options_page($this->settings->title, $this->settings->title, 'edit_users', $this->file, $this->settings->callback);
+  }
 
-    // Prefix options with namespace
-    //
-    // @param  array  $whitelist_options Options to whitelist
-    // @return array                     Whitelisted options
-    public function whitelist_options($whitelist_options)
-    {
-        $whitelist_options[$this->namespace] = array();
-        foreach ($this->settings->options as $opt) {
-            $whitelist_options[$this->namespace][] = $this->namespace.'_'.$opt;
-        }
-        return $whitelist_options;
-    }
+  /**
+   * Prefix options with namespace
+   *
+   * @param  array  $whitelist_options Options to whitelist
+   * @return array                     Whitelisted options
+   */
+  public function whitelist_options($whitelist_options)
+  {
+      $whitelist_options[$this->namespace] = array();
+      foreach ($this->settings->options as $opt) {
+          $whitelist_options[$this->namespace][] = $this->namespace.'_'.$opt;
+      }
+      return $whitelist_options;
+  }
 }
