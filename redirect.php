@@ -1,9 +1,7 @@
 <?php
 
-/**
-* Handle request for uploaded content
-* @return void
-*/
+// Handle request for uploaded content
+// @return void
 function new_members_only_serve_uploads()
 {
     $req = nmo_strip_query($_SERVER['REQUEST_URI']);
@@ -32,12 +30,10 @@ function new_members_only_serve_uploads()
     }
 }
 
-/**
-* Handle redirect for users when not logged in or viewing whitelisted content
-*
-* @param  boolean $root Whether attempting to view root or not
-* @return void
-*/
+// Handle redirect for users when not logged in or viewing whitelisted content
+//
+// @param  boolean $root Whether attempting to view root or not
+// @return void
 function new_members_only_redirect($root)
 {
     // Redirect

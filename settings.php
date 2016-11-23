@@ -3,11 +3,9 @@
 $ms = new MetaSettings(__FILE__, 'new_members_only');
 $ms->add_settings(__('New Members Only', 'membersonly'), array('list_type', 'list_content', 'ip_whitelist', 'redirect', 'redirect_root', 'upload_default', 'max_age'), 'new_members_only_options_page');
 
-/**
-* Output settings page content
-*
-* @return void
-*/
+// Output settings page content
+//
+// @return void
 function new_members_only_options_page()
 {
     ?>
