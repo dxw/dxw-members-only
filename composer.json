@@ -4,6 +4,7 @@
         "dxw/php-missing": "dev-master"
     },
     "require-dev": {
-        "dxw/phar-install": "dev-master"
+        "dxw/phar-install": "dev-master",
+        "friendsofphp/php-cs-fixer": "^1.12"
     }
 }
