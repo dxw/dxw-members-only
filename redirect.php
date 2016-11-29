@@ -1,7 +1,9 @@
 <?php
 
-// Handle request for uploaded content
-// @return void
+/**
+ * Handle request for uploaded content
+ * @return void
+ */
 function new_members_only_serve_uploads()
 {
     $req = nmo_strip_query($_SERVER['REQUEST_URI']);
@@ -14,8 +16,10 @@ function new_members_only_serve_uploads()
         $baseurl = preg_replace('%^https?://[^/]+(/.*)$%', '$1', $upload_dir['baseurl']);
         $basedir = $upload_dir['basedir'];
         $file = preg_replace("[^{$baseurl}]", $basedir, $req);
+        $realFilePath = realpath($file);
+        $realUploadDir = realpath($basedir);
 
-        if (is_file($file) && is_readable($file)) {
+        if (is_file($file) && is_readable($file) && strpos($realFilePath, $realUploadDir) === 0) {
             $mime = wp_check_filetype($file);
 
             $type = 'application/octet-stream';
