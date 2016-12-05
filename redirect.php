@@ -55,7 +55,7 @@ function new_members_only_ip_in_range($ip, $range)
 {
     $range = trim($range);
 
-    # Fix 4-in-6 addresses
+    # Handle IPv4-mapped IPv6 addresses
     if (preg_match('_^::ffff:(.*)$_', $ip, $m)) {
         $ip = $m[1];
     }
