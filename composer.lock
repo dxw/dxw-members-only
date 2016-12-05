@@ -4,30 +4,38 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "705122588fc9be6c660ec771e31d2545",
-    "content-hash": "df2cf22093c768bd968147353eaa942e",
+    "hash": "ee2d509dd8596b5b818d7e228c239fa8",
+    "content-hash": "7eb9217668fea8810316079e5a0e719f",
     "packages": [
         {
             "name": "dxw/cidr",
-            "version": "v1.0.0",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dxw/cidr.git",
-                "reference": "1326e4b8118b83a02b8a28d08c7e3414dc77c788"
+                "reference": "7f9df6a86ed8551734f2ef54b1b28b468d40c860"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dxw/cidr/zipball/1326e4b8118b83a02b8a28d08c7e3414dc77c788",
-                "reference": "1326e4b8118b83a02b8a28d08c7e3414dc77c788",
+                "url": "https://api.github.com/repos/dxw/cidr/zipball/7f9df6a86ed8551734f2ef54b1b28b468d40c860",
+                "reference": "7f9df6a86ed8551734f2ef54b1b28b468d40c860",
                 "shasum": ""
             },
+            "require": {
+                "dxw/result": "^1.0",
+                "ext-gmp": "*"
+            },
             "require-dev": {
-                "phpunit/phpunit": "4.8.*"
+                "fabpot/php-cs-fixer": "1.11.4",
+                "mockery/mockery": "dev-master",
+                "peridot-php/leo": "^1.5",
+                "peridot-php/peridot": "^1.18",
+                "peridot-php/peridot-dot-reporter": "^1.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "CIDR\\": "src/"
+                    "Dxw\\CIDR\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -38,12 +46,12 @@
                 {
                     "name": "Tom Adams",
                     "email": "tom@dxw.com",
-                    "homepage": "https://www.dxw.com/"
+                    "homepage": "http://dxw.com"
                 }
             ],
-            "description": "CIDR functions",
+            "description": "IP address matching with CIDR ranges",
             "homepage": "https://github.com/dxw/cidr",
-            "time": "2016-06-30 20:17:56"
+            "time": "2016-12-05 16:33:54"
         },
         {
             "name": "dxw/php-missing",
@@ -82,6 +90,46 @@
             "description": "The stdlib you wish PHP had",
             "homepage": "https://github.com/dxw/php-missing",
             "time": "2016-05-17 16:56:43"
+        },
+        {
+            "name": "dxw/result",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dxw/result.git",
+                "reference": "f4162f94234f3444dcbc1612889f6e2bfabc03ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dxw/result/zipball/f4162f94234f3444dcbc1612889f6e2bfabc03ec",
+                "reference": "f4162f94234f3444dcbc1612889f6e2bfabc03ec",
+                "shasum": ""
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "1.11.4",
+                "peridot-php/leo": "^1.5",
+                "peridot-php/peridot": "^1.18"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dxw\\Result\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tom Adams",
+                    "email": "tom@dxw.com",
+                    "homepage": "https://www.dxw.com/"
+                }
+            ],
+            "description": "Result values",
+            "homepage": "https://github.com/dxw/result",
+            "time": "2016-07-19 13:32:11"
         }
     ],
     "packages-dev": [

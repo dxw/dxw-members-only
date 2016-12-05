@@ -60,9 +60,12 @@ function new_members_only_ip_in_range($ip, $range)
         $ip = $m[1];
     }
 
-    list($match, $error) = \CIDR\IPv4::match($range, $ip);
+    $result = \Dxw\CIDR\IP::contains($range, $ip);
+    if ($result->isErr()) {
+        return false;
+    }
 
-    return $match;
+    return $result->unwrap();
 }
 
 function new_members_only_current_ip_in_whitelist()
