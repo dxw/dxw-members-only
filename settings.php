@@ -40,7 +40,7 @@ function new_members_only_options_page()
                     <td>
                         <textarea cols="30" rows="5" name="new_members_only_ip_whitelist" id="new_members_only_ip_whitelist" class="large-text code"><?php echo esc_html(get_option('new_members_only_ip_whitelist')) ?></textarea>
                         <br>
-                        <span class="description"><?php _e('One IPv4 address or CIDRv4 address range per line.', 'membersonly') ?></span>
+                        <span class="description"><?php _e('One IP address or CIDR address range per line.', 'membersonly') ?></span>
                     </td>
                 </tr>
 

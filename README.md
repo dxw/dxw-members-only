@@ -8,5 +8,5 @@ WordPress plugin that blocks access to site when user is not logged in. Allows f
 2. Enable the plugin
 3. Visit Settings > New Members Only
 4. Add URLs to the whitelist
-5. Add IP addresses to the whitelist or CIDR ranges (only IPv4 is supported at the moment) (i.e. 192.168.1.1 or 192.168.1.1/24)
+5. Add IP addresses to the whitelist or CIDR ranges (i.e. `192.168.1.1` or `192.168.1.1/24` or `2001:db8::/64`)
 6. Choose locations to redirect visitors to (usually /wp-login.php?redirect\_to=%return\_path%)
