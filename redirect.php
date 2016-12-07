@@ -42,14 +42,14 @@ function dxw_members_only_serve_uploads()
 function dxw_members_only_redirect($root)
 {
     // Redirect
-  if ($root) {
-      $redirect = get_option('dxw_members_only_redirect_root');
-  } else {
-      $redirect = get_option('dxw_members_only_redirect');
-  }
+    if ($root) {
+        $redirect = get_option('dxw_members_only_redirect_root');
+    } else {
+        $redirect = get_option('dxw_members_only_redirect');
+    }
 
-  // %return_path%
-  $redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
+    // %return_path%
+    $redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
 
     header('HTTP/1.1 303 See Other');
     header('Location: '.$redirect);
@@ -85,47 +85,47 @@ function dxw_members_only_current_ip_in_whitelist()
 }
 
 add_action('init', function () {
-  // Fix for wp-cli
-  if (defined('WP_CLI_ROOT')) {
-      return;
-  }
+    // Fix for wp-cli
+    if (defined('WP_CLI_ROOT')) {
+        return;
+    }
 
-  $max_age = absint(get_option('dxw_members_only_max_age'));
+    $max_age = absint(get_option('dxw_members_only_max_age'));
 
-  do_action('dxw_members_only_redirect');
-  if (
-      defined('dxw_members_ONLY_PASSTHROUGH') ||
-      is_user_logged_in() ||
-      apply_filters('dxw_members_only_redirect', false) === true
-     ) {
-      header('Cache-Control: private, max-age=' . $max_age);
-      dxw_members_only_serve_uploads();
-      return;
-  }
+    do_action('dxw_members_only_redirect');
+    if (
+        defined('dxw_members_ONLY_PASSTHROUGH') ||
+        is_user_logged_in() ||
+        apply_filters('dxw_members_only_redirect', false) === true
+        ) {
+        header('Cache-Control: private, max-age=' . $max_age);
+        dxw_members_only_serve_uploads();
+        return;
+    }
 
-  // Get path component
-  $path = dmo_strip_query($_SERVER['REQUEST_URI']);
+    // Get path component
+    $path = dmo_strip_query($_SERVER['REQUEST_URI']);
 
-  // Always allow /wp-login.php
-  if (\Missing\Strings::endsWith($path, 'wp-login.php')) {
-      return;
-  }
+    // Always allow /wp-login.php
+    if (\Missing\Strings::endsWith($path, 'wp-login.php')) {
+        return;
+    }
 
-  // Always allow POST /wp-admin/admin-ajax.php with action=heartbeat
-  if (\Missing\Strings::endsWith($path, 'wp-admin/admin-ajax.php') && isset($_POST['action']) && $_POST['action'] === 'heartbeat') {
-      return;
-  }
+    // Always allow POST /wp-admin/admin-ajax.php with action=heartbeat
+    if (\Missing\Strings::endsWith($path, 'wp-admin/admin-ajax.php') && isset($_POST['action']) && $_POST['action'] === 'heartbeat') {
+        return;
+    }
 
-  // IP whitelist
-  if (dxw_members_only_current_ip_in_whitelist()) {
-      header('Cache-Control: private, max-age=' . $max_age);
-      dxw_members_only_serve_uploads();
-      return;
-  }
+    // IP whitelist
+    if (dxw_members_only_current_ip_in_whitelist()) {
+        header('Cache-Control: private, max-age=' . $max_age);
+        dxw_members_only_serve_uploads();
+        return;
+    }
 
-  // List
-  $hit = false;
-  $list = explode("\r\n", get_option('dxw_members_only_list_content'));
+    // List
+    $hit = false;
+    $list = explode("\r\n", get_option('dxw_members_only_list_content'));
 
     foreach ($list as $w) {
         $w = trim($w);
@@ -159,12 +159,12 @@ add_action('init', function () {
         }
     }
 
-  if ($hit) {
-      header('Cache-Control: public');
-      dxw_members_only_serve_uploads();
-      return;
-  }
+    if ($hit) {
+        header('Cache-Control: public');
+        dxw_members_only_serve_uploads();
+        return;
+    }
 
-  header('Cache-Control: private, max-age=' . $max_age);
-  dxw_members_only_redirect($path === '/');
+    header('Cache-Control: private, max-age=' . $max_age);
+    dxw_members_only_redirect($path === '/');
 }, -99999999999);

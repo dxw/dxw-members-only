@@ -10,6 +10,6 @@ content.
 1. Install and enable the plugin
 2. Visit Settings > dxw Members Only
 3. Add URIs to the content whitelist. These URIs will be viewable by all users.
-4. Add IP addresses or CIDR ranges to the IP whitelist (only IPv4 is supported at the moment) (e.g. 192.168.1.1 or 192.168.1.1/24)
+4. Add IP addresses or CIDR ranges to the IP whitelist (e.g. 192.168.1.1 or 192.168.1.1/24 or 2001:db8::/64)
 5. Choose locations to redirect visitors to (usually /wp-login.php?redirect\_to=%return\_path%)
 6. Set max age for the cache-control header that will be served to any users who try to access restricted content when not logged in

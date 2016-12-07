@@ -17,10 +17,8 @@ function dxw_members_only_options_page()
   <form method="post" action="options.php">
     <?php settings_fields('dxw_members_only') ?>
 
-    <h3><?php _e('Content whitelist', 'dxwmembersonly');
-    ?></h3>
-    <p><?php _e('Enter a list of content that all users can view without logging in.', 'dxwmembersonly');
-    ?></p>
+    <h3><?php _e('Content whitelist', 'dxwmembersonly') ?></h3>
+    <p><?php _e('Enter a list of content that all users can view without logging in.', 'dxwmembersonly') ?></p>
 
     <table class="form-table">
       <tr valign="top">
