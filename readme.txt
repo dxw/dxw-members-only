@@ -29,11 +29,4 @@ content.
 
 == Development ==
 
-The source code is hosted at https://github.com/dxw/new-members-only.
-
-The plug-in uses [phar-install](https://github.com/dxw/phar-install) to wrap all
-composer dependencies into a single vendor.phar file.
-
-To create a development build:
-1. Run `composer install` to download dependencies
-2. Run `vendor/bin/phar-install` to create the vendor.phar file
+The source code is hosted at https://github.com/dxw/new-members-only .
