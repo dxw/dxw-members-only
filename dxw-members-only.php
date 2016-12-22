@@ -31,4 +31,6 @@ if (!defined('DOING_CRON')) {
     require(__DIR__.'/settings.php');
     require(__DIR__.'/upload.php');
     require(__DIR__.'/redirect.php');
+    require(__DIR__.'/upgrade.php');
+    register_activation_hook(__FILE__, 'transfer_new_members_only_options');
 }
