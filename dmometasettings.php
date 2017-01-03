@@ -1,5 +1,5 @@
 <?php
-class metasettings
+class dmometasettings
 {
     public function __construct($file, $namespace)
     {

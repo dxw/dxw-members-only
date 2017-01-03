@@ -4,7 +4,7 @@ add_action('init', 'dxw_members_only_metasettings');
 
 function dxw_members_only_metasettings()
 {
-    $ms = new MetaSettings(__FILE__, 'dxw_members_only');
+    $ms = new dmometasettings(__FILE__, 'dxw_members_only');
     $ms->add_settings(__('dxw Members Only', 'dxwmembersonly'), array('list_type', 'list_content', 'ip_whitelist', 'redirect', 'redirect_root', 'upload_default', 'max_age'), 'dxw_members_only_options_page');
 }
 
