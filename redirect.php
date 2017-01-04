@@ -19,7 +19,7 @@ function new_members_only_serve_uploads()
         $realFilePath = realpath($file);
         $realUploadDir = realpath($basedir);
 
-        if (is_file($file) && is_readable($file) && strpos($realFilePath, $realUploadDir.'/') === 0) {
+        if (is_file($file) && is_readable($file) && \Missing\Strings::startsWith($realFilePath, $realUploadDir.'/')) {
             $mime = wp_check_filetype($file);
 
             $type = 'application/octet-stream';
