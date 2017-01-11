@@ -18,7 +18,7 @@ content.
 
 == Installation ==
 
-1. Upload the plugin files to /wp-content/plguins/dxw-members-only, or install through the WordPress plugins interface
+1. Upload the plugin files to /wp-content/plugins/dxw-members-only, or install through the WordPress plugins interface
 2. Activate the plugin
 3. Visit Settings > dxw Members Only to set:
     - Any URIs that should be viewable by non-logged-in users
@@ -29,4 +29,4 @@ content.
 
 == Development ==
 
-The source code is hosted at https://github.com/dxw/new-members-only .
+https://github.com/dxw/dxw-members-only
