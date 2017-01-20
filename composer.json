@@ -1,6 +1,6 @@
 {
     "require": {
-        "dxw/cidr": "^2.0",
+        "dxw/cidr": "^3.0",
         "dxw/php-missing": "^1.0"
     },
     "require-dev": {
