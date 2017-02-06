@@ -4,9 +4,9 @@
  * Handle request for uploaded content
  * @return void
  */
-function new_members_only_serve_uploads()
+function dxw_members_only_serve_uploads()
 {
-    $req = nmo_strip_query($_SERVER['REQUEST_URI']);
+    $req = dmo_strip_query($_SERVER['REQUEST_URI']);
     if (
         $req === '/wp-content/uploads' || \Missing\Strings::startsWith($req, '/wp-content/uploads/')
         ||
@@ -33,18 +33,19 @@ function new_members_only_serve_uploads()
         }
     }
 }
-
-// Handle redirect for users when not logged in or viewing whitelisted content
-//
-// @param  boolean $root Whether attempting to view root or not
-// @return void
-function new_members_only_redirect($root)
+/**
+ * Handle redirect for users when not logged in or viewing whitelisted content
+ *
+ * @param  boolean $root Whether attempting to view root or not
+ * @return void
+ */
+function dxw_members_only_redirect($root)
 {
     // Redirect
     if ($root) {
-        $redirect = get_option('new_members_only_redirect_root');
+        $redirect = get_option('dxw_members_only_redirect_root');
     } else {
-        $redirect = get_option('new_members_only_redirect');
+        $redirect = get_option('dxw_members_only_redirect');
     }
 
     // %return_path%
@@ -55,7 +56,7 @@ function new_members_only_redirect($root)
     die();
 }
 
-function new_members_only_ip_in_range($ip, $range)
+function dxw_members_only_ip_in_range($ip, $range)
 {
     $range = trim($range);
 
@@ -72,15 +73,14 @@ function new_members_only_ip_in_range($ip, $range)
     return $result->unwrap();
 }
 
-function new_members_only_current_ip_in_whitelist()
+function dxw_members_only_current_ip_in_whitelist()
 {
-    $ip_list = explode("\r\n", get_option('new_members_only_ip_whitelist'));
+    $ip_list = explode("\r\n", get_option('dxw_members_only_ip_whitelist'));
     foreach ($ip_list as $ip) {
-        if (!empty($ip) && new_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
+        if (!empty($ip) && dxw_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
             return true;
         }
     }
-
     return false;
 }
 
@@ -90,21 +90,21 @@ add_action('init', function () {
         return;
     }
 
-    $max_age = absint(get_option('new_members_only_max_age'));
+    $max_age = absint(get_option('dxw_members_only_max_age'));
 
-    do_action('new_members_only_redirect');
+    do_action('dxw_members_only_redirect');
     if (
-        defined('NEW_MEMBERS_ONLY_PASSTHROUGH') ||
+        defined('dxw_members_ONLY_PASSTHROUGH') ||
         is_user_logged_in() ||
-        apply_filters('new_members_only_redirect', false) === true
-    ) {
+        apply_filters('dxw_members_only_redirect', false) === true
+        ) {
         header('Cache-Control: private, max-age=' . $max_age);
-        new_members_only_serve_uploads();
+        dxw_members_only_serve_uploads();
         return;
     }
 
     // Get path component
-    $path = nmo_strip_query($_SERVER['REQUEST_URI']);
+    $path = dmo_strip_query($_SERVER['REQUEST_URI']);
 
     // Always allow /wp-login.php
     if (\Missing\Strings::endsWith($path, 'wp-login.php')) {
@@ -117,15 +117,15 @@ add_action('init', function () {
     }
 
     // IP whitelist
-    if (new_members_only_current_ip_in_whitelist()) {
+    if (dxw_members_only_current_ip_in_whitelist()) {
         header('Cache-Control: private, max-age=' . $max_age);
-        new_members_only_serve_uploads();
+        dxw_members_only_serve_uploads();
         return;
     }
 
     // List
     $hit = false;
-    $list = explode("\r\n", get_option('new_members_only_list_content'));
+    $list = explode("\r\n", get_option('dxw_members_only_list_content'));
 
     foreach ($list as $w) {
         $w = trim($w);
@@ -161,10 +161,10 @@ add_action('init', function () {
 
     if ($hit) {
         header('Cache-Control: public');
-        new_members_only_serve_uploads();
+        dxw_members_only_serve_uploads();
         return;
     }
 
     header('Cache-Control: private, max-age=' . $max_age);
-    new_members_only_redirect($path === '/');
+    dxw_members_only_redirect($path === '/');
 }, -99999999999);
