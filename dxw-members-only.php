@@ -26,7 +26,7 @@ function dmo_strip_query($path)
 }
 
 if (!defined('DOING_CRON')) {
-    require(__DIR__.'/vendor.phar');
+    require(__DIR__.'/_vendor/autoload.php');
     require(__DIR__.'/dmometasettings.php');
     require(__DIR__.'/settings.php');
     require(__DIR__.'/upload.php');
