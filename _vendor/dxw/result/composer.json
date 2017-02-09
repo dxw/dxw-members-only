@@ -1,0 +1,24 @@
+{
+    "name": "dxw/result",
+    "description": "Result values",
+    "homepage": "https://github.com/dxw/result",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Tom Adams",
+        "email": "tom@dxw.com",
+        "homepage": "https://www.dxw.com/"
+      }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Dxw\\Result\\": "src/"
+        }
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "1.11.4",
+        "peridot-php/peridot": "^1.18",
+        "peridot-php/leo": "^1.5"
+    }
+}

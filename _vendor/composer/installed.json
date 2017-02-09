@@ -1,0 +1,227 @@
+[
+    {
+        "name": "phpseclib/phpseclib",
+        "version": "2.0.4",
+        "version_normalized": "2.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/phpseclib/phpseclib.git",
+            "reference": "ab8028c93c03cc8d9c824efa75dc94f1db2369bf"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/ab8028c93c03cc8d9c824efa75dc94f1db2369bf",
+            "reference": "ab8028c93c03cc8d9c824efa75dc94f1db2369bf",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "phing/phing": "~2.7",
+            "phpunit/phpunit": "~4.0",
+            "sami/sami": "~2.0",
+            "squizlabs/php_codesniffer": "~2.0"
+        },
+        "suggest": {
+            "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
+            "ext-libsodium": "SSH2/SFTP can make use of some algorithms provided by the libsodium-php extension.",
+            "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
+            "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
+        },
+        "time": "2016-10-04 00:57:04",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "phpseclib/bootstrap.php"
+            ],
+            "psr-4": {
+                "phpseclib\\": "phpseclib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jim Wigginton",
+                "email": "terrafrost@php.net",
+                "role": "Lead Developer"
+            },
+            {
+                "name": "Patrick Monnerat",
+                "email": "pm@datasphere.ch",
+                "role": "Developer"
+            },
+            {
+                "name": "Andreas Fischer",
+                "email": "bantu@phpbb.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Hans-Jürgen Petrich",
+                "email": "petrich@tronic-media.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Graham Campbell",
+                "email": "graham@alt-three.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
+        "homepage": "http://phpseclib.sourceforge.net",
+        "keywords": [
+            "BigInteger",
+            "aes",
+            "asn.1",
+            "asn1",
+            "blowfish",
+            "crypto",
+            "cryptography",
+            "encryption",
+            "rsa",
+            "security",
+            "sftp",
+            "signature",
+            "signing",
+            "ssh",
+            "twofish",
+            "x.509",
+            "x509"
+        ]
+    },
+    {
+        "name": "dxw/result",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dxw/result.git",
+            "reference": "f4162f94234f3444dcbc1612889f6e2bfabc03ec"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/dxw/result/zipball/f4162f94234f3444dcbc1612889f6e2bfabc03ec",
+            "reference": "f4162f94234f3444dcbc1612889f6e2bfabc03ec",
+            "shasum": ""
+        },
+        "require-dev": {
+            "fabpot/php-cs-fixer": "1.11.4",
+            "peridot-php/leo": "^1.5",
+            "peridot-php/peridot": "^1.18"
+        },
+        "time": "2016-07-19 13:32:11",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Dxw\\Result\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Tom Adams",
+                "email": "tom@dxw.com",
+                "homepage": "https://www.dxw.com/"
+            }
+        ],
+        "description": "Result values",
+        "homepage": "https://github.com/dxw/result"
+    },
+    {
+        "name": "dxw/cidr",
+        "version": "v3.0.0",
+        "version_normalized": "3.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dxw/cidr.git",
+            "reference": "db3ff67a10bd4f6cfa58ea099f7b145d5a34d43f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/dxw/cidr/zipball/db3ff67a10bd4f6cfa58ea099f7b145d5a34d43f",
+            "reference": "db3ff67a10bd4f6cfa58ea099f7b145d5a34d43f",
+            "shasum": ""
+        },
+        "require": {
+            "dxw/result": "^1.0",
+            "php": ">=7",
+            "phpseclib/phpseclib": "^2.0"
+        },
+        "require-dev": {
+            "fabpot/php-cs-fixer": "1.11.4",
+            "mockery/mockery": "dev-master",
+            "peridot-php/leo": "^1.5",
+            "peridot-php/peridot": "^1.18",
+            "peridot-php/peridot-dot-reporter": "^1.0"
+        },
+        "time": "2017-01-20 16:03:59",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Dxw\\CIDR\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Tom Adams",
+                "email": "tom@dxw.com",
+                "homepage": "http://dxw.com"
+            }
+        ],
+        "description": "IP address matching with CIDR ranges",
+        "homepage": "https://github.com/dxw/cidr"
+    },
+    {
+        "name": "dxw/php-missing",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dxw/php-missing.git",
+            "reference": "544ce7df568f6296e3811454b0e1df79ceb498b7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/dxw/php-missing/zipball/544ce7df568f6296e3811454b0e1df79ceb498b7",
+            "reference": "544ce7df568f6296e3811454b0e1df79ceb498b7",
+            "shasum": ""
+        },
+        "require-dev": {
+            "phpunit/phpunit": "4.8.*"
+        },
+        "time": "2016-05-17 16:56:43",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Missing\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Tom Adams",
+                "email": "tom@dxw.com",
+                "homepage": "http://dxw.com"
+            }
+        ],
+        "description": "The stdlib you wish PHP had",
+        "homepage": "https://github.com/dxw/php-missing"
+    }
+]
