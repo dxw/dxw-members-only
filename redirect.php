@@ -77,6 +77,7 @@ function dxw_members_only_current_ip_in_whitelist()
 {
     $ip_list = explode("\n", get_option('dxw_members_only_ip_whitelist'));
     foreach ($ip_list as $ip) {
+        $ip = trim($ip);
         if (!empty($ip) && dxw_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
             return true;
         }
