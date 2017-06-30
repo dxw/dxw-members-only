@@ -75,7 +75,7 @@ function dxw_members_only_ip_in_range($ip, $range)
 
 function dxw_members_only_current_ip_in_whitelist()
 {
-    $ip_list = explode("\r\n", get_option('dxw_members_only_ip_whitelist'));
+    $ip_list = explode("\n", get_option('dxw_members_only_ip_whitelist'));
     foreach ($ip_list as $ip) {
         if (!empty($ip) && dxw_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
             return true;
@@ -125,7 +125,7 @@ add_action('init', function () {
 
     // List
     $hit = false;
-    $list = explode("\r\n", get_option('dxw_members_only_list_content'));
+    $list = explode("\n", get_option('dxw_members_only_list_content'));
 
     foreach ($list as $w) {
         $w = trim($w);
