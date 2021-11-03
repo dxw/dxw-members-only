@@ -26,4 +26,14 @@ describe(\Dxw\Result\Ok::class, function () {
             })->to->throw(\RuntimeException::class);
         });
     });
+
+    describe('->wrap()', function () {
+        it('should raise an exception', function () {
+            $result = new \Dxw\Result\Ok('cat');
+
+            expect(function () use ($result) {
+                $result->wrap('foobar');
+            })->to->throw(\RuntimeException::class);
+        });
+    });
 });

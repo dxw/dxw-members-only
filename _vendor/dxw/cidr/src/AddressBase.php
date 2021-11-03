@@ -2,9 +2,13 @@
 
 namespace Dxw\CIDR;
 
-class AddressBase
+abstract class AddressBase
 {
+    /** @var string */
     private $address;
+
+    /** @var int */
+    protected static $size;
 
     public static function Make(string $address): \Dxw\Result\Result
     {
@@ -18,14 +22,40 @@ class AddressBase
         return \Dxw\Result\Result::ok(new static($_address));
     }
 
-    private function __construct(string $address)
+    final private function __construct(string $address)
     {
         $this->address = $address;
     }
 
     public function __toString(): string
     {
-        return inet_ntop($this->address);
+        $value = inet_ntop($this->address);
+
+        // $value should never be false since the address gets parsed by
+        // inet_pton() before being passed to the constructor
+        if ($value === false) {
+            throw new \ErrorException("inet_ntop error: return value was false");
+        }
+        return $value;
+    }
+
+    public static function FromBinary(\phpseclib\Math\BigInteger $binary): \Dxw\Result\Result
+    {
+        if ($binary->compare(new \phpseclib\Math\BigInteger(0)) < 0) {
+            return \Dxw\Result\Result::err(sprintf('address cannot be negative', static::$size));
+        }
+
+        $numBytes = intdiv(static::$size, 4);
+        $numNibbles = intdiv(static::$size, 8);
+
+        if (strlen($binary->toHex()) > $numBytes) {
+            return \Dxw\Result\Result::err(sprintf('address size cannot exceed %s bytes', static::$size));
+        }
+
+        $bytes = $binary->toBytes();
+        $bytes = str_pad($bytes, $numNibbles, "\x00", STR_PAD_LEFT);
+
+        return \Dxw\Result\Result::ok(new static($bytes));
     }
 
     public function getBinary(): \phpseclib\Math\BigInteger

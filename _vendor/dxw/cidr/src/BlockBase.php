@@ -2,9 +2,12 @@
 
 namespace Dxw\CIDR;
 
-class BlockBase
+abstract class BlockBase
 {
+    /** @var int */
     private $value;
+
+    /** @var int */
     protected static $maxSize;
 
     public static function Make(int $value): \Dxw\Result\Result
@@ -20,7 +23,7 @@ class BlockBase
         return \Dxw\Result\Result::ok(new static($value));
     }
 
-    private function __construct(int $value)
+    final private function __construct(int $value)
     {
         $this->value = $value;
     }
@@ -42,5 +45,10 @@ class BlockBase
         }
 
         return new \phpseclib\Math\BigInteger($s, 2);
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('/%d', $this->value);
     }
 }

@@ -6,8 +6,8 @@
     "license": "MIT",
     "authors": [
       {
-        "name": "Tom Adams",
-        "email": "tom@dxw.com",
+        "name": "Mallory Adams",
+        "email": "mallory@dxw.com",
         "homepage": "https://www.dxw.com/"
       }
     ],
@@ -17,8 +17,13 @@
         }
     },
     "require-dev": {
-        "fabpot/php-cs-fixer": "1.11.4",
-        "peridot-php/peridot": "^1.18",
-        "peridot-php/leo": "^1.5"
+        "peridot-php/peridot": "^1.19",
+        "peridot-php/leo": "^1.6",
+        "vimeo/psalm": "^3.2",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "peridot-php/peridot-dot-reporter": "^1.0"
+    },
+    "require": {
+        "php": "^7.2"
     }
 }

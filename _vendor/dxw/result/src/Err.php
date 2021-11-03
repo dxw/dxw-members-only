@@ -4,6 +4,9 @@ namespace Dxw\Result;
 
 class Err extends Result
 {
+    /** @var string */
+    private $message;
+
     public function __construct(string $message)
     {
         $this->message = $message;
