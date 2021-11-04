@@ -6,9 +6,12 @@ cache:
   directories:
     - vendor
 php:
-  - 7.0
+  - 7.2
+  - 7.3
+  - 7.4
 install:
   - composer --no-interaction install
 script:
   - vendor/bin/peridot -C spec
   - vendor/bin/php-cs-fixer fix --dry-run -v --diff
+  - vendor/bin/psalm

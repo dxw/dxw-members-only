@@ -2,10 +2,19 @@
 
 namespace Dxw\CIDR;
 
-class IPv4Range
+/**
+ * @extends RangeBase<IPv4Block>
+ */
+class IPv4Range extends RangeBase
 {
+    /** @var IPv4Address */
     private $address;
-    private $block;
+
+    /** @var IPv4Block */
+    protected $block;
+
+    /** @psalm-var class-string */
+    protected static $addressClass = IPv4Address::class;
 
     public static function Make(string $range): \Dxw\Result\Result
     {
@@ -34,7 +43,7 @@ class IPv4Range
             }
             $address = $result->unwrap();
 
-            $result = \Dxw\CIDR\IPv4Block::Make($_block);
+            $result = \Dxw\CIDR\IPv4Block::Make((int) $_block);
             if ($result->isErr()) {
                 return $result->wrap('cannot make range with invalid block size');
             }
