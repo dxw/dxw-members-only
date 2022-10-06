@@ -7,7 +7,7 @@ class dmometasettings
         $this->plugin = plugin_basename($file);
         $this->namespace = $namespace;
 
-        $this->settings = (object)array();
+        $this->settings = (object)[];
 
         $this->set_defaults();
     }
@@ -47,9 +47,9 @@ class dmometasettings
         $this->settings->options = $options;
         $this->settings->callback = $callback;
 
-        add_filter('plugin_action_links', array($this, 'plugin_action_links'), 10, 2);
-        add_action('admin_menu', array($this, 'admin_menu'));
-        add_filter('whitelist_options', array($this, 'whitelist_options'));
+        add_filter('plugin_action_links', [$this, 'plugin_action_links'], 10, 2);
+        add_action('admin_menu', [$this, 'admin_menu']);
+        add_filter('whitelist_options', [$this, 'whitelist_options']);
     }
 
     /**
@@ -85,7 +85,7 @@ class dmometasettings
     */
     public function whitelist_options($whitelist_options)
     {
-        $whitelist_options[$this->namespace] = array();
+        $whitelist_options[$this->namespace] = [];
         foreach ($this->settings->options as $opt) {
             $whitelist_options[$this->namespace][] = $this->namespace.'_'.$opt;
         }
