@@ -718,7 +718,16 @@ class SFTP extends SSH2
             return false;
         }
 
+        $this->pwd = true;
         $this->pwd = $this->_realpath('.');
+        if ($this->pwd === false) {
+            if (!$this->canonicalize_paths) {
+                user_error('Unable to canonicalize current working directory');
+                return false;
+            }
+            $this->canonicalize_paths = false;
+            $this->_reset_connection(NET_SSH2_DISCONNECT_CONNECTION_LOST);
+        }
 
         $this->_update_stat_cache($this->pwd, array());
 
@@ -766,7 +775,9 @@ class SFTP extends SSH2
     }
 
     /**
-     * Enable path canonicalization
+     * Disable path canonicalization
+     *
+     * If this is enabled then $sftp->pwd() will not return the canonicalized absolute path
      *
      * @access public
      */
@@ -872,10 +883,37 @@ class SFTP extends SSH2
     function _realpath($path)
     {
         if (!$this->canonicalize_paths) {
-            return $path;
+            if ($this->pwd === true) {
+                return '.';
+            }
+            if (!strlen($path) || $path[0] != '/') {
+                $path = $this->pwd . '/' . $path;
+            }
+
+            $parts = explode('/', $path);
+            $afterPWD = $beforePWD = [];
+            foreach ($parts as $part) {
+                switch ($part) {
+                    //case '': // some SFTP servers /require/ double /'s. see https://github.com/phpseclib/phpseclib/pull/1137
+                    case '.':
+                        break;
+                    case '..':
+                        if (!empty($afterPWD)) {
+                            array_pop($afterPWD);
+                        } else {
+                            $beforePWD[] = '..';
+                        }
+                        break;
+                    default:
+                        $afterPWD[] = $part;
+                }
+            }
+
+            $beforePWD = count($beforePWD) ? implode('/', $beforePWD) : '.';
+            return $beforePWD . '/' . implode('/', $afterPWD);
         }
 
-        if ($this->pwd === false) {
+        if ($this->pwd === true) {
             // http://tools.ietf.org/html/draft-ietf-secsh-filexfer-13#section-8.9
             if (!$this->_send_sftp_packet(NET_SFTP_REALPATH, pack('Na*', strlen($path), $path))) {
                 return false;
@@ -897,7 +935,6 @@ class SFTP extends SSH2
                     $this->_logError($response);
                     return false;
                 default:
-                    user_error('Expected SSH_FXP_NAME or SSH_FXP_STATUS');
                     return false;
             }
         }
@@ -1724,7 +1761,7 @@ class SFTP extends SSH2
     function chgrp($filename, $gid, $recursive = false)
     {
         $attr = $this->version < 4 ?
-            pack('N3', NET_SFTP_ATTR_UIDGID, $gid, -1) :
+            pack('N3', NET_SFTP_ATTR_UIDGID, -1, $gid) :
             pack('NNa*Na*', NET_SFTP_ATTR_OWNERGROUP, 0, '', strlen($gid), $gid);
 
         return $this->_setstat($filename, $attr, $recursive);
@@ -2273,7 +2310,7 @@ class SFTP extends SSH2
             case is_resource($data):
                 $mode = $mode & ~self::SOURCE_LOCAL_FILE;
                 $info = stream_get_meta_data($data);
-                if ($info['wrapper_type'] == 'PHP' && $info['stream_type'] == 'Input') {
+                if (isset($info['wrapper_type']) && $info['wrapper_type'] == 'PHP' && $info['stream_type'] == 'Input') {
                     $fp = fopen('php://memory', 'w+');
                     stream_copy_to_stream($data, $fp);
                     rewind($fp);
@@ -2709,7 +2746,7 @@ class SFTP extends SSH2
         // normally $entries would have at least . and .. but it might not if the directories
         // permissions didn't allow reading
         if (empty($entries)) {
-            return false;
+            $entries = array();
         }
 
         unset($entries['.'], $entries['..']);
@@ -3200,6 +3237,36 @@ class SFTP extends SSH2
         }
         foreach ($this->attributes as $key => $value) {
             switch ($flags & $key) {
+                case NET_SFTP_ATTR_UIDGID:
+                    if ($this->version > 3) {
+                        continue 2;
+                    }
+                    break;
+                case NET_SFTP_ATTR_CREATETIME:
+                case NET_SFTP_ATTR_MODIFYTIME:
+                case NET_SFTP_ATTR_ACL:
+                case NET_SFTP_ATTR_OWNERGROUP:
+                case NET_SFTP_ATTR_SUBSECOND_TIMES:
+                    if ($this->version < 4) {
+                        continue 2;
+                    }
+                    break;
+                case NET_SFTP_ATTR_BITS:
+                    if ($this->version < 5) {
+                        continue 2;
+                    }
+                    break;
+                case NET_SFTP_ATTR_ALLOCATION_SIZE:
+                case NET_SFTP_ATTR_TEXT_HINT:
+                case NET_SFTP_ATTR_MIME_TYPE:
+                case NET_SFTP_ATTR_LINK_COUNT:
+                case NET_SFTP_ATTR_UNTRANSLATED_NAME:
+                case NET_SFTP_ATTR_CTIME:
+                    if ($this->version < 6) {
+                        continue 2;
+                    }
+            }
+            switch ($flags & $key) {
                 case NET_SFTP_ATTR_SIZE:             // 0x00000001
                     // The size attribute is defined as an unsigned 64-bit integer.
                     // The following will use floats on 32-bit platforms, if necessary.
@@ -3588,6 +3655,9 @@ class SFTP extends SSH2
         while ($tempLength > 0) {
             $temp = $this->_get_channel_packet(self::CHANNEL, true);
             if (is_bool($temp)) {
+                if ($temp && $this->channel_status[self::CHANNEL] === NET_SSH2_MSG_CHANNEL_CLOSE) {
+                    $this->channel_close = true;
+                }
                 $this->packet_type = false;
                 $this->packet_buffer = '';
                 return false;
@@ -3697,7 +3767,7 @@ class SFTP extends SSH2
      */
     function getSupportedVersions()
     {
-        if (!($this->bitmap & NET_SSH2_MASK_LOGIN)) {
+        if (!($this->bitmap & SSH2::MASK_LOGIN)) {
             return false;
         }
 
