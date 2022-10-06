@@ -4,7 +4,7 @@
         "dxw/php-missing": "^1.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.0"
+        "friendsofphp/php-cs-fixer": "^3.0"
     },
     "scripts": {
         "post-update-cmd": "COMPOSER_VENDOR_DIR=_vendor composer install --no-dev --no-interaction"
