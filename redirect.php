@@ -8,9 +8,7 @@ function dxw_members_only_serve_uploads()
 {
     $req = dmo_strip_query($_SERVER['REQUEST_URI']);
     if (
-        $req === '/wp-content/uploads' || \Missing\Strings::startsWith($req, '/wp-content/uploads/')
-        ||
-        $req === '/wp-content/blogs.dir' || \Missing\Strings::startsWith($req, '/wp-content/blogs.dir/')
+        str_contains($req, '/wp-content/uploads/') || str_contains($req, '/wp-content/blogs.dir/')
     ) {
         $upload_dir = wp_upload_dir();
         $baseurl = preg_replace('%^https?://[^/]+(/.*)$%', '$1', $upload_dir['baseurl']);
