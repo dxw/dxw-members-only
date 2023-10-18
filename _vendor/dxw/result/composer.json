@@ -17,13 +17,11 @@
         }
     },
     "require-dev": {
-        "peridot-php/peridot": "^1.19",
-        "peridot-php/leo": "^1.6",
-        "vimeo/psalm": "^3.2",
-        "friendsofphp/php-cs-fixer": "^2.16",
-        "peridot-php/peridot-dot-reporter": "^1.0"
+        "vimeo/psalm": "^4",
+        "kahlan/kahlan": "^5.2",
+        "dxw/php-cs-fixer-config": "^2.1"
     },
     "require": {
-        "php": "^7.2"
+        "php": "^7.4||^8.1"
     }
 }

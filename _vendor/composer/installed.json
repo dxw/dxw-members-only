@@ -2,33 +2,30 @@
     "packages": [
         {
             "name": "dxw/cidr",
-            "version": "v3.1.2",
-            "version_normalized": "3.1.2.0",
+            "version": "v3.2.0",
+            "version_normalized": "3.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dxw/cidr.git",
-                "reference": "9cb82cb70f0d4a4a32b1b2e3e1ae005fba84d581"
+                "reference": "b07dd398f5a93441f57a687982bc7d0ffb96729a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dxw/cidr/zipball/9cb82cb70f0d4a4a32b1b2e3e1ae005fba84d581",
-                "reference": "9cb82cb70f0d4a4a32b1b2e3e1ae005fba84d581",
+                "url": "https://api.github.com/repos/dxw/cidr/zipball/b07dd398f5a93441f57a687982bc7d0ffb96729a",
+                "reference": "b07dd398f5a93441f57a687982bc7d0ffb96729a",
                 "shasum": ""
             },
             "require": {
                 "dxw/result": "^1.0",
-                "php": "^7.2",
+                "php": "^7.4||^8.1",
                 "phpseclib/phpseclib": "^2.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "mockery/mockery": "^1.3",
-                "peridot-php/leo": "^1.6",
-                "peridot-php/peridot": "^1.19",
-                "peridot-php/peridot-dot-reporter": "^1.0",
-                "vimeo/psalm": "^4.7"
+                "dxw/php-cs-fixer-config": "^2.0",
+                "kahlan/kahlan": "^5.2",
+                "vimeo/psalm": "^5.14"
             },
-            "time": "2021-04-13T15:13:30+00:00",
+            "time": "2023-08-14T10:14:13+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -51,7 +48,7 @@
             "homepage": "https://github.com/dxw/cidr",
             "support": {
                 "issues": "https://github.com/dxw/cidr/issues",
-                "source": "https://github.com/dxw/cidr/tree/v3.1.2"
+                "source": "https://github.com/dxw/cidr/tree/v3.2.0"
             },
             "install-path": "../dxw/cidr"
         },
@@ -102,30 +99,28 @@
         },
         {
             "name": "dxw/result",
-            "version": "v1.0.4",
-            "version_normalized": "1.0.4.0",
+            "version": "v1.0.6",
+            "version_normalized": "1.0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dxw/result.git",
-                "reference": "5b9d3988c215dc95e17cd082a33bc2c02b6007ca"
+                "reference": "d554bb10f0cf74056ccd26526688e194652eef79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dxw/result/zipball/5b9d3988c215dc95e17cd082a33bc2c02b6007ca",
-                "reference": "5b9d3988c215dc95e17cd082a33bc2c02b6007ca",
+                "url": "https://api.github.com/repos/dxw/result/zipball/d554bb10f0cf74056ccd26526688e194652eef79",
+                "reference": "d554bb10f0cf74056ccd26526688e194652eef79",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2"
+                "php": "^7.4||^8.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "peridot-php/leo": "^1.6",
-                "peridot-php/peridot": "^1.19",
-                "peridot-php/peridot-dot-reporter": "^1.0",
-                "vimeo/psalm": "^3.2"
+                "dxw/php-cs-fixer-config": "^2.1",
+                "kahlan/kahlan": "^5.2",
+                "vimeo/psalm": "^4"
             },
-            "time": "2020-06-12T16:01:47+00:00",
+            "time": "2023-07-19T11:14:28+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -148,23 +143,23 @@
             "homepage": "https://github.com/dxw/result",
             "support": {
                 "issues": "https://github.com/dxw/result/issues",
-                "source": "https://github.com/dxw/result/tree/master"
+                "source": "https://github.com/dxw/result/tree/v1.0.6"
             },
             "install-path": "../dxw/result"
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.38",
-            "version_normalized": "2.0.38.0",
+            "version": "2.0.45",
+            "version_normalized": "2.0.45.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "b03536539f43a4f9aa33c4f0b2f3a1c752088fcd"
+                "reference": "28d8f438a0064c9de80857e3270d071495544640"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/b03536539f43a4f9aa33c4f0b2f3a1c752088fcd",
-                "reference": "b03536539f43a4f9aa33c4f0b2f3a1c752088fcd",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/28d8f438a0064c9de80857e3270d071495544640",
+                "reference": "28d8f438a0064c9de80857e3270d071495544640",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +177,7 @@
                 "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations.",
                 "ext-xml": "Install the XML extension to load XML formatted public keys."
             },
-            "time": "2022-09-02T17:04:26+00:00",
+            "time": "2023-09-15T20:55:47+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -247,7 +242,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/2.0.38"
+                "source": "https://github.com/phpseclib/phpseclib/tree/2.0.45"
             },
             "funding": [
                 {

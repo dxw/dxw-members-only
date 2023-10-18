@@ -274,6 +274,18 @@ class SSH2
     var $server_host_key_algorithms = false;
 
     /**
+     * Supported Private Key Algorithms
+     *
+     * In theory this should be the same as the Server Host Key Algorithms but, in practice,
+     * some servers (eg. Azure) will support rsa-sha2-512 as a server host key algorithm but
+     * not a private key algorithm
+     *
+     * @see self::privatekey_login()
+     * @var array|false
+     */
+    var $supported_private_key_algorithms = false;
+
+    /**
      * Encryption Algorithms: Client to Server
      *
      * @see self::getEncryptionAlgorithmsClient2Server()
@@ -391,6 +403,14 @@ class SSH2
     var $decrypt = false;
 
     /**
+     * Decryption Algorithm Name
+     *
+     * @var string|null
+     * @access private
+     */
+    var $decryptName;
+
+    /**
      * Client to Server Encryption Object
      *
      * @see self::_send_binary_packet()
@@ -398,6 +418,14 @@ class SSH2
      * @access private
      */
     var $encrypt = false;
+
+    /**
+     * Encryption Algorithm Name
+     *
+     * @var string|null
+     * @access private
+     */
+    var $encryptName;
 
     /**
      * Client to Server HMAC Object
@@ -409,6 +437,13 @@ class SSH2
     var $hmac_create = false;
 
     /**
+     * Client to Server HMAC Name
+     *
+     * @var string|false
+     */
+    private $hmac_create_name;
+
+    /**
      * Server to Client HMAC Object
      *
      * @see self::_get_binary_packet()
@@ -416,6 +451,13 @@ class SSH2
      * @access private
      */
     var $hmac_check = false;
+
+    /**
+     * Server to Client HMAC Name
+     *
+     * @var string|false
+     */
+    var $hmac_check_name;
 
     /**
      * Size of server to client HMAC
@@ -1552,6 +1594,8 @@ class SSH2
         $temp = unpack('Nlength', $this->_string_shift($response, 4));
         $this->server_host_key_algorithms = explode(',', $this->_string_shift($response, $temp['length']));
 
+        $this->supported_private_key_algorithms = $this->server_host_key_algorithms;
+
         if (strlen($response) < 4) {
             return false;
         }
@@ -1978,7 +2022,7 @@ class SSH2
             }
             $this->encrypt->setKey(substr($key, 0, $encryptKeyLength));
 
-            $this->encrypt->name = $decrypt;
+            $this->encryptName = $encrypt;
         }
 
         $this->decrypt = $this->_encryption_algorithm_to_crypt_instance($decrypt);
@@ -2008,7 +2052,7 @@ class SSH2
             }
             $this->decrypt->setKey(substr($key, 0, $decryptKeyLength));
 
-            $this->decrypt->name = $decrypt;
+            $this->decryptName = $decrypt;
         }
 
         /* The "arcfour128" algorithm is the RC4 cipher, as described in
@@ -2053,7 +2097,7 @@ class SSH2
                 $this->hmac_create = new Hash('md5-96');
                 $createKeyLength = 16;
         }
-        $this->hmac_create->name = $mac_algorithm_out;
+        $this->hmac_create_name = $mac_algorithm_out;
 
         $checkKeyLength = 0;
         $this->hmac_size = 0;
@@ -2083,7 +2127,7 @@ class SSH2
                 $checkKeyLength = 16;
                 $this->hmac_size = 12;
         }
-        $this->hmac_check->name = $mac_algorithm_in;
+        $this->hmac_check_name = $mac_algorithm_in;
 
         $key = $kexHash->hash($keyBytes . $this->exchange_hash . 'E' . $this->session_id);
         while ($createKeyLength > strlen($key)) {
@@ -2731,7 +2775,13 @@ class SSH2
             $publickey['n']
         );
 
-        switch ($this->signature_format) {
+        $algos = array('rsa-sha2-256', 'rsa-sha2-512', 'ssh-rsa');
+        if (isset($this->preferred['hostkey'])) {
+            $algos = array_intersect($this->preferred['hostkey'], $algos);
+        }
+        $algo = $this->_array_intersect_first($algos, $this->supported_private_key_algorithms);
+
+        switch ($algo) {
             case 'rsa-sha2-512':
                 $hash = 'sha512';
                 $signatureType = 'rsa-sha2-512';
@@ -2781,7 +2831,12 @@ class SSH2
                     return false;
                 }
                 extract(unpack('Nmethodlistlen', $this->_string_shift($response, 4)));
-                $this->auth_methods_to_continue = explode(',', $this->_string_shift($response, $methodlistlen));
+                $auth_methods = explode(',', $this->_string_shift($response, $methodlistlen));
+                if (in_array('publickey', $auth_methods) && substr($signatureType, 0, 9) == 'rsa-sha2-') {
+                    $this->supported_private_key_algorithms = array_diff($this->supported_private_key_algorithms, array('rsa-sha2-256', 'rsa-sha2-512'));
+                    return $this->_privatekey_login($username, $privatekey);
+                }
+                $this->auth_methods_to_continue = $auth_methods;
                 $this->errors[] = 'SSH_MSG_USERAUTH_FAILURE';
                 return false;
             case NET_SSH2_MSG_USERAUTH_PK_OK:
@@ -2833,6 +2888,16 @@ class SSH2
 
         user_error('Unexpected response to publickey authentication pt 2');
         return $this->_disconnect(NET_SSH2_DISCONNECT_BY_APPLICATION);
+    }
+
+    /**
+     * Return the currently configured timeout
+     *
+     * @return int
+     */
+    function getTimeout()
+    {
+        return $this->timeout;
     }
 
     /**
@@ -3363,7 +3428,7 @@ class SSH2
      */
     function isConnected()
     {
-        return (bool) ($this->bitmap & self::MASK_CONNECTED);
+        return ($this->bitmap & self::MASK_CONNECTED) && is_resource($this->fsock) && !feof($this->fsock);
     }
 
     /**
@@ -3554,7 +3619,7 @@ class SSH2
         // "implementations SHOULD check that the packet length is reasonable"
         // PuTTY uses 0x9000 as the actual max packet size and so to shall we
         if ($remaining_length < -$this->decrypt_block_size || $remaining_length > 0x9000 || $remaining_length % $this->decrypt_block_size != 0) {
-            if (!$this->bad_key_size_fix && $this->_bad_algorithm_candidate($this->decrypt->name) && !($this->bitmap & SSH2::MASK_LOGIN)) {
+            if (!$this->bad_key_size_fix && $this->_bad_algorithm_candidate($this->decryptName) && !($this->bitmap & SSH2::MASK_LOGIN)) {
                 $this->bad_key_size_fix = true;
                 $this->_reset_connection(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
                 return false;
@@ -4959,13 +5024,13 @@ class SSH2
             'kex' => $this->kex_algorithm,
             'hostkey' => $this->signature_format,
             'client_to_server' => array(
-                'crypt' => $this->encrypt->name,
-                'mac' => $this->hmac_create->name,
+                'crypt' => $this->encryptName,
+                'mac' => $this->hmac_create_name,
                 'comp' => $compression_map[$this->compress],
             ),
             'server_to_client' => array(
-                'crypt' => $this->decrypt->name,
-                'mac' => $this->hmac_check->name,
+                'crypt' => $this->decryptName,
+                'mac' => $this->hmac_check_name,
                 'comp' => $compression_map[$this->decompress],
             )
         );

@@ -8,5 +8,10 @@
     },
     "scripts": {
         "post-update-cmd": "COMPOSER_VENDOR_DIR=_vendor composer install --no-dev --no-interaction"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        }
     }
 }

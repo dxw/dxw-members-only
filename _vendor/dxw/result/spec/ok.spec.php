@@ -1,39 +1,47 @@
 <?php
 
 describe(\Dxw\Result\Ok::class, function () {
-    describe('->unwrap()', function () {
-        it('should allow extracting values', function () {
-            $result = new \Dxw\Result\Ok('cat');
+	describe('->unwrap()', function () {
+		it('should allow extracting values', function () {
+			$result = new \Dxw\Result\Ok('cat');
 
-            expect($result->unwrap())->to->equal('cat');
-        });
-    });
+			expect($result->unwrap())->toEqual('cat');
+		});
+	});
 
-    describe('->isErr()', function () {
-        it('should always be false', function () {
-            $result = new \Dxw\Result\Ok('cat');
+	describe('->unwarpOr()', function () {
+		it('should allow extracting values', function () {
+			$result = new \Dxw\Result\Ok('cat');
 
-            expect($result->isErr())->to->equal(false);
-        });
-    });
+			expect($result->unwrapOr('default'))->toEqual('cat');
+		});
+	});
 
-    describe('->getErr()', function () {
-        it('should raise an exception', function () {
-            $result = new \Dxw\Result\Ok('cat');
+	describe('->isErr()', function () {
+		it('should always be false', function () {
+			$result = new \Dxw\Result\Ok('cat');
 
-            expect(function () use ($result) {
-                $result->getErr();
-            })->to->throw(\RuntimeException::class);
-        });
-    });
+			expect($result->isErr())->toEqual(false);
+		});
+	});
 
-    describe('->wrap()', function () {
-        it('should raise an exception', function () {
-            $result = new \Dxw\Result\Ok('cat');
+	describe('->getErr()', function () {
+		it('should raise an exception', function () {
+			$result = new \Dxw\Result\Ok('cat');
 
-            expect(function () use ($result) {
-                $result->wrap('foobar');
-            })->to->throw(\RuntimeException::class);
-        });
-    });
+			expect(function () use ($result) {
+				$result->getErr();
+			})->toThrow(new \RuntimeException());
+		});
+	});
+
+	describe('->wrap()', function () {
+		it('should raise an exception', function () {
+			$result = new \Dxw\Result\Ok('cat');
+
+			expect(function () use ($result) {
+				$result->wrap('foobar');
+			})->toThrow(new \RuntimeException());
+		});
+	});
 });
