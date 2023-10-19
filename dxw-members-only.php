@@ -3,7 +3,7 @@
  * Plugin Name: dxw Members Only
  * Plugin URI: http://dxw.com
  * Description: Make your WordPress site visible to signed-in users only with the added ability to whitelist specific content for access by all users.
- * Version: 4.0.3
+ * Version: 4.0.4
  * Author: dxw
  * Author URI: http://dxw.com
  * Text Domain: dxwmembersonly
@@ -26,7 +26,7 @@ function dmo_strip_query($path)
 }
 
 if (!defined('DOING_CRON')) {
-    require(__DIR__.'/_vendor/autoload.php');
+    require(__DIR__.'/vendor.phar');
     require(__DIR__.'/dmometasettings.php');
     require(__DIR__.'/settings.php');
     require(__DIR__.'/upload.php');
