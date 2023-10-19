@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78cd874c1fa23e54a33e01169e530d42",
+    "content-hash": "f107bed3e3c35b450083dab8d33539d3",
     "packages": [
         {
             "name": "dxw/cidr",
@@ -676,6 +676,42 @@
             "time": "2022-12-14T08:49:07+00:00"
         },
         {
+            "name": "dxw/phar-install",
+            "version": "v1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dxw/phar-install.git",
+                "reference": "36eb78be91d433546bc90194db6f4de754a542de"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dxw/phar-install/zipball/36eb78be91d433546bc90194db6f4de754a542de",
+                "reference": "36eb78be91d433546bc90194db6f4de754a542de",
+                "shasum": ""
+            },
+            "bin": [
+                "bin/phar-install"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mallory Adams",
+                    "email": "mallory@dxw.com",
+                    "homepage": "https://www.dxw.com"
+                }
+            ],
+            "homepage": "https://github.com/dxw/phar-install",
+            "support": {
+                "issues": "https://github.com/dxw/phar-install/issues",
+                "source": "https://github.com/dxw/phar-install/tree/master"
+            },
+            "time": "2020-04-06T09:47:56+00:00"
+        },
+        {
             "name": "friendsofphp/php-cs-fixer",
             "version": "v2.19.3",
             "source": {
@@ -783,6 +819,64 @@
                 }
             ],
             "time": "2021-11-15T17:17:55+00:00"
+        },
+        {
+            "name": "kahlan/kahlan",
+            "version": "4.7.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kahlan/kahlan.git",
+                "reference": "36ec916f7c7b067239431d3da0dc1da172bc98bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kahlan/kahlan/zipball/36ec916f7c7b067239431d3da0dc1da172bc98bb",
+                "reference": "36ec916f7c7b067239431d3da0dc1da172bc98bb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "bin": [
+                "bin/kahlan"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Kahlan\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CrysaLEAD"
+                }
+            ],
+            "description": "The PHP Test Framework for Freedom, Truth and Justice.",
+            "keywords": [
+                "BDD",
+                "Behavior-Driven Development",
+                "Monkey Patching",
+                "TDD",
+                "mock",
+                "stub",
+                "testing",
+                "unit test"
+            ],
+            "support": {
+                "issues": "https://github.com/kahlan/kahlan/issues",
+                "source": "https://github.com/kahlan/kahlan/tree/4.7.7"
+            },
+            "time": "2020-10-17T08:37:23+00:00"
         },
         {
             "name": "php-cs-fixer/diff",

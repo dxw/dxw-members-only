@@ -4,10 +4,12 @@
         "dxw/php-missing": "^1.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.0"
+        "dxw/phar-install": "^1.1",
+        "friendsofphp/php-cs-fixer": "^2.0",
+        "kahlan/kahlan": "^4.7"
     },
     "scripts": {
-        "post-update-cmd": "COMPOSER_VENDOR_DIR=_vendor composer install --no-dev --no-interaction"
+        "post-update-cmd": "vendor/bin/phar-install"
     },
     "config": {
         "platform": {
