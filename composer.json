@@ -5,8 +5,7 @@
     },
     "require-dev": {
         "dxw/phar-install": "^1.1",
-        "friendsofphp/php-cs-fixer": "^2.0",
-        "kahlan/kahlan": "^4.7"
+        "friendsofphp/php-cs-fixer": "^2.0"
     },
     "scripts": {
         "post-update-cmd": "vendor/bin/phar-install"
