@@ -5,7 +5,7 @@ add_action('init', 'dxw_members_only_metasettings');
 function dxw_members_only_metasettings()
 {
     $ms = new dmometasettings(__FILE__, 'dxw_members_only');
-    $ms->add_settings(__('dxw Members Only', 'dxwmembersonly'), ['list_type', 'list_content', 'ip_whitelist', 'redirect', 'redirect_root', 'upload_default', 'max_age'], 'dxw_members_only_options_page');
+    $ms->add_settings(__('dxw Members Only', 'dxwmembersonly'), ['list_type', 'list_content', 'ip_whitelist', 'referrer_allow_list', 'redirect', 'redirect_root', 'upload_default', 'max_age'], 'dxw_members_only_options_page');
 }
 
 /**
@@ -52,6 +52,24 @@ function dxw_members_only_options_page()
       </tr>
 
     </table>
+
+    <h3><?php _e('Referrer Allow list') ?></h3>
+    <p><?php _e('Enter a list of internal referrers to whitelist.', 'dxwmembersonly') ?></p>
+    <p><?php _e('This is for enabling certain plugins such as Nelio AB to function correctly, do not use unless required', 'dxwmembersonly') ?></p>
+
+    <table class="form-table">
+
+      <tr valign="top">
+        <th scope="row"><label for="dxw_members_only_referrer_allow_list"><?php _e('List of referrers', 'dxwmembersonly') ?></label></th>
+        <td>
+          <textarea cols="30" rows="5" name="dxw_members_only_referrer_allow_list" id="dxw_members_only_referrer_allow_list" class="large-text code"><?php echo esc_html(get_option('dxw_members_only_referrer_allow_list')) ?></textarea>
+          <br>
+          <span class="description"><?php _e('One address per line, do not include the domain (eg /admin.php?page=test)', 'dxwmembersonly') ?></span>
+        </td>
+      </tr>
+
+  </table>
+      <?php echo get_option('dxw_members_only_referrer_whitelist'); ?>
 
     <h3><?php _e('Redirection', 'dxwmembersonly') ?></h3>
     <p><?php _e('In both the following options, <code>%return_path%</code> will be converted to the URL that was originally visited. i.e. <code>/wp-login.php?redirect_to=http://example.com/private-page</code>', 'dxwmembersonly') ?></p>
