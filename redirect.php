@@ -25,9 +25,12 @@ function dxw_members_only_serve_uploads()
                 $type = $mime['type'];
             }
 
-            header('Content-type: ' . $type);
-            echo file_get_contents($file);
-            die();
+            header('Content-Type: ' . $type);
+            header('Content-Length: ' . filesize($file));
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s T', filemtime($file)));
+            ob_get_flush();
+            readfile($file);
+            exit;
         }
     }
 }
