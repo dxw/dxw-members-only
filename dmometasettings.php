@@ -37,6 +37,14 @@ class dmometasettings
         if (!get_option('dxw_members_only_max_age')) {
             add_option('dxw_members_only_max_age', 0);
         }
+
+        if (!get_option('dxw_members_only_max_age_static')) {
+            add_option('dxw_members_only_max_age_static', 0);
+        }
+
+        if (!get_option('dxw_members_only_max_age_public')) {
+            add_option('dxw_members_only_max_age_public', 86400);
+        }
     }
 
     /**

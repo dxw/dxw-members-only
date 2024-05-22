@@ -136,6 +136,8 @@ add_action('init', function () {
     }
 
     $max_age = absint(get_option('dxw_members_only_max_age'));
+    $max_age_static = absint(get_option('dxw_members_only_max_age_static'));
+    $max_age_static = absint(get_option('dxw_members_only_max_age_public'));
 
     do_action('dxw_members_only_redirect');
     if (
@@ -163,14 +165,14 @@ add_action('init', function () {
 
     // IP whitelist
     if (dxw_members_only_current_ip_in_whitelist()) {
-        header('Cache-Control: private, max-age=' . $max_age);
+        header('Cache-Control: private, max-age=' . $max_age_static);
         dxw_members_only_serve_uploads();
         return;
     }
 
     // Referrer whitelist
     if (dxw_members_only_referrer_in_allow_list()) {
-        header('Cache-Control: private, max-age=' . $max_age);
+        header('Cache-Control: private, max-age=' . $max_age_static);
         dxw_members_only_serve_uploads();
         return;
     }
@@ -212,7 +214,7 @@ add_action('init', function () {
     }
 
     if ($hit) {
-        header('Cache-Control: public');
+        header('Cache-Control: public, max-age=' . $max_age_public);
         dxw_members_only_serve_uploads();
         return;
     }
