@@ -1,6 +1,11 @@
 <?php
 class dmometasettings
 {
+    public $file;
+    public $plugin;
+    public $settings;
+    public $namespace;
+
     public function __construct($file, $namespace)
     {
         $this->file = $file;
