@@ -28,6 +28,7 @@ function dxw_members_only_serve_uploads()
             header('Content-Type: ' . $type);
             header('Content-Length: ' . filesize($file));
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s T', filemtime($file)));
+            header('Accept-Ranges: none');
 
             header('X-Accel-Buffering: no');
 
