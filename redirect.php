@@ -50,6 +50,7 @@ function dxw_members_only_redirect($root)
     $redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
 
     header('HTTP/1.1 303 See Other');
+    header('x-redirect-by: dxw-members-only');
     header('Location: '.$redirect);
     die();
 }
