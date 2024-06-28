@@ -18,17 +18,14 @@ function dxw_members_only_serve_uploads()
         $realUploadDir = realpath($basedir);
 
         if (is_file($file) && is_readable($file) && \Missing\Strings::startsWith($realFilePath, $realUploadDir.'/')) {
-
             $ims_timestamp = gmdate('D, d M Y H:i:s T', filemtime($file));
 
-            if ( $_SERVER['HTTP_IF_MODIFIED_SINCE'] && $ims_timestamp === $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) {
+            if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && $ims_timestamp === $_SERVER['HTTP_IF_MODIFIED_SINCE']) {
                 ## we don't set Etag so `If-None-Match:` doesn't need checking
 
                 http_response_code(304);
                 header('Last-Modified: ' . $ims_timestamp);
-
             } else {
-
                 $mime = wp_check_filetype($file);
                 $type = 'application/octet-stream';
                 if ($mime['type'] !== false) {
