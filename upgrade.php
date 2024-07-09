@@ -10,12 +10,16 @@
  function transfer_new_members_only_options()
  {
      $options = [
+         'list_type',
          'list_content',
+         'ip_whitelist',
+         'referrer_allow_list',
          'redirect',
          'redirect_root',
+         'upload_default',
          'max_age',
-         'ip_whitelist',
-         'upload_default'
+         'max_age_static',
+         'max_age_public'
      ];
      foreach ($options as $option) {
          $old_option = 'new_members_only_' . $option;
