@@ -137,7 +137,7 @@ add_action('init', function () {
 
     $max_age = absint(get_option('dxw_members_only_max_age'));
     $max_age_static = absint(get_option('dxw_members_only_max_age_static'));
-    $max_age_static = absint(get_option('dxw_members_only_max_age_public'));
+    $max_age_public = absint(get_option('dxw_members_only_max_age_public'));
 
     do_action('dxw_members_only_redirect');
     if (
