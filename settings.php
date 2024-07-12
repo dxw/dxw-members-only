@@ -5,7 +5,18 @@ add_action('init', 'dxw_members_only_metasettings');
 function dxw_members_only_metasettings()
 {
     $ms = new dmometasettings(__FILE__, 'dxw_members_only');
-    $ms->add_settings(__('dxw Members Only', 'dxwmembersonly'), ['list_type', 'list_content', 'ip_whitelist', 'referrer_allow_list', 'redirect', 'redirect_root', 'upload_default', 'max_age'], 'dxw_members_only_options_page');
+    $ms->add_settings(__('dxw Members Only', 'dxwmembersonly'), [
+      'list_type',
+      'list_content',
+      'ip_whitelist',
+      'referrer_allow_list',
+      'redirect',
+      'redirect_root',
+      'upload_default',
+      'max_age',
+      'max_age_static',
+      'max_age_public'
+    ], 'dxw_members_only_options_page');
 }
 
 /**
@@ -117,14 +128,35 @@ function dxw_members_only_options_page()
 
     </table>
 
-    <h3><?php _e('Max Age', 'dxwmembersonly') ?></h3>
+    <h3><?php _e('Browser Cache Max Age', 'dxwmembersonly') ?></h3>
+    <p><?php _e('A Cache-Control header will be set that prevents server caching on non-public responses, but allows browsers to cache for a maximum number of seconds.', 'dxwmembersonly') ?></p>
 
     <table class="form-table">
         <tr valign="top">
-            <th scope="row"><label for="dxw_members_only_max_age"><?php _e('Max age for cache-control header', 'dxwmembersonly') ?></label></th>
+            <th scope="row"><label for="dxw_members_only_max_age"><?php _e('Browser cache max age in seconds', 'dxwmembersonly') ?></label></th>
             <td>
                 <input type="number" min="0" step="1" name="dxw_members_only_max_age" id="dxw_members_only_max_age" value="<?php form_option('dxw_members_only_max_age') ?>" class="regular-text">
                 <span class="description">Defaults to 0 if not set.</span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="form-table">
+        <tr valign="top">
+            <th scope="row"><label for="dxw_members_only_max_age_static"><?php _e('Browser cache max age in seconds (static content)', 'dxwmembersonly') ?></label></th>
+            <td>
+                <input type="number" min="0" step="1" name="dxw_members_only_max_age_static" id="dxw_members_only_max_age_static" value="<?php form_option('dxw_members_only_max_age_static') ?>" class="regular-text">
+                <span class="description">Defaults to 0 if not set.</span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="form-table">
+        <tr valign="top">
+            <th scope="row"><label for="dxw_members_only_max_age_public"><?php _e('Browser cache max age in seconds (public content)', 'dxwmembersonly') ?></label></th>
+            <td>
+                <input type="number" min="0" step="1" name="dxw_members_only_max_age_public" id="dxw_members_only_max_age_public" value="<?php form_option('dxw_members_only_max_age_public') ?>" class="regular-text">
+                <span class="description">Defaults to 86400 if not set.</span>
             </td>
         </tr>
     </table>
