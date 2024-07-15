@@ -4,8 +4,10 @@
  * Handle request for uploaded content
  * @return void
  */
-function dxw_members_only_serve_uploads()
+function dxw_members_only_serve_uploads( $public = false )
 {
+    $max_age = absint(get_option('dxw_members_only_max_age'));
+
     $req = dmo_strip_query($_SERVER['REQUEST_URI']);
     if (
         str_contains($req, '/wp-content/uploads/') || str_contains($req, '/wp-content/blogs.dir/')
@@ -26,6 +28,12 @@ function dxw_members_only_serve_uploads()
                 http_response_code(304);
                 header('Last-Modified: ' . $ims_timestamp);
             } else {
+                if ( $public ) {
+                    $max_age = absint(get_option('dxw_members_only_max_age_public'));
+                } else {
+                    $max_age = absint(get_option('dxw_members_only_max_age_static'));
+                }
+
                 $mime = wp_check_filetype($file);
                 $type = 'application/octet-stream';
                 if ($mime['type'] !== false) {
@@ -33,6 +41,7 @@ function dxw_members_only_serve_uploads()
                 }
 
                 header('Accept-Ranges: none');
+                header('Cache-Control: private, max-age=' . $max_age);
                 header('Content-Type: ' . $type);
                 header('Content-Length: ' . filesize($file));
                 header('Last-Modified: ' . $ims_timestamp);
@@ -44,6 +53,9 @@ function dxw_members_only_serve_uploads()
             }
             exit;
         }
+    } else {
+        /* default value, expecte to be replaced by WordPress */
+        header('Cache-Control: private, max-age=' . $max_age);
     }
 }
 /**
@@ -136,8 +148,6 @@ add_action('init', function () {
     }
 
     $max_age = absint(get_option('dxw_members_only_max_age'));
-    $max_age_static = absint(get_option('dxw_members_only_max_age_static'));
-    $max_age_public = absint(get_option('dxw_members_only_max_age_public'));
 
     do_action('dxw_members_only_redirect');
     if (
@@ -145,7 +155,6 @@ add_action('init', function () {
         is_user_logged_in() ||
         apply_filters('dxw_members_only_redirect', false) === true
         ) {
-        header('Cache-Control: private, max-age=' . $max_age);
         dxw_members_only_serve_uploads();
         return;
     }
@@ -165,14 +174,12 @@ add_action('init', function () {
 
     // IP whitelist
     if (dxw_members_only_current_ip_in_whitelist()) {
-        header('Cache-Control: private, max-age=' . $max_age_static);
         dxw_members_only_serve_uploads();
         return;
     }
 
     // Referrer whitelist
     if (dxw_members_only_referrer_in_allow_list()) {
-        header('Cache-Control: private, max-age=' . $max_age_static);
         dxw_members_only_serve_uploads();
         return;
     }
@@ -214,8 +221,7 @@ add_action('init', function () {
     }
 
     if ($hit) {
-        header('Cache-Control: public, max-age=' . $max_age_public);
-        dxw_members_only_serve_uploads();
+        dxw_members_only_serve_uploads( true );
         return;
     }
 
