@@ -4,7 +4,7 @@
  * Handle request for uploaded content
  * @return void
  */
-function dxw_members_only_serve_uploads( $public = false )
+function dxw_members_only_serve_uploads($public = false)
 {
     $max_age = absint(get_option('dxw_members_only_max_age'));
 
@@ -28,7 +28,7 @@ function dxw_members_only_serve_uploads( $public = false )
                 http_response_code(304);
                 header('Last-Modified: ' . $ims_timestamp);
             } else {
-                if ( $public ) {
+                if ($public) {
                     $max_age = absint(get_option('dxw_members_only_max_age_public'));
                 } else {
                     $max_age = absint(get_option('dxw_members_only_max_age_static'));
@@ -221,7 +221,7 @@ add_action('init', function () {
     }
 
     if ($hit) {
-        dxw_members_only_serve_uploads( true );
+        dxw_members_only_serve_uploads(true);
         return;
     }
 
