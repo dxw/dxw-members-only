@@ -28,10 +28,14 @@ function dxw_members_only_serve_uploads($public = false)
                 http_response_code(304);
                 header('Last-Modified: ' . $ims_timestamp);
             } else {
+                header('Accept-Ranges: none');
+
                 if ($public) {
                     $max_age = absint(get_option('dxw_members_only_max_age_public'));
+                    header('Cache-Control: public, max-age=' . $max_age);
                 } else {
                     $max_age = absint(get_option('dxw_members_only_max_age_static'));
+                    header('Cache-Control: private, max-age=' . $max_age);
                 }
 
                 $mime = wp_check_filetype($file);
@@ -39,9 +43,6 @@ function dxw_members_only_serve_uploads($public = false)
                 if ($mime['type'] !== false) {
                     $type = $mime['type'];
                 }
-
-                header('Accept-Ranges: none');
-                header('Cache-Control: private, max-age=' . $max_age);
                 header('Content-Type: ' . $type);
                 header('Content-Length: ' . filesize($file));
                 header('Last-Modified: ' . $ims_timestamp);
