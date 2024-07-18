@@ -19,3 +19,18 @@ content.
 
 To create a development build:
 1. Run `composer install` to download dependencies
+
+## Versioning
+
+Please publish and tag new releases when they happen.
+
+As well as the individual version tags, we also have a major version tag (currently v4) that tracks the latest release for that major version. That has to be manually updated after you've done the release on GitHub as follows:
+
+(e.g. if you'd just published v4.5.0):
+
+```sh
+git checkout main
+git fetch --tags -f
+git tag -f v4 v4.5.0
+git push origin -f --tags
+```
