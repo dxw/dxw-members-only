@@ -1,1 +1,2 @@
 - [ ] Version number has been bumped
+- [ ] Major version number tag moved after release (see [docs](README.md#Versioning))
