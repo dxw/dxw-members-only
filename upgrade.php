@@ -13,6 +13,7 @@
          'list_type',
          'list_content',
          'ip_whitelist',
+         'password_allow_list',
          'referrer_allow_list',
          'redirect',
          'redirect_root',

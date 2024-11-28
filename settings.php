@@ -64,6 +64,22 @@ function dxw_members_only_options_page()
 
     </table>
 
+    <h3><?php _e('Passwords') ?></h3>
+    <p><?php _e('Enter a list of page passwords that can be used to access protected uploads.', 'dxwmembersonly') ?></p>
+
+    <table class="form-table">
+
+      <tr valign="top">
+        <th scope="row"><label for="dxw_members_only_password_allowlist"><?php _e('List of passwords', 'dxwmembersonly') ?></label></th>
+        <td>
+          <textarea cols="30" rows="5" name="dxw_members_only_password_allowlist" id="dxw_members_only_password_allowlist" class="large-text code"><?php echo esc_html(get_option('dxw_members_only_password_allowlist')) ?></textarea>
+          <br>
+          <span class="description"><?php _e('One plaintext password per line', 'dxwmembersonly') ?></span>
+        </td>
+      </tr>
+
+    </table>
+
     <h3><?php _e('Referrer Allow list') ?></h3>
     <p><?php _e('Enter a list of internal referrers to whitelist.', 'dxwmembersonly') ?></p>
     <p><?php _e('This is for enabling certain plugins such as Nelio AB to function correctly, do not use unless required', 'dxwmembersonly') ?></p>
