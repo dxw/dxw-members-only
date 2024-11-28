@@ -99,6 +99,27 @@ function dxw_members_only_current_ip_in_whitelist()
     return false;
 }
 
+function dxw_members_only_current_password_in_allowlist()
+{
+    require_once ABSPATH . WPINC . '/class-phpass.php';
+
+    if (! isset($_COOKIE['wp-postpass_' . COOKIEHASH])) {
+        return false;
+    }
+
+    $password_list = explode("\n", get_option('dxw_members_only_password_allowlist'));
+    $hasher = new PasswordHash(8, true);
+    $hash = wp_unslash($_COOKIE['wp-postpass_' . COOKIEHASH]);
+    if (! str_starts_with($hash, '$P$B')) {
+        foreach ($password_list as $password) {
+            if ($hasher->CheckPassword($password, $hash)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function dxw_members_only_referrer_in_allow_list()
 {
     $referrer_list = explode("\n", get_option('dxw_members_only_referrer_allow_list'));
@@ -165,6 +186,13 @@ add_action('init', function () {
 
     // IP whitelist
     if (dxw_members_only_current_ip_in_whitelist()) {
+        header('Cache-Control: private, max-age=' . $max_age_static);
+        dxw_members_only_serve_uploads();
+        return;
+    }
+
+    // Password allowlist
+    if (dxw_members_only_current_password_in_allowlist()) {
         header('Cache-Control: private, max-age=' . $max_age_static);
         dxw_members_only_serve_uploads();
         return;
