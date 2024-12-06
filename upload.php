@@ -6,7 +6,7 @@ add_filter('attachment_fields_to_edit', function ($fields, $post) {
 
         $fields['dmo_add_to_list'] = [
             'input' => 'html',
-            'label' => __('Add to whitelist', 'dxwmembersonly'),
+            'label' => __('Add to allow-list', 'dxwmembersonly'),
             'html' => '<input type="checkbox" name="attachments['.$post->ID.'][dmo_add_to_list]" '.($upload_default==='true'?'checked':'').'>',
         ];
     }

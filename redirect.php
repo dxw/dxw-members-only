@@ -47,7 +47,7 @@ function dxw_members_only_serve_uploads()
     }
 }
 /**
- * Handle redirect for users when not logged in or viewing whitelisted content
+ * Handle redirect for users when not logged in or viewing allow-listed content
  *
  * @param  boolean $root Whether attempting to view root or not
  * @return void
@@ -87,7 +87,7 @@ function dxw_members_only_ip_in_range($ip, $range)
     return $result->unwrap();
 }
 
-function dxw_members_only_current_ip_in_whitelist()
+function dxw_members_only_current_ip_in_allow_list()
 {
     $ip_list = explode("\n", get_option('dxw_members_only_ip_whitelist'));
     foreach ($ip_list as $ip) {
@@ -101,10 +101,10 @@ function dxw_members_only_current_ip_in_whitelist()
 
 function dxw_members_only_referrer_in_allow_list()
 {
-    $referrer_list = explode("\n", get_option('dxw_members_only_referrer_allow_list'));
+    $referrer_list = explode("\n", get_option('dxw_members_only_referrer_whitelist'));
     /*
      * If there is no referrer header, or if we have no configured referrers to
-     * whitelist we can stop here.
+     * allow-list we can stop here.
      */
     if (isset($_SERVER['HTTP_REFERER'])) {
         foreach ($referrer_list as $referrer) {
@@ -113,12 +113,12 @@ function dxw_members_only_referrer_in_allow_list()
                  * Add the site url to the referrer string to ensure that external
                  * referrers can't be used here.
                  */
-                $whitelisted_referrer = get_site_url() . $referrer;
-                $referrer_check = strpos($_SERVER['HTTP_REFERER'], $whitelisted_referrer);
+                $allow_listed_referrer = get_site_url() . $referrer;
+                $referrer_check = strpos($_SERVER['HTTP_REFERER'], $allow_listed_referrer);
                 /*
                  * Check that there is a match, and that match is at the start of the referrer string.
-                 * This is to ensure that the referrer being whitelisted can't be fooled by having
-                 * a whitelisted referrer passed in as a parameter on the referrer string.
+                 * This is to ensure that the referrer being allow-listed can't be fooled by having
+                 * a allow-listed referrer passed in as a parameter on the referrer string.
                  */
                 if ($referrer_check !== false && $referrer_check == 0) {
                     return true;
@@ -163,14 +163,14 @@ add_action('init', function () {
         return;
     }
 
-    // IP whitelist
-    if (dxw_members_only_current_ip_in_whitelist()) {
+    // IP allow-list
+    if (dxw_members_only_current_ip_in_allow_list()) {
         header('Cache-Control: private, max-age=' . $max_age_static);
         dxw_members_only_serve_uploads();
         return;
     }
 
-    // Referrer whitelist
+    // Referrer allow-list
     if (dxw_members_only_referrer_in_allow_list()) {
         header('Cache-Control: private, max-age=' . $max_age_static);
         dxw_members_only_serve_uploads();
