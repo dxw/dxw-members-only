@@ -62,7 +62,7 @@ class dmometasettings
 
         add_filter('plugin_action_links', [$this, 'plugin_action_links'], 10, 2);
         add_action('admin_menu', [$this, 'admin_menu']);
-        add_filter('whitelist_options', [$this, 'whitelist_options']);
+        add_filter('whitelist_options', [$this, 'allow_list_options']);
     }
 
     /**
@@ -93,15 +93,15 @@ class dmometasettings
     /**
     * Prefix options with namespace
     *
-    * @param  array  $whitelist_options Options to whitelist
-    * @return array                     Whitelisted options
+    * @param  array  $allow-list_options Options to allow-list
+    * @return array                     Allow-listed options
     */
-    public function whitelist_options($whitelist_options)
+    public function allow_list_options($allow_list_options)
     {
-        $whitelist_options[$this->namespace] = [];
+        $allow_list_options[$this->namespace] = [];
         foreach ($this->settings->options as $opt) {
-            $whitelist_options[$this->namespace][] = $this->namespace.'_'.$opt;
+            $allow_list_options[$this->namespace][] = $this->namespace.'_'.$opt;
         }
-        return $whitelist_options;
+        return $allow_list_options;
     }
 }

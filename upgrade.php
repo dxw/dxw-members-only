@@ -12,7 +12,7 @@
      $options = [
          'list_type',
          'list_content',
-         'ip_whitelist',
+         'ip_allow-list',
          'referrer_allow_list',
          'redirect',
          'redirect_root',

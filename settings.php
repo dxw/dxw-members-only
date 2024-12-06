@@ -8,7 +8,7 @@ function dxw_members_only_metasettings()
     $ms->add_settings(__('dxw Members Only', 'dxwmembersonly'), [
       'list_type',
       'list_content',
-      'ip_whitelist',
+      'ip_allow-list',
       'referrer_allow_list',
       'redirect',
       'redirect_root',
@@ -33,7 +33,7 @@ function dxw_members_only_options_page()
   <form method="post" action="options.php">
     <?php settings_fields('dxw_members_only') ?>
 
-    <h3><?php _e('Content whitelist', 'dxwmembersonly') ?></h3>
+    <h3><?php _e('Content allow-list', 'dxwmembersonly') ?></h3>
     <p><?php _e('Enter a list of content that all users can view without logging in.', 'dxwmembersonly') ?></p>
 
     <table class="form-table">
@@ -48,15 +48,15 @@ function dxw_members_only_options_page()
 
     </table>
 
-    <h3><?php _e('IP whitelist') ?></h3>
+    <h3><?php _e('IP allow-list') ?></h3>
     <p><?php _e('Enter a list of IP addresses that can be allowed to view the site without logging in.', 'dxwmembersonly') ?></p>
 
     <table class="form-table">
 
       <tr valign="top">
-        <th scope="row"><label for="dxw_members_only_ip_whitelist"><?php _e('List of IP addresses', 'dxwmembersonly') ?></label></th>
+        <th scope="row"><label for="dxw_members_only_ip_allow-list"><?php _e('List of IP addresses', 'dxwmembersonly') ?></label></th>
         <td>
-          <textarea cols="30" rows="5" name="dxw_members_only_ip_whitelist" id="dxw_members_only_ip_whitelist" class="large-text code"><?php echo esc_html(get_option('dxw_members_only_ip_whitelist')) ?></textarea>
+          <textarea cols="30" rows="5" name="dxw_members_only_ip_allow-list" id="dxw_members_only_ip_allow-list" class="large-text code"><?php echo esc_html(get_option('dxw_members_only_ip_whitelist')) ?></textarea>
           <br>
           <span class="description"><?php _e('One IPv4 address or CIDRv4 address range per line.', 'dxwmembersonly') ?></span>
         </td>
@@ -65,7 +65,7 @@ function dxw_members_only_options_page()
     </table>
 
     <h3><?php _e('Referrer Allow list') ?></h3>
-    <p><?php _e('Enter a list of internal referrers to whitelist.', 'dxwmembersonly') ?></p>
+    <p><?php _e('Enter a list of internal referrers to allow-list.', 'dxwmembersonly') ?></p>
     <p><?php _e('This is for enabling certain plugins such as Nelio AB to function correctly, do not use unless required', 'dxwmembersonly') ?></p>
 
     <table class="form-table">
@@ -73,7 +73,7 @@ function dxw_members_only_options_page()
       <tr valign="top">
         <th scope="row"><label for="dxw_members_only_referrer_allow_list"><?php _e('List of referrers', 'dxwmembersonly') ?></label></th>
         <td>
-          <textarea cols="30" rows="5" name="dxw_members_only_referrer_allow_list" id="dxw_members_only_referrer_allow_list" class="large-text code"><?php echo esc_html(get_option('dxw_members_only_referrer_allow_list')) ?></textarea>
+          <textarea cols="30" rows="5" name="dxw_members_only_referrer_allow_list" id="dxw_members_only_referrer_allow_list" class="large-text code"><?php echo esc_html(get_option('dxw_members_only_referrer_whitelist')) ?></textarea>
           <br>
           <span class="description"><?php _e('One address per line, do not include the domain (eg /admin.php?page=test)', 'dxwmembersonly') ?></span>
         </td>
@@ -98,7 +98,7 @@ function dxw_members_only_options_page()
         <th scope="row"><label for="dxw_members_only_redirect_root"><?php _e('Redirect visitors to / to', 'dxwmembersonly') ?></label></th>
         <td>
           <input type="text" name="dxw_members_only_redirect_root" id="dxw_members_only_redirect_root" value="<?php form_option('dxw_members_only_redirect_root') ?>" class="regular-text">
-          <span class="description"><?php _e("Only applies if / isn't whitelisted.", 'dxwmembersonly') ?></span>
+          <span class="description"><?php _e("Only applies if / isn't allow-listed.", 'dxwmembersonly') ?></span>
         </td>
       </tr>
 
