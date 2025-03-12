@@ -20,12 +20,17 @@ function dxw_members_only_serve_uploads()
         if (is_file($file) && is_readable($file) && \Missing\Strings::startsWith($realFilePath, $realUploadDir.'/')) {
             $ims_timestamp = gmdate('D, d M Y H:i:s T', filemtime($file));
 
-            if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && $ims_timestamp === $_SERVER['HTTP_IF_MODIFIED_SINCE']) {
+            if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $ims_timestamp === $_SERVER['HTTP_IF_MODIFIED_SINCE']) {
                 ## we don't set Etag so `If-None-Match:` doesn't need checking
 
                 http_response_code(304);
                 header('Last-Modified: ' . $ims_timestamp);
             } else {
+                $public = false;
+                $attachment_id = attachment_url_to_postid($req);
+                if (!empty($attachment_id)) {
+                    $public = get_post_meta($attachment_id, 'public_access', true);
+                }
                 $mime = wp_check_filetype($file);
                 $type = 'application/octet-stream';
                 if ($mime['type'] !== false) {
@@ -33,6 +38,13 @@ function dxw_members_only_serve_uploads()
                 }
 
                 header('Accept-Ranges: none');
+
+                if ($public) {
+                    header('Cache-Control: public, max-age=600');
+                } else {
+                    header('Cache-Control: private, max-age=600');
+                }
+
                 header('Content-Type: ' . $type);
                 header('Content-Length: ' . filesize($file));
                 header('Last-Modified: ' . $ims_timestamp);
