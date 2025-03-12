@@ -33,6 +33,19 @@ function dxw_members_only_serve_uploads()
 				}
 
 				header('Accept-Ranges: none');
+
+				$public = false;
+				$attachment_id = attachment_url_to_postid($req);
+				if (!empty($attachment_id)) {
+					$public = get_post_meta($attachment_id, 'public_access', true);
+				}
+
+				if ($public) {
+					header('Cache-Control: public, max-age=600');
+				} else {
+					header('Cache-Control: private, max-age=600');
+				}
+
 				header('Content-Type: ' . $type);
 				header('Content-Length: ' . filesize($file));
 				header('Last-Modified: ' . $ims_timestamp);
