@@ -1,11 +1,11 @@
 <?php
 /*
  * Plugin Name: dxw Members Only
- * Plugin URI: http://dxw.com
+ * Plugin URI: https://www.dxw.com
  * Description: Make your WordPress site visible to signed-in users only with the added ability to whitelist specific content for access by all users.
  * Version: 4.3.2
  * Author: dxw
- * Author URI: http://dxw.com
+ * Author URI: https://www.dxw.com
  * Text Domain: dxwmembersonly
  */
 
@@ -32,5 +32,6 @@ if (!defined('DOING_CRON')) {
     require(__DIR__.'/upload.php');
     require(__DIR__.'/redirect.php');
     require(__DIR__.'/upgrade.php');
+    require(__DIR__.'/public-access.php');
     register_activation_hook(__FILE__, 'transfer_new_members_only_options');
 }
