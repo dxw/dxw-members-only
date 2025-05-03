@@ -129,6 +129,24 @@ function dxw_members_only_referrer_in_allow_list()
     return false;
 }
 
+function dxw_members_only_rest_access($result)
+{
+    if (is_user_logged_in()) {
+        return $result;
+    }
+    if (dxw_members_only_current_ip_in_whitelist()) {
+        return $result;
+    }
+    $error = new WP_Error(
+        'rest_unauthorised',
+        __('Only authenticated users can access the REST API.', 'rest_unauthorised'),
+        [ 'status' => rest_authorization_required_code() ]
+    );
+    return $error;
+}
+
+add_filter('rest_authentication_errors', 'dxw_members_only_rest_access');
+
 add_action('init', function () {
     // Fix for wp-cli
     if (defined('WP_CLI_ROOT')) {
@@ -152,6 +170,17 @@ add_action('init', function () {
 
     // Get path component
     $path = dmo_strip_query($_SERVER['REQUEST_URI']);
+
+    // Fall back to dxw_members_only_rest_access for REST requests
+    // Note that REST_REQUEST should be used, but it's not
+    // actually available during init when it's needed here
+
+    if (defined('REST_REQUEST')) {
+        return;
+    }
+    if (substr($path, 0, 8) === "/wp-json") {
+        return;
+    }
 
     // Always allow /wp-login.php
     if (\Missing\Strings::endsWith($path, 'wp-login.php')) {
