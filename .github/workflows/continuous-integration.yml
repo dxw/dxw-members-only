@@ -4,10 +4,10 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        php-versions: ['7.4']
+        php-versions: ['8.3']
     steps:
       - uses: actions/checkout@v4
       - name: Setup PHP

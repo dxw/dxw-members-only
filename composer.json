@@ -1,11 +1,11 @@
 {
     "require": {
-        "dxw/cidr": "^3.0",
-        "dxw/php-missing": "^1.0"
+        "dxw/cidr": "^3.2.0",
+        "dxw/php-missing": "^2.0.0"
     },
     "require-dev": {
         "dxw/phar-install": "^1.1",
-        "friendsofphp/php-cs-fixer": "^2.0"
+        "dxw/php-cs-fixer-config": "^2.1"
     },
     "scripts": {
         "post-update-cmd": "vendor/bin/phar-install"
