@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Plugin Name: dxw Members Only
  * Plugin URI: http://dxw.com
@@ -17,20 +18,20 @@
  */
 function dmo_strip_query($path)
 {
-    $pos = strpos($path, '?');
-    if ($pos !== false) {
-        $path = substr($path, 0, $pos);
-    }
+	$pos = strpos($path, '?');
+	if ($pos !== false) {
+		$path = substr($path, 0, $pos);
+	}
 
-    return $path;
+	return $path;
 }
 
 if (!defined('DOING_CRON')) {
-    require(__DIR__.'/vendor.phar');
-    require(__DIR__.'/dmometasettings.php');
-    require(__DIR__.'/settings.php');
-    require(__DIR__.'/upload.php');
-    require(__DIR__.'/redirect.php');
-    require(__DIR__.'/upgrade.php');
-    register_activation_hook(__FILE__, 'transfer_new_members_only_options');
+	require(__DIR__.'/vendor.phar');
+	require(__DIR__.'/dmometasettings.php');
+	require(__DIR__.'/settings.php');
+	require(__DIR__.'/upload.php');
+	require(__DIR__.'/redirect.php');
+	require(__DIR__.'/upgrade.php');
+	register_activation_hook(__FILE__, 'transfer_new_members_only_options');
 }

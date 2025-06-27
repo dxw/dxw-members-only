@@ -4,19 +4,19 @@ add_action('init', 'dxw_members_only_metasettings');
 
 function dxw_members_only_metasettings()
 {
-    $ms = new dmometasettings(__FILE__, 'dxw_members_only');
-    $ms->add_settings(__('dxw Members Only', 'dxwmembersonly'), [
-      'list_type',
-      'list_content',
-      'ip_whitelist',
-      'referrer_allow_list',
-      'redirect',
-      'redirect_root',
-      'upload_default',
-      'max_age',
-      'max_age_static',
-      'max_age_public'
-    ], 'dxw_members_only_options_page');
+	$ms = new dmometasettings(__FILE__, 'dxw_members_only');
+	$ms->add_settings(__('dxw Members Only', 'dxwmembersonly'), [
+	  'list_type',
+	  'list_content',
+	  'ip_whitelist',
+	  'referrer_allow_list',
+	  'redirect',
+	  'redirect_root',
+	  'upload_default',
+	  'max_age',
+	  'max_age_static',
+	  'max_age_public'
+	], 'dxw_members_only_options_page');
 }
 
 /**
@@ -26,7 +26,7 @@ function dxw_members_only_metasettings()
  */
 function dxw_members_only_options_page()
 {
-    ?>
+	?>
 <div class="wrap">
   <h2><?php _e('dxw Members Only', 'dxwmembersonly') ?></h2>
 
