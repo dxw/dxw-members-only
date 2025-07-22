@@ -4,7 +4,7 @@
  * Handle request for uploaded content
  * @return void
  */
-function dxw_members_only_serve_uploads($req)
+function dxw_members_only_serve_uploads($req, $public = false)
 {
 	$upload_dir = wp_upload_dir();
 	$baseurl = preg_replace('%^https?://[^/]+(/.*)$%', '$1', $upload_dir['baseurl']);
@@ -14,6 +14,10 @@ function dxw_members_only_serve_uploads($req)
 	$realUploadDir = realpath($basedir);
 
 	$max_age_static = absint(get_option('dxw_members_only_max_age_static'));
+	$cache_type = "private";
+	if ($public) {
+		$cache_type = "public";
+	}
 
 	if (is_file($file) && is_readable($file) && \Missing\Strings::startsWith($realFilePath, $realUploadDir.'/')) {
 		$ims_timestamp = gmdate('D, d M Y H:i:s T', filemtime($file));
@@ -30,7 +34,7 @@ function dxw_members_only_serve_uploads($req)
 				$type = $mime['type'];
 			}
 			header('Accept-Ranges: none');
-			header('Cache-Control: private, max-age=' . $max_age_static);
+			header('Cache-Control: '. $cache_type .', max-age=' . $max_age_static);
 			header('Content-Type: ' . $type);
 			header('Content-Length: ' . filesize($file));
 			header('Last-Modified: ' . $ims_timestamp);
@@ -231,7 +235,7 @@ add_action('init', function () {
 
 	if ($hit) {
 		if ($upload) {
-			dxw_members_only_serve_uploads($path);
+			dxw_members_only_serve_uploads($path, true);
 		} else {
 			header('Cache-Control: public, max-age=' . $max_age_public);
 		}
