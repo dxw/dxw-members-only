@@ -4,46 +4,42 @@
  * Handle request for uploaded content
  * @return void
  */
-function dxw_members_only_serve_uploads()
+function dxw_members_only_serve_uploads($req)
 {
-	$req = dmo_strip_query($_SERVER['REQUEST_URI']);
-	if (
-		str_contains($req, '/wp-content/uploads/') || str_contains($req, '/wp-content/blogs.dir/')
-	) {
-		$upload_dir = wp_upload_dir();
-		$baseurl = preg_replace('%^https?://[^/]+(/.*)$%', '$1', $upload_dir['baseurl']);
-		$basedir = $upload_dir['basedir'];
-		$file = preg_replace("[^{$baseurl}]", $basedir, $req);
-		$realFilePath = realpath($file);
-		$realUploadDir = realpath($basedir);
+	$upload_dir = wp_upload_dir();
+	$baseurl = preg_replace('%^https?://[^/]+(/.*)$%', '$1', $upload_dir['baseurl']);
+	$basedir = $upload_dir['basedir'];
+	$file = preg_replace("[^{$baseurl}]", $basedir, $req);
+	$realFilePath = realpath($file);
+	$realUploadDir = realpath($basedir);
 
-		if (is_file($file) && is_readable($file) && \Missing\Strings::startsWith($realFilePath, $realUploadDir.'/')) {
-			$ims_timestamp = gmdate('D, d M Y H:i:s T', filemtime($file));
+	$max_age_static = absint(get_option('dxw_members_only_max_age_static'));
 
-			if (array_key_exists('HTTP_IF_MODIFIED_SINCE', $_SERVER) && $ims_timestamp === $_SERVER['HTTP_IF_MODIFIED_SINCE']) {
-				## we don't set Etag so `If-None-Match:` doesn't need checking
+	if (is_file($file) && is_readable($file) && \Missing\Strings::startsWith($realFilePath, $realUploadDir.'/')) {
+		$ims_timestamp = gmdate('D, d M Y H:i:s T', filemtime($file));
 
-				http_response_code(304);
-				header('Last-Modified: ' . $ims_timestamp);
-			} else {
-				$mime = wp_check_filetype($file);
-				$type = 'application/octet-stream';
-				if ($mime['type'] !== false) {
-					$type = $mime['type'];
-				}
+		if (array_key_exists('HTTP_IF_MODIFIED_SINCE', $_SERVER) && $ims_timestamp === $_SERVER['HTTP_IF_MODIFIED_SINCE']) {
+			## we don't set Etag so `If-None-Match:` doesn't need checking
 
-				header('Accept-Ranges: none');
-				header('Content-Type: ' . $type);
-				header('Content-Length: ' . filesize($file));
-				header('Last-Modified: ' . $ims_timestamp);
-
-				header('X-Accel-Buffering: no');
-
-				ob_get_flush();
-				readfile($file);
+			http_response_code(304);
+			header('Last-Modified: ' . $ims_timestamp);
+		} else {
+			$mime = wp_check_filetype($file);
+			$type = 'application/octet-stream';
+			if ($mime['type'] !== false) {
+				$type = $mime['type'];
 			}
-			exit;
+			header('Accept-Ranges: none');
+			header('Cache-Control: private, max-age=' . $max_age_static);
+			header('Content-Type: ' . $type);
+			header('Content-Length: ' . filesize($file));
+			header('Last-Modified: ' . $ims_timestamp);
+			header('X-Accel-Buffering: no');
+
+			ob_get_flush();
+			readfile($file);
 		}
+		exit;
 	}
 }
 /**
@@ -136,8 +132,14 @@ add_action('init', function () {
 	}
 
 	$max_age = absint(get_option('dxw_members_only_max_age'));
-	$max_age_static = absint(get_option('dxw_members_only_max_age_static'));
 	$max_age_public = absint(get_option('dxw_members_only_max_age_public'));
+
+	// Get path component
+	$path = dmo_strip_query($_SERVER['REQUEST_URI']);
+	$upload = false;
+	if (str_contains($path, '/wp-content/uploads/') || str_contains($path, '/wp-content/blogs.dir/')) {
+		$upload = true;
+	}
 
 	do_action('dxw_members_only_redirect');
 	if (
@@ -145,13 +147,13 @@ add_action('init', function () {
 		is_user_logged_in() ||
 		apply_filters('dxw_members_only_redirect', false) === true
 	) {
-		header('Cache-Control: private, max-age=' . $max_age);
-		dxw_members_only_serve_uploads();
+		if ($upload) {
+			dxw_members_only_serve_uploads($path);
+		} else {
+			header('Cache-Control: private, max-age=' . $max_age);
+		}
 		return;
 	}
-
-	// Get path component
-	$path = dmo_strip_query($_SERVER['REQUEST_URI']);
 
 	// Always allow /wp-login.php
 	if (\Missing\Strings::endsWith($path, 'wp-login.php')) {
@@ -165,15 +167,21 @@ add_action('init', function () {
 
 	// IP whitelist
 	if (dxw_members_only_current_ip_in_whitelist()) {
-		header('Cache-Control: private, max-age=' . $max_age_static);
-		dxw_members_only_serve_uploads();
+		if ($upload) {
+			dxw_members_only_serve_uploads($path);
+		} else {
+			header('Cache-Control: private, max-age=' . $max_age);
+		}
 		return;
 	}
 
 	// Referrer whitelist
 	if (dxw_members_only_referrer_in_allow_list()) {
-		header('Cache-Control: private, max-age=' . $max_age_static);
-		dxw_members_only_serve_uploads();
+		if ($upload) {
+			dxw_members_only_serve_uploads($path);
+		} else {
+			header('Cache-Control: private, max-age=' . $max_age);
+		}
 		return;
 	}
 
@@ -214,8 +222,11 @@ add_action('init', function () {
 	}
 
 	if ($hit) {
-		header('Cache-Control: public, max-age=' . $max_age_public);
-		dxw_members_only_serve_uploads();
+		if ($upload) {
+			dxw_members_only_serve_uploads($path);
+		} else {
+			header('Cache-Control: public, max-age=' . $max_age_public);
+		}
 		return;
 	}
 
