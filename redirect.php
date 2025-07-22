@@ -184,8 +184,15 @@ add_action('init', function () {
 		if ($upload) {
 			dxw_members_only_serve_uploads($path);
 		} else {
-			//TODO check for open comments
-			header('Cache-Control: private, max-age=' . $max_age_static);
+			// if comments are open, and this is an IP bypass, set max-age to zero
+			// so if someone visits the page, then logs in, they don't load their cached version
+			// this change does put extra strain on the server when pages with open comments get a lot of visits
+			$tmp_page_id = url_to_postid($path);
+			if (comments_open($tmp_page_id)) {
+				header('Cache-Control: private, max-age=' . '0');
+			} else {
+				header('Cache-Control: private, max-age=' . $max_age_static);
+			}
 		}
 		return;
 	}
