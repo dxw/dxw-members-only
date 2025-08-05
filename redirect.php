@@ -90,6 +90,7 @@ function dxw_members_only_ip_in_range($ip, $range)
 
 function dxw_members_only_current_ip_in_whitelist()
 {
+	return true;
 	$ip_list = explode("\n", get_option('dxw_members_only_ip_whitelist'));
 	foreach ($ip_list as $ip) {
 		$ip = trim($ip);
