@@ -6,6 +6,7 @@
  */
 function dxw_members_only_serve_uploads()
 {
+	error_log("*****************************************************************");
 	$req = dmo_strip_query($_SERVER['REQUEST_URI']);
 	if (
 		str_contains($req, '/wp-content/uploads/') || str_contains($req, '/wp-content/blogs.dir/')
