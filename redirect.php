@@ -18,6 +18,16 @@ function dxw_members_only_serve_uploads()
 		$realFilePath = realpath($file);
 		$realUploadDir = realpath($basedir);
 
+		$max_age_static = absint(get_option('dxw_members_only_max_age_static'));
+		$max_age_public = absint(get_option('dxw_members_only_max_age_public'));
+		if (dxw_members_only_current_ip_in_whitelist()) {
+			header('Cache-Control: private, max-age=' . $max_age_static);
+		} elseif (dxw_members_only_referrer_in_allow_list()) {
+			header('Cache-Control: private, max-age=' . $max_age_static);
+		} else {
+			header('Cache-Control: public, max-age=' . $max_age_public);
+		}
+
 		if (is_file($file) && is_readable($file) && \Missing\Strings::startsWith($realFilePath, $realUploadDir.'/')) {
 			$ims_timestamp = gmdate('D, d M Y H:i:s T', filemtime($file));
 
@@ -138,8 +148,6 @@ add_action('init', function () {
 	}
 
 	$max_age = absint(get_option('dxw_members_only_max_age'));
-	$max_age_static = absint(get_option('dxw_members_only_max_age_static'));
-	$max_age_public = absint(get_option('dxw_members_only_max_age_public'));
 
 	do_action('dxw_members_only_redirect');
 	if (
@@ -147,7 +155,6 @@ add_action('init', function () {
 		is_user_logged_in() ||
 		apply_filters('dxw_members_only_redirect', false) === true
 	) {
-		header('Cache-Control: private, max-age=' . $max_age);
 		dxw_members_only_serve_uploads();
 		return;
 	}
@@ -167,14 +174,12 @@ add_action('init', function () {
 
 	// IP whitelist
 	if (dxw_members_only_current_ip_in_whitelist()) {
-		header('Cache-Control: private, max-age=' . $max_age_static);
 		dxw_members_only_serve_uploads();
 		return;
 	}
 
 	// Referrer whitelist
 	if (dxw_members_only_referrer_in_allow_list()) {
-		header('Cache-Control: private, max-age=' . $max_age_static);
 		dxw_members_only_serve_uploads();
 		return;
 	}
@@ -216,7 +221,6 @@ add_action('init', function () {
 	}
 
 	if ($hit) {
-		header('Cache-Control: public, max-age=' . $max_age_public);
 		dxw_members_only_serve_uploads();
 		return;
 	}
