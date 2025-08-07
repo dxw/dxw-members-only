@@ -163,15 +163,8 @@ add_action('init', function () {
 		return;
 	}
 
-	// IP whitelist
-	if (dxw_members_only_current_ip_in_whitelist()) {
-		header('Cache-Control: private, max-age=' . $max_age);
-		dxw_members_only_serve_uploads();
-		return;
-	}
-
-	// Referrer whitelist
-	if (dxw_members_only_referrer_in_allow_list()) {
+	// IP & referrer allow lists
+	if (dxw_members_only_current_ip_in_whitelist() || dxw_members_only_referrer_in_allow_list()) {
 		header('Cache-Control: private, max-age=' . $max_age);
 		dxw_members_only_serve_uploads();
 		return;
