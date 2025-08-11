@@ -130,7 +130,8 @@ function dxw_members_only_referrer_in_allow_list()
 	return false;
 }
 
-add_action('init', function () {
+function dxw_members_only_flow()
+{
 	// Fix for wp-cli
 	if (defined('WP_CLI_ROOT')) {
 		return;
@@ -214,4 +215,6 @@ add_action('init', function () {
 
 	header('Cache-Control: private, max-age=' . $max_age);
 	dxw_members_only_redirect($path === '/');
-}, -99999999999);
+}
+
+add_action('init', 'dxw_members_only_flow', -99999999999);
