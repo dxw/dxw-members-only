@@ -20,6 +20,19 @@ content.
 To create a development build:
 1. Run `composer install` to download dependencies
 
+### Testing locally
+
+1. Install and activate this plugin on a development site
+2. Ensure that requests to `wp-content/uploads` are redirected via PHP as follows (otherwise the plugin will not serve any cache headers for media library files):
+   * Access the WordPress container (usually `script/console` for most of our projects)
+   * `cd /etc/apache2/sites-enabled`
+   * `vi wordpress.conf`, and add the following rewrite rule:
+      ```
+      RewriteRule ^wp-content/uploads/.* index.php [L]
+      ```
+   * Save & exit vi, then `service apache2 reload`
+3. If you want to allow-list your local IP address within the plugin, add `0.0.0.0/0` to the IP allow list in the plugin settings page (this has the effect of allow-listing all IP addresses)
+
 ## Versioning
 
 Please publish and tag new releases when they happen.
