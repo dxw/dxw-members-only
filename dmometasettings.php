@@ -2,12 +2,12 @@
 
 class dmometasettings
 {
-	public $file;
-	public $plugin;
-	public $settings;
-	public $namespace;
+	public string $file;
+	public string $plugin;
+	public object $settings;
+	public string $namespace;
 
-	public function __construct($file, $namespace)
+	public function __construct(string $file, string $namespace)
 	{
 		$this->file = $file;
 		$this->plugin = plugin_basename($file);
@@ -21,7 +21,7 @@ class dmometasettings
 	/**
 	* Set default options settings for plugin
 	*/
-	public function set_defaults()
+	public function set_defaults(): void
 	{
 		if (!get_option('dxw_members_only_list_content')) {
 			add_option('dxw_members_only_list_content', '');
@@ -52,28 +52,28 @@ class dmometasettings
 	* Wrapper for adding settings with the WP Settings API
 	*
 	* @param string $title    Name of the setting
-	* @param array  $options  Setting options array
-	* @param string $callback Callback function
+	* @param array<array-key, string> $options
+	* @param callable|string $callback Callback function
 	*/
-	public function add_settings($title, $options, $callback)
+	public function add_settings(string $title, array $options, callable|string $callback): void
 	{
 		$this->settings->title = $title;
 		$this->settings->options = $options;
 		$this->settings->callback = $callback;
 
 		add_filter('plugin_action_links', [$this, 'plugin_action_links'], 10, 2);
-		add_action('admin_menu', [$this, 'admin_menu']);
-		add_filter('whitelist_options', [$this, 'whitelist_options']);
+		add_action('admin_menu', [$this, 'admin_menu'], 10, 0);
+		add_filter('allowed_options', [$this, 'whitelist_options']);
 	}
 
 	/**
 	* Insert action links for plugin
 	*
-	* @param  array  $links Existing action links for the plugin
+	* @param  array<array-key, string> $links Existing action links for the plugin
 	* @param  string $file  File to link to in the actions
-	* @return array         New action links
+	* @return array<array-key, string>         New action links
 	*/
-	public function plugin_action_links($links, $file)
+	public function plugin_action_links(array $links, string $file): array
 	{
 		if (dirname($file) === dirname($this->plugin)) {
 			array_unshift($links, '<a href="'.get_admin_url(null, 'options-general.php?page='.$this->plugin).'">'.__('Settings', 'dxwmembersonly').'</a>');
@@ -86,9 +86,11 @@ class dmometasettings
 	*
 	* @return void
 	*/
-	public function admin_menu()
+	public function admin_menu(): void
 	{
-		add_options_page($this->settings->title, $this->settings->title, 'edit_users', $this->file, $this->settings->callback);
+		if (is_string($this->settings->title) && is_callable($this->settings->callback)) {
+			add_options_page($this->settings->title, $this->settings->title, 'edit_users', $this->file, $this->settings->callback);
+		}
 	}
 
 	/**
@@ -97,9 +99,10 @@ class dmometasettings
 	* @param  array  $whitelist_options Options to whitelist
 	* @return array                     Whitelisted options
 	*/
-	public function whitelist_options($whitelist_options)
+	public function whitelist_options($whitelist_options): array
 	{
 		$whitelist_options[$this->namespace] = [];
+		/** @var string $opt */
 		foreach ($this->settings->options as $opt) {
 			$whitelist_options[$this->namespace][] = $this->namespace.'_'.$opt;
 		}
