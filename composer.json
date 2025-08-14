@@ -5,7 +5,9 @@
     },
     "require-dev": {
         "dxw/phar-install": "^1.1",
-        "dxw/php-cs-fixer-config": "^2.1"
+        "dxw/php-cs-fixer-config": "^2.1",
+        "vimeo/psalm": "^5.26",
+        "humanmade/psalm-plugin-wordpress": "^3.1"
     },
     "scripts": {
         "post-update-cmd": "vendor/bin/phar-install"
