@@ -27,3 +27,5 @@ jobs:
         run: composer --no-interaction install
       - name: PHP CS fix
         run: vendor/bin/php-cs-fixer fix --dry-run -v --diff
+      - name: Run Psalm
+        run: ./vendor/bin/psalm --error-level=1 --find-unused-psalm-suppress

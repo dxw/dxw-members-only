@@ -1,10 +1,14 @@
 <?php
 
-add_action('init', 'dxw_members_only_metasettings');
+add_action('init', 'dxw_members_only_metasettings', 10, 0);
 
-function dxw_members_only_metasettings()
+function dxw_members_only_metasettings(): void
 {
+	/**
+	 * @var dmometasettings $ms
+	 */
 	$ms = new dmometasettings(__FILE__, 'dxw_members_only');
+
 	$ms->add_settings(__('dxw Members Only', 'dxwmembersonly'), [
 	  'list_type',
 	  'list_content',
@@ -40,7 +44,7 @@ function dxw_members_only_options_page()
       <tr valign="top">
         <th scope="row"><label for="dxw_members_only_list_content"><?php _e('List of content URIs', 'dxwmembersonly') ?></label></th>
         <td>
-          <textarea cols="30" rows="5" name="dxw_members_only_list_content" id="dxw_members_only_list_content" class="large-text code"><?php echo esc_html(get_option('dxw_members_only_list_content')) ?></textarea>
+          <textarea cols="30" rows="5" name="dxw_members_only_list_content" id="dxw_members_only_list_content" class="large-text code"><?php echo esc_html((string) get_option('dxw_members_only_list_content')) ?></textarea>
           <br>
           <span class="description"><?php _e('One host-relative URI per line. A * may be used at the end of a line. Query string ignored. /wp-login.php will always be allowed.', 'dxwmembersonly') ?></span>
         </td>
@@ -56,7 +60,7 @@ function dxw_members_only_options_page()
       <tr valign="top">
         <th scope="row"><label for="dxw_members_only_ip_whitelist"><?php _e('List of IP addresses', 'dxwmembersonly') ?></label></th>
         <td>
-          <textarea cols="30" rows="5" name="dxw_members_only_ip_whitelist" id="dxw_members_only_ip_whitelist" class="large-text code"><?php echo esc_html(get_option('dxw_members_only_ip_whitelist')) ?></textarea>
+          <textarea cols="30" rows="5" name="dxw_members_only_ip_whitelist" id="dxw_members_only_ip_whitelist" class="large-text code"><?php echo esc_html((string) get_option('dxw_members_only_ip_whitelist')) ?></textarea>
           <br>
           <span class="description"><?php _e('One IPv4 address or CIDRv4 address range per line.', 'dxwmembersonly') ?></span>
         </td>
@@ -73,14 +77,14 @@ function dxw_members_only_options_page()
       <tr valign="top">
         <th scope="row"><label for="dxw_members_only_referrer_allow_list"><?php _e('List of referrers', 'dxwmembersonly') ?></label></th>
         <td>
-          <textarea cols="30" rows="5" name="dxw_members_only_referrer_allow_list" id="dxw_members_only_referrer_allow_list" class="large-text code"><?php echo esc_html(get_option('dxw_members_only_referrer_allow_list')) ?></textarea>
+          <textarea cols="30" rows="5" name="dxw_members_only_referrer_allow_list" id="dxw_members_only_referrer_allow_list" class="large-text code"><?php echo esc_html((string) get_option('dxw_members_only_referrer_allow_list')) ?></textarea>
           <br>
           <span class="description"><?php _e('One address per line, do not include the domain (eg /admin.php?page=test)', 'dxwmembersonly') ?></span>
         </td>
       </tr>
 
   </table>
-      <?php echo get_option('dxw_members_only_referrer_whitelist'); ?>
+      <?php echo (string) get_option('dxw_members_only_referrer_whitelist'); ?>
 
     <h3><?php _e('Redirection', 'dxwmembersonly') ?></h3>
     <p><?php _e('In both the following options, <code>%return_path%</code> will be converted to the URL that was originally visited. i.e. <code>/wp-login.php?redirect_to=http://example.com/private-page</code>', 'dxwmembersonly') ?></p>

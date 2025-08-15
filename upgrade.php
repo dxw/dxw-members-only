@@ -7,7 +7,7 @@
  * new-members-only options and copy them across to the dxw_members_only format.
  */
 
-function transfer_new_members_only_options()
+function transfer_new_members_only_options(): void
 {
 	$options = [
 		 'list_type',
@@ -27,8 +27,7 @@ function transfer_new_members_only_options()
 
 		//use is_null because don't want to overwrite existing but empty options
 		if (!is_null(get_option($old_option, null)) && is_null(get_option($new_option, null))) {
-			$old_option_val = get_option($old_option);
-			add_option($new_option, $old_option_val);
+			add_option($new_option, get_option($old_option));
 		}
 	}
 }

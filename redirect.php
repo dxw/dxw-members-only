@@ -6,7 +6,10 @@
  */
 function dxw_members_only_serve_uploads()
 {
-	$req = dmo_strip_query($_SERVER['REQUEST_URI']);
+	/** @var string $req
+	 * @psalm-suppress UndefinedFunction
+	 */
+	$req = isset($_SERVER['REQUEST_URI']) ? dmo_strip_query($_SERVER['REQUEST_URI']) : '';
 	if (
 		str_contains($req, '/wp-content/uploads/') || str_contains($req, '/wp-content/blogs.dir/')
 	) {
@@ -38,7 +41,10 @@ function dxw_members_only_serve_uploads()
 				header('Last-Modified: ' . $ims_timestamp);
 
 				header('X-Accel-Buffering: no');
-				$max_age_static = absint(get_option('dxw_members_only_max_age_static'));
+				/** @var mixed $max_age_option_value */
+				$max_age_option_value = get_option('dxw_members_only_max_age_static');
+				/** @var int $max_age_static */
+				$max_age_static = absint((is_int($max_age_option_value) || is_string($max_age_option_value)) ? $max_age_option_value : 0);
 				header('Cache-Control: private, max-age=' . $max_age_static);
 				ob_get_flush();
 				readfile($file);
@@ -51,19 +57,21 @@ function dxw_members_only_serve_uploads()
  * Handle redirect for users when not logged in or viewing whitelisted content
  *
  * @param  boolean $root Whether attempting to view root or not
- * @return void
+ * @return never
  */
 function dxw_members_only_redirect($root)
 {
 	// Redirect
 	if ($root) {
-		$redirect = get_option('dxw_members_only_redirect_root');
+		$redirect = (string) get_option('dxw_members_only_redirect_root');
 	} else {
-		$redirect = get_option('dxw_members_only_redirect');
+		$redirect = (string) get_option('dxw_members_only_redirect');
 	}
 
 	// %return_path%
-	$redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
+	if (isset($_SERVER['REQUEST_URI'])) {
+		$redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
+	}
 
 	header('HTTP/1.1 303 See Other');
 	header('x-redirect-by: dxw-members-only');
@@ -71,7 +79,7 @@ function dxw_members_only_redirect($root)
 	die();
 }
 
-function dxw_members_only_ip_in_range($ip, $range)
+function dxw_members_only_ip_in_range(string $ip, string $range): bool
 {
 	$range = trim($range);
 
@@ -85,24 +93,25 @@ function dxw_members_only_ip_in_range($ip, $range)
 		return false;
 	}
 
+	/** @var bool */
 	return $result->unwrap();
 }
 
-function dxw_members_only_current_ip_in_whitelist()
+function dxw_members_only_current_ip_in_whitelist(): bool
 {
-	$ip_list = explode("\n", get_option('dxw_members_only_ip_whitelist'));
+	$ip_list = explode("\n", (string) get_option('dxw_members_only_ip_whitelist'));
 	foreach ($ip_list as $ip) {
 		$ip = trim($ip);
-		if (!empty($ip) && dxw_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
+		if (!empty($ip) && isset($_SERVER['REMOTE_ADDR']) && dxw_members_only_ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
 			return true;
 		}
 	}
 	return false;
 }
 
-function dxw_members_only_referrer_in_allow_list()
+function dxw_members_only_referrer_in_allow_list(): bool
 {
-	$referrer_list = explode("\n", get_option('dxw_members_only_referrer_allow_list'));
+	$referrer_list = explode("\n", (string) get_option('dxw_members_only_referrer_allow_list'));
 	/*
 	 * If there is no referrer header, or if we have no configured referrers to
 	 * whitelist we can stop here.
@@ -136,10 +145,12 @@ add_action('init', function () {
 		return;
 	}
 
-	$max_age = absint(get_option('dxw_members_only_max_age'));
-	$max_age_public = absint(get_option('dxw_members_only_max_age_public'));
+	/** @var int @max_age */
+	$max_age = absint((int) get_option('dxw_members_only_max_age'));
+	/** @var int @max_age_public */
+	$max_age_public = absint((int) get_option('dxw_members_only_max_age_public'));
 
-	do_action('dxw_members_only_redirect');
+	do_action('dxw_members_only');
 	if (
 		defined('dxw_members_ONLY_PASSTHROUGH') ||
 		is_user_logged_in() ||
@@ -151,7 +162,11 @@ add_action('init', function () {
 	}
 
 	// Get path component
-	$path = dmo_strip_query($_SERVER['REQUEST_URI']);
+	/**
+	 * @psalm-suppress UndefinedFunction
+	 * @var string $path
+	 */
+	$path = dmo_strip_query(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
 
 	// Always allow /wp-login.php
 	if (\Missing\Strings::endsWith($path, 'wp-login.php')) {
@@ -172,7 +187,7 @@ add_action('init', function () {
 
 	// List
 	$hit = false;
-	$list = explode("\n", get_option('dxw_members_only_list_content'));
+	$list = explode("\n", (string) get_option('dxw_members_only_list_content'));
 
 	foreach ($list as $w) {
 		$w = trim($w);
@@ -214,4 +229,4 @@ add_action('init', function () {
 
 	header('Cache-Control: private, max-age=' . $max_age);
 	dxw_members_only_redirect($path === '/');
-}, -99999999999);
+}, -99999999999, 0);

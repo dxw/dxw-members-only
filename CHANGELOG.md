@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- BREAKING CHANGE: `dxw_members_only_redirect` action renamed to `dxw_members_only`. (The filter of the same name remains).
+
 ### Added
 
 - Support for PHP versions 8.2 and up
