@@ -150,7 +150,7 @@ add_action('init', function () {
 	/** @var int @max_age_public */
 	$max_age_public = absint((int) get_option('dxw_members_only_max_age_public'));
 
-	do_action('dxw_members_only_redirect');
+	do_action('dxw_members_only');
 	if (
 		defined('dxw_members_ONLY_PASSTHROUGH') ||
 		is_user_logged_in() ||
