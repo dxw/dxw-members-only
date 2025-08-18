@@ -14,3 +14,22 @@ fi
 
 echo "==> Bootstrapping..."
 script/bootstrap
+
+# Check if services running
+already_running=1
+if ! docker compose -f local/docker-compose.yml ps | grep -q Up; then
+	script/server -d
+	already_running=0
+fi
+
+# Wait for the MySQL container to be ready
+while ! docker compose -f local/docker-compose.yml exec wordpress mysqladmin ping -hmysql -pfoobar --silent >/dev/null; do
+	echo "===> Waiting for MySQL instance to be ready..."
+	sleep 5
+done
+
+docker compose -f local/docker-compose.yml exec wordpress /usr/src/app/local/setup/internal.sh
+
+if [ $already_running != 1 ]; then
+	docker compose -f local/docker-compose.yml down
+fi
