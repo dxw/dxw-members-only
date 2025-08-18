@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+
+exec docker-compose -f local/docker-compose.yml exec wordpress bash
