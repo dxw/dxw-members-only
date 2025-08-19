@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+if test "$1" = "down"; then
+	docker compose -f local/docker-compose.yml down
+	exit
+fi
+
+docker compose -f local/docker-compose.yml down --remove-orphans
+
+docker compose -f local/docker-compose.yml pull wordpress
+
+if test "$1" = "-d"; then
+	docker compose -f local/docker-compose.yml up -d
+else
+	docker compose -f local/docker-compose.yml up
+fi
