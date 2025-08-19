@@ -14,3 +14,5 @@ while ! docker compose -f local/docker-compose.yml exec wordpress mysqladmin pin
 done
 
 docker compose -f local/docker-compose.yml exec wordpress /usr/src/app/local/setup/internal.sh
+
+script/test

@@ -26,7 +26,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
-      - name: CI setup
+      - name: CI build & test
         run: script/cibuild
-      - name: Run tests
-        run: script/test
