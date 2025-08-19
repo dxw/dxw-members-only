@@ -23,5 +23,8 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
       - name: Run tests
         run: script/test
