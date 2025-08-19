@@ -15,4 +15,6 @@ done
 
 docker compose -f local/docker-compose.yml exec wordpress /usr/src/app/local/setup/internal.sh
 
+npx playwright install --with-deps
+
 script/test
