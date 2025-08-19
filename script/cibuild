@@ -5,6 +5,8 @@
 
 set -e
 
+script/test
+
 script/server -d
 
 # Wait for the MySQL container to be ready
@@ -17,4 +19,5 @@ docker compose -f local/docker-compose.yml exec wordpress /usr/src/app/local/set
 
 npx playwright install --with-deps
 
-script/test
+echo "==> Running end-to-end tests..."
+npx playwright test
