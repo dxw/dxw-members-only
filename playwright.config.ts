@@ -74,6 +74,6 @@ export default defineConfig({
   webServer: {
     command: './script/server -d',
     url: 'http://localhost',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
   },
 });
