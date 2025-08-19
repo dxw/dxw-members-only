@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+
+docker compose -f local/docker-compose.yml exec -i  wordpress wp "${@}"
