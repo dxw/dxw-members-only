@@ -99,45 +99,51 @@ test.describe('media uploads', () => {
   });
 });
 
-test.describe('The cache-control header for the redirect response pointing to the login page', () => {
-  test.beforeAll(async () => {
-    execSync('local/bin/wp option delete dxw_members_only_list_content --quiet', { stdio: 'inherit' });
-    execSync('local/bin/wp option delete dxw_members_only_ip_whitelist --quiet', { stdio: 'inherit' });
-    execSync('local/bin/wp option delete dxw_members_only_referrer_allow_list --quiet', { stdio: 'inherit' });
-  });
-  // Currently, the redirect gets served with the default max cache age
-  // That can result in users getting redirected even when correctly authenticated
-  // If they try to visit a page they were previously bounced to the login page from
-  // This test will fail until that bug is fixed
-  test.fail('should always be private, and have a max age of 0', async ({ page }) => {
-    var redirectCacheControlHeader: string = '';
-
-    page.on('response', response => {
-      if (response.status() == 303) {
-        redirectCacheControlHeader = response.headers()['cache-control'];
-      }
+test.describe('Bugs that require fixing', () => {
+  test.describe('The cache-control header for the redirect response pointing to the login page', () => {
+    test.beforeAll(async () => {
+      execSync('local/bin/wp option delete dxw_members_only_list_content --quiet', { stdio: 'inherit' });
+      execSync('local/bin/wp option delete dxw_members_only_ip_whitelist --quiet', { stdio: 'inherit' });
+      execSync('local/bin/wp option delete dxw_members_only_referrer_allow_list --quiet', { stdio: 'inherit' });
     });
-    await page.goto('http://localhost/');
-    expect(redirectCacheControlHeader).toContain('max-age=0');
-    expect(redirectCacheControlHeader).toContain('private');
+    // Currently, the redirect gets served with the default max cache age
+    // That can result in users getting redirected even when correctly authenticated
+    // If they try to visit a page they were previously bounced to the login page from
+    // This test will fail until that bug is fixed
+    test.fail('should always be private, and have a max age of 0', async ({ page }) => {
+      var redirectCacheControlHeader: string = '';
+
+      page.on('response', response => {
+        if (response.status() == 303) {
+          redirectCacheControlHeader = response.headers()['cache-control'];
+        }
+      });
+      await page.goto('http://localhost/');
+      expect(redirectCacheControlHeader).toContain('max-age=0');
+      expect(redirectCacheControlHeader).toContain('private');
+    });
+  });
+
+  test.describe('The cache-control header served once a user has successfully logged in', () => {
+    test.beforeAll(async () => {
+      execSync('local/bin/wp option delete dxw_members_only_list_content --quiet', { stdio: 'inherit' });
+      execSync('local/bin/wp option delete dxw_members_only_ip_whitelist --quiet', { stdio: 'inherit' });
+      execSync('local/bin/wp option delete dxw_members_only_referrer_allow_list --quiet', { stdio: 'inherit' });
+    });
+
+    // Currently, a logged in user always gets the default WordPress core cache-control header, with max-age of 0
+    // This is because the plugin hooks into early, and WordPress core overrides the header we set
+    // This failing test therefore documents that bug, and what the correct behaviour should be
+    test.fail('should use the default max-age value from the plugin, not the 0 value WordPress core provides', async ({ page }) => {
+      await page.goto('http://localhost/wp-login.php');
+      await page.locator('#user_login').fill('admin');
+      await page.locator('#user_pass').fill('admin');
+      await page.locator('#wp-submit').click();
+
+      const response = await page.goto('http://localhost');
+      expect(response?.headers()['cache-control']).toContain('max-age=10');
+      expect(response?.headers()['cache-control']).not.toContain('max-age=0');
+    });
   });
 });
 
-test.describe('The cache-control header served once a user has successfully logged in', () => {
-  test.beforeAll(async () => {
-    execSync('local/bin/wp option delete dxw_members_only_list_content --quiet', { stdio: 'inherit' });
-    execSync('local/bin/wp option delete dxw_members_only_ip_whitelist --quiet', { stdio: 'inherit' });
-    execSync('local/bin/wp option delete dxw_members_only_referrer_allow_list --quiet', { stdio: 'inherit' });
-  });
-
-  test.fail('should use the default max-age value from the plugin, not the 0 value WordPress core provides', async ({ page }) => {
-    await page.goto('http://localhost/wp-login.php');
-    await page.locator('#user_login').fill('admin');
-    await page.locator('#user_pass').fill('admin');
-    await page.locator('#wp-submit').click();
-
-    const response = await page.goto('http://localhost');
-    expect(response?.headers()['cache-control']).toContain('max-age=10');
-    expect(response?.headers()['cache-control']).not.toContain('max-age=0');
-  });
-});
