@@ -123,3 +123,21 @@ test.describe('The cache-control header for the redirect response pointing to th
   });
 });
 
+test.describe('The cache-control header served once a user has successfully logged in', () => {
+  test.beforeAll(async () => {
+    execSync('local/bin/wp option delete dxw_members_only_list_content --quiet', { stdio: 'inherit' });
+    execSync('local/bin/wp option delete dxw_members_only_ip_whitelist --quiet', { stdio: 'inherit' });
+    execSync('local/bin/wp option delete dxw_members_only_referrer_allow_list --quiet', { stdio: 'inherit' });
+  });
+
+  test.fail('should use the default max-age value from the plugin, not the 0 value WordPress core provides', async ({ page }) => {
+    await page.goto('http://localhost/wp-login.php');
+    await page.locator('#user_login').fill('admin');
+    await page.locator('#user_pass').fill('admin');
+    await page.locator('#wp-submit').click();
+
+    const response = await page.goto('http://localhost');
+    expect(response?.headers()['cache-control']).toContain('max-age=10');
+    expect(response?.headers()['cache-control']).not.toContain('max-age=0');
+  });
+});
