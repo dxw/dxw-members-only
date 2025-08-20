@@ -24,6 +24,7 @@ test.describe('when all allow lists are blank', () => {
     await page.locator('#user_login').fill('admin');
     await page.locator('#user_pass').fill('admin');
     await page.locator('#wp-submit').click();
+    await page.waitForURL('http://localhost/');
     await expect(page).toHaveTitle('dxw Members Only');
     // Confirm we're logged in
     await expect(page.locator('#wpadminbar')).toHaveCount(1);
@@ -33,6 +34,7 @@ test.describe('when all allow lists are blank', () => {
     await page.locator('#user_login').fill('admin');
     await page.locator('#user_pass').fill('admin');
     await page.locator('#wp-submit').click();
+    await page.waitForURL('http://localhost/sample-page/');
     await expect(page).toHaveTitle('Sample Page – dxw Members Only');
     // Confirm we're logged in
     await expect(page.locator('#wpadminbar')).toHaveCount(1);
