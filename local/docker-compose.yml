@@ -11,6 +11,7 @@ services:
       - ../:/usr/src/app
       - ../:/var/www/html/wp-content/plugins/dxw-members-only
       - ./uploads/:/var/www/html/wp-content/uploads
+      - ./wordpress.conf:/etc/apache2/sites-enabled/wordpress.conf
   mysql:
     image: mariadb:10
     ports:
