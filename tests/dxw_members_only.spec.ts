@@ -98,3 +98,28 @@ test.describe('media uploads', () => {
     expect(response?.headers()['cache-control']).toBe('private, max-age=30');
   });
 });
+
+test.describe('The cache-control header for the redirect response pointing to the login page', () => {
+  test.beforeAll(async () => {
+    execSync('local/bin/wp option delete dxw_members_only_list_content --quiet', { stdio: 'inherit' });
+    execSync('local/bin/wp option delete dxw_members_only_ip_whitelist --quiet', { stdio: 'inherit' });
+    execSync('local/bin/wp option delete dxw_members_only_referrer_allow_list --quiet', { stdio: 'inherit' });
+  });
+  // Currently, the redirect gets served with the default max cache age
+  // That can result in users getting redirected even when correctly authenticated
+  // If they try to visit a page they were previously bounced to the login page from
+  // This test will fail until that bug is fixed
+  test.fail('should always be private, and have a max age of 0', async ({ page }) => {
+    var redirectCacheControlHeader: string = '';
+
+    page.on('response', response => {
+      if (response.status() == 303) {
+        redirectCacheControlHeader = response.headers()['cache-control'];
+      }
+    });
+    await page.goto('http://localhost/');
+    expect(redirectCacheControlHeader).toContain('max-age=0');
+    expect(redirectCacheControlHeader).toContain('private');
+  });
+});
+
