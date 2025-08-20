@@ -10,6 +10,7 @@ services:
     volumes:
       - ../:/usr/src/app
       - ../:/var/www/html/wp-content/plugins/dxw-members-only
+      - ./uploads/:/var/www/html/wp-content/uploads
   mysql:
     image: mariadb:10
     ports:
