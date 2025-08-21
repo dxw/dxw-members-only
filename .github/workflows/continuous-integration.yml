@@ -3,7 +3,7 @@ on:
   push:
 
 jobs:
-  lint:
+  tests:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
@@ -23,5 +23,8 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
-      - name: Run tests
-        run: script/test
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: CI build & test
+        run: script/cibuild

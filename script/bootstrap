@@ -26,3 +26,13 @@ if [ -f composer.json ]; then
     fi
   fi
 fi
+
+if [ -f package.json ]; then
+  echo "==> Installing NPM dependencies..."
+  if [ -z "$CI" ]; then
+    npm install
+  else
+    npm ci
+  fi
+  npx playwright install --with-deps
+fi
