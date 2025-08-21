@@ -15,6 +15,7 @@
       <directory name="spec" />
       <file name=".php-cs-fixer.php"/>
       <file name="vendor.phar"/>
+      <file name="app/di.php" />
     </ignoreFiles>
   </projectFiles>
   <issueHandlers>
