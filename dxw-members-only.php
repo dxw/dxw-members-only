@@ -33,5 +33,8 @@ if (!defined('DOING_CRON')) {
 	require(__DIR__.'/upload.php');
 	require(__DIR__.'/redirect.php');
 	require(__DIR__.'/upgrade.php');
+	/** @var \Dxw\Iguana\Registrar */
+	$registrar = require __DIR__. '/app/load.php';
+	$registrar->register();
 	register_activation_hook(__FILE__, 'transfer_new_members_only_options');
 }
