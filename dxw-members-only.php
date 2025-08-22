@@ -32,6 +32,12 @@ if (!defined('DOING_CRON')) {
 	require(__DIR__.'/settings.php');
 	require(__DIR__.'/upload.php');
 	require(__DIR__.'/redirect.php');
-	require(__DIR__.'/upgrade.php');
-	register_activation_hook(__FILE__, 'transfer_new_members_only_options');
+	/** @var \Dxw\Iguana\Registrar */
+	$registrar = require __DIR__. '/app/load.php';
+	$registrar->register();
+	register_activation_hook(__FILE__, function () use ($registrar) {
+		/** @var \Dxw\MembersOnly\Upgrade */
+		$upgrade = $registrar->getInstance(\Dxw\MembersOnly\Upgrade::class);
+		$upgrade->transfer_new_members_only_options();
+	});
 }
