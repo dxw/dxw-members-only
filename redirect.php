@@ -36,6 +36,9 @@ function dxw_members_only_serve_uploads()
 				}
 
 				header('Accept-Ranges: none');
+
+				header('Cache-Control: private, max-age=600');
+
 				header('Content-Type: ' . $type);
 				header('Content-Length: ' . filesize($file));
 				header('Last-Modified: ' . $ims_timestamp);
