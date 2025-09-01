@@ -63,6 +63,36 @@ class Redirect implements \Dxw\Iguana\Registerable
 		}
 	}
 
+	private function ip_in_range(string $ip, string $range): bool
+	{
+		$range = trim($range);
+
+		# Handle IPv4-mapped IPv6 addresses
+		if (preg_match('_^::ffff:(.*)$_', $ip, $m)) {
+			$ip = $m[1];
+		}
+
+		$result = \Dxw\CIDR\IP::contains($range, $ip);
+		if ($result->isErr()) {
+			return false;
+		}
+
+		/** @var bool */
+		return $result->unwrap();
+	}
+
+	public function current_ip_in_whitelist(): bool
+	{
+		$ip_list = explode("\n", (string) get_option('dxw_members_only_ip_whitelist'));
+		foreach ($ip_list as $ip) {
+			$ip = trim($ip);
+			if (!empty($ip) && isset($_SERVER['REMOTE_ADDR']) && $this->ip_in_range($_SERVER['REMOTE_ADDR'], $ip)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function _exit(): never
 	{
 		exit();

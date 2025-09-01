@@ -212,4 +212,68 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 			});
 		});
 	});
+
+	describe('current_ip_in_whitelist()', function () {
+		context('no REMOTE_ADDR is set', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [];
+				allow('get_option')->toBeCalled()->andReturn('0.0.0.0/0');
+				expect($this->redirect->current_ip_in_whitelist())->toEqual(false);
+			});
+		});
+		context('no IP allow list is set', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'REMOTE_ADDR' => '127.0.0.1'
+				];
+				allow('get_option')->toBeCalled()->andReturn(false);
+				expect($this->redirect->current_ip_in_whitelist())->toEqual(false);
+			});
+		});
+		context('current IP is not within allow list', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'REMOTE_ADDR' => '127.0.0.1'
+				];
+				allow('get_option')->toBeCalled()->andReturn('124.0.0.1');
+				expect($this->redirect->current_ip_in_whitelist())->toEqual(false);
+			});
+		});
+		context('IP check returns an error', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'REMOTE_ADDR' => '127.0.0.1'
+				];
+				allow('get_option')->toBeCalled()->andReturn('0.0.0.0/0');
+				allow('Dxw\CIDR\IP')->toReceive('::contains')->andReturn(new Dxw\Result\Err('foobar'));
+				expect($this->redirect->current_ip_in_whitelist())->toEqual(false);
+			});
+		});
+		context('current IP is within allow list range', function () {
+			it('returns true', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'REMOTE_ADDR' => '127.0.0.1'
+				];
+				allow('get_option')->toBeCalled()->andReturn('0.0.0.0/0');
+
+				expect($this->redirect->current_ip_in_whitelist())->toEqual(true);
+			});
+		});
+		context('current IP is an IPv4-mapped IPv6 address', function () {
+			it('returns true', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'REMOTE_ADDR' => '::ffff:127.0.0.1'
+				];
+				allow('get_option')->toBeCalled()->andReturn('0.0.0.0/0');
+
+				expect($this->redirect->current_ip_in_whitelist())->toEqual(true);
+			});
+		});
+	});
 });
