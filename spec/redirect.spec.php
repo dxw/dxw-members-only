@@ -276,4 +276,86 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 			});
 		});
 	});
+
+	describe('->referrer_in_allow_list()', function () {
+		context('no HTTP_REFERER is set', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [];
+				allow('get_option')->toBeCalled()->andReturn('/referrer');
+
+				expect($this->redirect->referrer_in_allow_list())->toEqual(false);
+			});
+		});
+		context('no referrer allow list is set', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'HTTP_REFERER' => '/referrer'
+				];
+				allow('get_option')->toBeCalled()->andReturn(false);
+
+				expect($this->redirect->referrer_in_allow_list())->toEqual(false);
+			});
+		});
+		context('no referrer allow list is set', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'HTTP_REFERER' => '/referrer'
+				];
+				allow('get_option')->toBeCalled()->andReturn(false);
+
+				expect($this->redirect->referrer_in_allow_list())->toEqual(false);
+			});
+		});
+		context('the referrer is an external URL ending in the same string', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'HTTP_REFERER' => 'http://external.com/referrer'
+				];
+				allow('get_option')->toBeCalled()->andReturn('/referrer');
+				allow('get_site_url')->toBeCalled()->andReturn('http://localhost');
+
+				expect($this->redirect->referrer_in_allow_list())->toEqual(false);
+			});
+		});
+		context('the referrer is an external URL with the local referrer URL embedded as a query string', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'HTTP_REFERER' => 'http://external.com?test=http://localhost/referrer'
+				];
+				allow('get_option')->toBeCalled()->andReturn('/referrer');
+				allow('get_site_url')->toBeCalled()->andReturn('http://localhost');
+
+				expect($this->redirect->referrer_in_allow_list())->toEqual(false);
+			});
+		});
+		context('the referrer is on the host URL but does not match the allow list', function () {
+			it('returns false', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'HTTP_REFERER' => 'http://localhost/foobar'
+				];
+				allow('get_option')->toBeCalled()->andReturn('/referrer');
+				allow('get_site_url')->toBeCalled()->andReturn('http://localhost');
+
+				expect($this->redirect->referrer_in_allow_list())->toEqual(false);
+			});
+		});
+		context('the referrer is on the host URL and does match the allow list', function () {
+			it('returns true', function () {
+				global $_SERVER;
+				$_SERVER = [
+					'HTTP_REFERER' => 'http://localhost/referrer'
+				];
+				allow('get_option')->toBeCalled()->andReturn('/referrer');
+				allow('get_site_url')->toBeCalled()->andReturn('http://localhost');
+
+				expect($this->redirect->referrer_in_allow_list())->toEqual(true);
+			});
+		});
+	});
 });

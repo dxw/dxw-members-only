@@ -93,6 +93,36 @@ class Redirect implements \Dxw\Iguana\Registerable
 		return false;
 	}
 
+	public function referrer_in_allow_list(): bool
+	{
+		$referrer_list = explode("\n", (string) get_option('dxw_members_only_referrer_allow_list'));
+		/*
+		* If there is no referrer header, or if we have no configured referrers to
+		* whitelist we can stop here.
+		*/
+		if (isset($_SERVER['HTTP_REFERER'])) {
+			foreach ($referrer_list as $referrer) {
+				if (!empty($referrer)) {
+					/*
+					* Add the site url to the referrer string to ensure that external
+					* referrers can't be used here.
+					*/
+					$whitelisted_referrer = get_site_url() . $referrer;
+					$referrer_check = strpos($_SERVER['HTTP_REFERER'], $whitelisted_referrer);
+					/*
+					* Check that there is a match, and that match is at the start of the referrer string.
+					* This is to ensure that the referrer being whitelisted can't be fooled by having
+					* a whitelisted referrer passed in as a parameter on the referrer string.
+					*/
+					if ($referrer_check !== false && $referrer_check == 0) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	public function _exit(): never
 	{
 		exit();
