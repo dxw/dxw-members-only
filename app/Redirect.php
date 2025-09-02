@@ -6,7 +6,100 @@ class Redirect implements \Dxw\Iguana\Registerable
 {
 	public function register(): void
 	{
-		add_action('init', [$this, 'redirect_request'], 10, 0);
+		add_action('init', [$this, 'redirect_request'], -99999999999, 0);
+	}
+
+	public function redirect_request(): void
+	{
+		// Fix for wp-cli
+		if (defined('WP_CLI_ROOT')) {
+			return;
+		}
+
+		/** @var int @max_age */
+		$max_age = absint((int) get_option('dxw_members_only_max_age'));
+		/** @var int @max_age_public */
+		$max_age_public = absint((int) get_option('dxw_members_only_max_age_public'));
+
+		do_action('dxw_members_only');
+		if (
+			defined('dxw_members_ONLY_PASSTHROUGH') ||
+			is_user_logged_in() ||
+			apply_filters('dxw_members_only_redirect', false) === true
+		) {
+			header('Cache-Control: private, max-age=' . $max_age);
+			$this->serve_uploads();
+			return;
+		}
+
+		// Get path component
+		/**
+		 * @psalm-suppress UndefinedFunction
+		 * @var string $path
+		 */
+		$path = dmo_strip_query(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
+
+		// Always allow /wp-login.php
+		if (\Missing\Strings::endsWith($path, 'wp-login.php')) {
+			return;
+		}
+
+		// Always allow POST /wp-admin/admin-ajax.php with action=heartbeat
+		if (\Missing\Strings::endsWith($path, 'wp-admin/admin-ajax.php') && isset($_POST['action']) && $_POST['action'] === 'heartbeat') {
+			return;
+		}
+
+		// IP & referrer allow lists
+		if ($this->current_ip_in_whitelist() || $this->referrer_in_allow_list()) {
+			header('Cache-Control: private, max-age=' . $max_age);
+			$this->serve_uploads();
+			return;
+		}
+
+		// List
+		$hit = false;
+		$list = explode("\n", (string) get_option('dxw_members_only_list_content'));
+
+		foreach ($list as $w) {
+			$w = trim($w);
+
+			if (empty($w)) {
+				continue;
+			}
+
+			# /welcome => /welcome, /welcome/
+			if ($path === $w || $path === $w . '/') {
+				$hit = true;
+				break;
+			}
+
+			# /welcome/ => /welcome
+			if (\Missing\Strings::endsWith($w, '/') && $path === substr($w, 0, -1)) {
+				$hit = true;
+				break;
+			}
+
+			# /welcome/* => /welcome
+			if (\Missing\Strings::endsWith($w, '/*') && $path === substr($w, 0, -2)) {
+				$hit = true;
+				break;
+			}
+
+			# /welcome/* => /welcome/.*
+			if (\Missing\Strings::endsWith($w, '*') && \Missing\Strings::startsWith($path, substr($w, 0, -1))) {
+				$hit = true;
+				break;
+			}
+		}
+
+		if ($hit) {
+			header('Cache-Control: public, max-age=' . $max_age_public);
+			$this->serve_uploads();
+			return;
+		}
+
+		header('Cache-Control: private, max-age=' . $max_age);
+		$this->redirect($path === '/');
 	}
 
 	/**

@@ -16,9 +16,310 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 		it('adds the action', function () {
 			allow('add_action')->toBeCalled();
 
-			expect('add_action')->toBeCalled()->once()->with('init', [$this->redirect, 'redirect_request'], 10, 0);
+			expect('add_action')->toBeCalled()->once()->with('init', [$this->redirect, 'redirect_request'], -99999999999, 0);
 
 			$this->redirect->register();
+		});
+	});
+
+	describe('->redirect_request()', function () {
+		context('WP_CLI_ROOT is defined', function () {
+			it('immediately returns', function () {
+				allow('defined')->toBeCalled()->with('WP_CLI_ROOT')->andReturn(true);
+
+				expect('get_option')->not->toBeCalled();
+				expect('header')->not->toBeCalled();
+
+				$this->redirect->redirect_request();
+			});
+		});
+		context('WP_CLI_ROOT is not defined', function () {
+			beforeEach(function () {
+				allow('defined')->toBeCalled()->with('WP_CLI_ROOT')->andReturn(false);
+				allow('absint')->toBeCalled()->andRun(function ($input) {
+					return $input;
+				});
+				$this->defaultMaxAge = 10;
+				$this->publicMaxAge = 100;
+				allow('get_option')->toBeCalled()->andReturn($this->defaultMaxAge, $this->publicMaxAge);
+				allow('do_action')->toBeCalled();
+
+				expect('do_action')->toBeCalled()->once()->with('dxw_members_only');
+			});
+			context('and dxw_members_ONLY_PASSTHROUGH is defined', function () {
+				it('sets a header of the default max age and exits', function () {
+					allow('defined')->toBeCalled()->with('dxw_members_ONLY_PASSTHROUGH')->andReturn(true);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=10');
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and the user is logged in', function () {
+				it('sets a header of the default max age and exits', function () {
+					allow('defined')->toBeCalled()->with('dxw_members_ONLY_PASSTHROUGH')->andReturn(false);
+					allow('is_user_logged_in')->toBeCalled()->andReturn(true);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=10');
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and the dxw_members_only_redirect filter returns true', function () {
+				it('sets a header of the default max age and exits', function () {
+					allow('defined')->toBeCalled()->with('dxw_members_ONLY_PASSTHROUGH')->andReturn(false);
+					allow('is_user_logged_in')->toBeCalled()->andReturn(false);
+					allow('apply_filters')->toBeCalled()->andReturn(true);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=10');
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+		});
+		context('the main functionality is NOT bypassed (e.g. by a user being logged in or WP_CLI_ROOT being defined)', function () {
+			beforeEach(function () {
+				allow('defined')->toBeCalled()->with('WP_CLI_ROOT')->andReturn(false);
+				allow('absint')->toBeCalled()->andRun(function ($input) {
+					return $input;
+				});
+				$this->defaultMaxAge = 10;
+				$this->publicMaxAge = 100;
+				allow('get_option')->toBeCalled()->andReturn($this->defaultMaxAge, $this->publicMaxAge);
+				allow('do_action')->toBeCalled();
+				allow('defined')->toBeCalled()->with('dxw_members_ONLY_PASSTHROUGH')->andReturn(false);
+				allow('is_user_logged_in')->toBeCalled()->andReturn(false);
+				allow('apply_filters')->toBeCalled()->with('dxw_members_only_redirect', false)->andReturn(false);
+				allow('dmo_strip_query')->toBeCalled()->andRun(function ($input) {
+					return $input;
+				});
+
+				expect('do_action')->toBeCalled()->once()->with('dxw_members_only');
+			});
+			context('but this is the login page', function () {
+				it('returns and does nothing else', function () {
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => '/wp-login.php'
+					];
+
+					expect('header')->not->toBeCalled();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('but this is a POST to the heartbeat endpoint', function () {
+				it('returns and does nothing else', function () {
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => '/wp-admin/admin-ajax.php'
+					];
+					global $_POST;
+					$_POST = [
+						'action' => 'heartbeat'
+					];
+
+					expect('header')->not->toBeCalled();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and the request is from an allow-listed IP address', function () {
+				it('sets a header of the default max age and potentially serves uploads', function () {
+					global $_SERVER;
+					$_SERVER = [];
+					global $_POST;
+					$_POST = [];
+					allow($this->redirect)->toReceive('current_ip_in_whitelist')->andReturn(true);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=' . $this->defaultMaxAge);
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and the request is from an allow-listed IP referrer', function () {
+				it('sets a header of the default max age and potentially serves uploads', function () {
+					global $_SERVER;
+					$_SERVER = [];
+					global $_POST;
+					$_POST = [];
+					allow($this->redirect)->toReceive('current_ip_in_whitelist')->andReturn(false);
+					allow($this->redirect)->toReceive('referrer_in_allow_list')->andReturn(true);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=' . $this->defaultMaxAge);
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and the request is for a URL exactly matching one on the public allow list', function () {
+				it('sets a header of the public max age and potentially serves uploads', function () {
+					global $_SERVER;
+					$_SERVER = [];
+					global $_POST;
+					$_POST = [];
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => '/foobar'
+					];
+					allow($this->redirect)->toReceive('current_ip_in_whitelist')->andReturn(false);
+					allow($this->redirect)->toReceive('referrer_in_allow_list')->andReturn(false);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+					allow('get_option')->toBeCalled()->andReturn($this->defaultMaxAge, $this->publicMaxAge, '/foobar');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and the request is for a URL matching one on the public allow list, but with an extra trailing slash', function () {
+				it('sets a header of the public max age and potentially serves uploads', function () {
+					global $_SERVER;
+					$_SERVER = [];
+					global $_POST;
+					$_POST = [];
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => '/foobar/'
+					];
+					allow($this->redirect)->toReceive('current_ip_in_whitelist')->andReturn(false);
+					allow($this->redirect)->toReceive('referrer_in_allow_list')->andReturn(false);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+					allow('get_option')->toBeCalled()->andReturn($this->defaultMaxAge, $this->publicMaxAge, '/foobar');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and the request is for a URL matching one on the public allow list, but missing the trailing slash', function () {
+				it('sets a header of the public max age and potentially serves uploads', function () {
+					global $_SERVER;
+					$_SERVER = [];
+					global $_POST;
+					$_POST = [];
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => '/foobar'
+					];
+					allow($this->redirect)->toReceive('current_ip_in_whitelist')->andReturn(false);
+					allow($this->redirect)->toReceive('referrer_in_allow_list')->andReturn(false);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+					allow('get_option')->toBeCalled()->andReturn($this->defaultMaxAge, $this->publicMaxAge, '/foobar/');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and the request is for a URL at the root of a wildcarded set', function () {
+				it('sets a header of the public max age and potentially serves uploads', function () {
+					global $_SERVER;
+					$_SERVER = [];
+					global $_POST;
+					$_POST = [];
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => '/foobar'
+					];
+					allow($this->redirect)->toReceive('current_ip_in_whitelist')->andReturn(false);
+					allow($this->redirect)->toReceive('referrer_in_allow_list')->andReturn(false);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+					allow('get_option')->toBeCalled()->andReturn($this->defaultMaxAge, $this->publicMaxAge, '/foobar/*');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and the request is for a URL within a wildcarded set', function () {
+				it('sets a header of the public max age and potentially serves uploads', function () {
+					global $_SERVER;
+					$_SERVER = [];
+					global $_POST;
+					$_POST = [];
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => '/foobar/boo/far'
+					];
+					allow($this->redirect)->toReceive('current_ip_in_whitelist')->andReturn(false);
+					allow($this->redirect)->toReceive('referrer_in_allow_list')->andReturn(false);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+					allow('get_option')->toBeCalled()->andReturn($this->defaultMaxAge, $this->publicMaxAge, '/foobar/*');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
+					expect($this->redirect)->toReceive('serve_uploads')->once();
+
+					$this->redirect->redirect_request();
+				});
+			});
+			context('and there is no IP, referrer or URL allow list match', function () {
+				it('set the default private header, and calls redirect', function () {
+					global $_SERVER;
+					$_SERVER = [];
+					global $_POST;
+					$_POST = [];
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => '/foobar/'
+					];
+					allow($this->redirect)->toReceive('current_ip_in_whitelist')->andReturn(false);
+					allow($this->redirect)->toReceive('referrer_in_allow_list')->andReturn(false);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+					allow('get_option')->toBeCalled()->andReturn($this->defaultMaxAge, $this->publicMaxAge, '');
+					allow($this->redirect)->toReceive('redirect');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=' . $this->defaultMaxAge);
+					expect($this->redirect)->toReceive('redirect')->once()->with(false);
+
+					$this->redirect->redirect_request();
+				});
+				it('calls redirect with argument of true if the homepage is the requested URL', function () {
+					global $_SERVER;
+					$_SERVER = [];
+					global $_POST;
+					$_POST = [];
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => '/'
+					];
+					allow($this->redirect)->toReceive('current_ip_in_whitelist')->andReturn(false);
+					allow($this->redirect)->toReceive('referrer_in_allow_list')->andReturn(false);
+					allow('header')->toBeCalled();
+					allow($this->redirect)->toReceive('serve_uploads');
+					allow('get_option')->toBeCalled()->andReturn($this->defaultMaxAge, $this->publicMaxAge, '');
+					allow($this->redirect)->toReceive('redirect');
+
+					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=' . $this->defaultMaxAge);
+					expect($this->redirect)->toReceive('redirect')->once()->with(true);
+
+					$this->redirect->redirect_request();
+				});
+			});
 		});
 	});
 
