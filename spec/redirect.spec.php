@@ -22,7 +22,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 		});
 	});
 
-	describe('->redirect_request()', function () {
+	describe('->handle_request()', function () {
 		context('WP_CLI_ROOT is defined', function () {
 			it('immediately returns', function () {
 				allow('defined')->toBeCalled()->with('WP_CLI_ROOT')->andReturn(true);
@@ -30,7 +30,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 				expect('get_option')->not->toBeCalled();
 				expect('header')->not->toBeCalled();
 
-				$this->redirect->redirect_request();
+				$this->redirect->handle_request();
 			});
 		});
 		context('WP_CLI_ROOT is not defined', function () {
@@ -55,7 +55,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=10');
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and the user is logged in', function () {
@@ -68,7 +68,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=10');
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and the dxw_members_only_redirect filter returns true', function () {
@@ -82,7 +82,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=10');
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 		});
@@ -114,7 +114,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 
 					expect('header')->not->toBeCalled();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('but this is a POST to the heartbeat endpoint', function () {
@@ -130,7 +130,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 
 					expect('header')->not->toBeCalled();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and the request is from an allow-listed IP address', function () {
@@ -146,7 +146,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=' . $this->defaultMaxAge);
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and the request is from an allow-listed IP referrer', function () {
@@ -163,7 +163,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=' . $this->defaultMaxAge);
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and the request is for a URL exactly matching one on the public allow list', function () {
@@ -185,7 +185,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and the request is for a URL matching one on the public allow list, but with an extra trailing slash', function () {
@@ -207,7 +207,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and the request is for a URL matching one on the public allow list, but missing the trailing slash', function () {
@@ -229,7 +229,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and the request is for a URL at the root of a wildcarded set', function () {
@@ -251,7 +251,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and the request is for a URL within a wildcarded set', function () {
@@ -273,7 +273,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: public, max-age=' . $this->publicMaxAge);
 					expect($this->redirect)->toReceive('serve_uploads')->once();
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 			context('and there is no IP, referrer or URL allow list match', function () {
@@ -296,7 +296,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=' . $this->defaultMaxAge);
 					expect($this->redirect)->toReceive('redirect')->once()->with(false);
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 				it('calls redirect with argument of true if the homepage is the requested URL', function () {
 					global $_SERVER;
@@ -317,7 +317,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 					expect('header')->toBeCalled()->once()->with('Cache-Control: private, max-age=' . $this->defaultMaxAge);
 					expect($this->redirect)->toReceive('redirect')->once()->with(true);
 
-					$this->redirect->redirect_request();
+					$this->redirect->handle_request();
 				});
 			});
 		});

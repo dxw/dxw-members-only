@@ -6,10 +6,10 @@ class Redirect implements \Dxw\Iguana\Registerable
 {
 	public function register(): void
 	{
-		add_action('init', [$this, 'redirect_request'], -99999999999, 0);
+		add_action('init', [$this, 'handle_request'], -99999999999, 0);
 	}
 
-	public function redirect_request(): void
+	public function handle_request(): void
 	{
 		// Fix for wp-cli
 		if (defined('WP_CLI_ROOT')) {
