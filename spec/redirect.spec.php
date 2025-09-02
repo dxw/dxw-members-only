@@ -22,6 +22,87 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 		});
 	});
 
+	describe('->redirect()', function () {
+		context('$root param is true', function () {
+			it('redirects to the root redirect option then exits', function () {
+				global $_SERVER;
+				$_SERVER = [];
+				allow('get_option')->toBeCalled()->with('dxw_members_only_redirect_root')->andReturn('http://localhost/root-redirect');
+				allow('header')->toBeCalled();
+
+				expect('header')->toBeCalled()->once()->with('HTTP/1.1 303 See Other');
+				expect('header')->toBeCalled()->once()->with('x-redirect-by: dxw-members-only');
+				expect('header')->toBeCalled()->once()->with('Location: http://localhost/root-redirect');
+
+				Quit::disable();
+				$closure = function () {
+					$this->redirect->redirect(true);
+				};
+				expect($closure)->toThrow(new QuitException());
+			});
+		});
+		context('$root param is false', function () {
+			it('redirects to the default redirect option then exits', function () {
+				global $_SERVER;
+				$_SERVER = [];
+				allow('get_option')->toBeCalled()->with('dxw_members_only_redirect')->andReturn('http://localhost/default-redirect');
+				allow('header')->toBeCalled();
+
+				expect('header')->toBeCalled()->once()->with('HTTP/1.1 303 See Other');
+				expect('header')->toBeCalled()->once()->with('x-redirect-by: dxw-members-only');
+				expect('header')->toBeCalled()->once()->with('Location: http://localhost/default-redirect');
+
+				Quit::disable();
+				$closure = function () {
+					$this->redirect->redirect(false);
+				};
+				expect($closure)->toThrow(new QuitException());
+			});
+		});
+		context('a REQUEST_URI is set', function () {
+			context('but the redirect option does not contain a %return_path%', function () {
+				it('redirects to the appropriate redirect option, without replacement', function () {
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => 'http://localhost/foobar'
+					];
+					allow('get_option')->toBeCalled()->with('dxw_members_only_redirect')->andReturn('http://localhost/default-redirect');
+					allow('header')->toBeCalled();
+
+					expect('header')->toBeCalled()->once()->with('HTTP/1.1 303 See Other');
+					expect('header')->toBeCalled()->once()->with('x-redirect-by: dxw-members-only');
+					expect('header')->toBeCalled()->once()->with('Location: http://localhost/default-redirect');
+
+					Quit::disable();
+					$closure = function () {
+						$this->redirect->redirect(false);
+					};
+					expect($closure)->toThrow(new QuitException());
+				});
+			});
+			context('and the redirect option does contain a %return_path%', function () {
+				it('redirects to the appropriate redirect option, and replaces %return_path% with the originally requested URL', function () {
+					global $_SERVER;
+					$_SERVER = [
+						'REQUEST_URI' => 'http://localhost/foobar'
+					];
+					allow('get_option')->toBeCalled()->with('dxw_members_only_redirect')->andReturn('http://localhost/default-redirect?redirect=%return_path%');
+					allow('header')->toBeCalled();
+
+					expect('header')->toBeCalled()->once()->with('HTTP/1.1 303 See Other');
+					expect('header')->toBeCalled()->once()->with('x-redirect-by: dxw-members-only');
+					expect('header')->toBeCalled()->once()->with('Location: http://localhost/default-redirect?redirect=' . urlencode('http://localhost/foobar'));
+
+					Quit::disable();
+					$closure = function () {
+						$this->redirect->redirect(false);
+					};
+					expect($closure)->toThrow(new QuitException());
+				});
+			});
+		});
+	});
+
 	describe('->serve_uploads()', function () {
 		context('no request uri is set', function () {
 			it('does nothing', function () {

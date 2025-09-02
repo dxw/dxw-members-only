@@ -10,6 +10,32 @@ class Redirect implements \Dxw\Iguana\Registerable
 	}
 
 	/**
+	 * Handle redirect for users when not logged in or viewing whitelisted content
+	 *
+	 * @param  boolean $root Whether attempting to view root or not
+	 * @return never
+	 */
+	public function redirect($root)
+	{
+		// Redirect
+		if ($root) {
+			$redirect = (string) get_option('dxw_members_only_redirect_root');
+		} else {
+			$redirect = (string) get_option('dxw_members_only_redirect');
+		}
+
+		// %return_path%
+		if (isset($_SERVER['REQUEST_URI'])) {
+			$redirect = str_replace('%return_path%', urlencode($_SERVER['REQUEST_URI']), $redirect);
+		}
+
+		header('HTTP/1.1 303 See Other');
+		header('x-redirect-by: dxw-members-only');
+		header('Location: '.$redirect);
+		$this->_exit();
+	}
+
+	/**
 	 * Handle request for uploaded content
 	 * @return void
 	 */
