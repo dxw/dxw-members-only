@@ -30,7 +30,6 @@ if (!defined('DOING_CRON')) {
 	require(__DIR__.'/vendor.phar');
 	require(__DIR__.'/dmometasettings.php');
 	require(__DIR__.'/settings.php');
-	require(__DIR__.'/upload.php');
 	/** @var \Dxw\Iguana\Registrar */
 	$registrar = require __DIR__. '/app/load.php';
 	$registrar->register();
