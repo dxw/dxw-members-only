@@ -16,7 +16,7 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 		it('adds the action', function () {
 			allow('add_action')->toBeCalled();
 
-			expect('add_action')->toBeCalled()->once()->with('init', [$this->redirect, 'redirect_request'], -99999999999, 0);
+			expect('add_action')->toBeCalled()->once()->with('init', [$this->redirect, 'handle_request'], -99999999999, 0);
 
 			$this->redirect->register();
 		});
