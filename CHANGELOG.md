@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for PHP versions 8.2 and up
+- Support for REST API calls
 
 ### Removed
 
