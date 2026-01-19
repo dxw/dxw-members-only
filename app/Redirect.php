@@ -16,6 +16,10 @@ class Redirect implements \Dxw\Iguana\Registerable
 			return;
 		}
 
+		if (isset($_SERVER['REQUEST_URI']) && str_starts_with($_SERVER['REQUEST_URI'], '/wp-json/')) {
+			return;
+		}
+
 		/** @var int @max_age */
 		$max_age = absint((int) get_option('dxw_members_only_max_age'));
 		/** @var int @max_age_public */
