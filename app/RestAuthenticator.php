@@ -15,6 +15,10 @@ class RestAuthenticator implements \Dxw\Iguana\Registerable
 	 */
 	public function authenticate($errors)
 	{
-		return null;
+		if (is_user_logged_in()) {
+			return true;
+		}
+
+		return $errors;
 	}
 }

@@ -18,4 +18,13 @@ describe(Dxw\MembersOnly\RestAuthenticator::class, function () {
 			$this->restAuthenticator->register();
 		});
 	});
+
+	describe('->authenticate()', function () {
+		it('allows access if the user is already logged in', function () {
+			allow('is_user_logged_in')->toBeCalled()->andReturn(true);
+
+			$actual = $this->restAuthenticator->authenticate(false);
+			expect($actual)->toBe(true);
+		});
+	});
 });
