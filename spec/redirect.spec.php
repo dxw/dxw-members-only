@@ -35,16 +35,16 @@ describe(Dxw\MembersOnly\Redirect::class, function () {
 		});
 
 		context('When request is a REST API call', function () {
-            it('immediately returns', function () {
-                $_SERVER['REQUEST_URI'] = '/wp-json/wp/v2/posts';
-                allow('defined')->toBeCalled()->with('WP_CLI_ROOT')->andReturn(true);
+			it('immediately returns', function () {
+				$_SERVER['REQUEST_URI'] = '/wp-json/wp/v2/posts';
+				allow('defined')->toBeCalled()->with('WP_CLI_ROOT')->andReturn(true);
 
-                expect('get_option')->not->toBeCalled();
-                expect('header')->not->toBeCalled();
+				expect('get_option')->not->toBeCalled();
+				expect('header')->not->toBeCalled();
 
-                $this->redirect->handle_request();
-                unset($_SERVER);
-            });
+				$this->redirect->handle_request();
+				unset($_SERVER);
+			});
 		});
 
 		context('WP_CLI_ROOT is not defined', function () {
