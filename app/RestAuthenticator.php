@@ -19,6 +19,10 @@ class RestAuthenticator implements \Dxw\Iguana\Registerable
 			return true;
 		}
 
-		return $errors;
+		return new \WP_Error(
+			'rest_forbidden',
+			'You must be authenticated to access the REST API.',
+			[ 'status' => 401 ]
+		);
 	}
 }

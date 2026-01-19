@@ -1,12 +1,14 @@
 <?php
 
+use Kahlan\Plugin\Double;
+
 describe(Dxw\MembersOnly\RestAuthenticator::class, function () {
 	beforeEach(function () {
 		$this->restAuthenticator = new \Dxw\MembersOnly\RestAuthenticator();
 	});
 
 	it('implements the registerable interface', function () {
-		expect($this->restAuthenticator)->toBeAnInstanceOf(\Dxw\Iguana\Registerable::class);
+		expect($this->restAuthenticator)->toBeAnInstanceOf(\dxw\iguana\registerable::class);
 	});
 
 	describe('->register()', function () {
@@ -25,6 +27,17 @@ describe(Dxw\MembersOnly\RestAuthenticator::class, function () {
 
 			$actual = $this->restAuthenticator->authenticate(false);
 			expect($actual)->toBe(true);
+		});
+
+		it('blocks request if not authenticated', function () {
+			$wpError = Double::instance([
+				'class' => '\WP_Error',
+			]);
+
+			allow('is_user_logged_in')->toBeCalled()->andReturn(false);
+
+			$actual = $this->restAuthenticator->authenticate(true);
+			expect($actual)->toBeAnInstanceOf($wpError);
 		});
 	});
 });
