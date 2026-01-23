@@ -22,22 +22,40 @@ describe(Dxw\MembersOnly\RestAuthenticator::class, function () {
 	});
 
 	describe('->authenticate()', function () {
-		it('allows access if the user is already logged in', function () {
+		beforeEach(function () {
+			$_SERVER['REQUEST_URI'] = '';
+			$_REQUEST['rest_route'] = '';
+
+			$this->wpError = Double::instance([
+				'class' => '\WP_Error',
+			]);
+		});
+
+		it('allows access for logged-in users on whitelisted endpoints', function () {
 			allow('is_user_logged_in')->toBeCalled()->andReturn(true);
 
-			$actual = $this->restAuthenticator->authenticate(false);
+			$_SERVER['REQUEST_URI'] = '/wp/v2/posts';
+
+			$actual = $this->restAuthenticator->authenticate(null);
 			expect($actual)->toBe(true);
 		});
 
-		it('blocks request if not authenticated', function () {
-			$wpError = Double::instance([
-				'class' => '\WP_Error',
-			]);
+		it('blocks logged-in users for non-whitelisted endpoints', function () {
+			allow('is_user_logged_in')->toBeCalled()->andReturn(true);
 
+			$_SERVER['REQUEST_URI'] = '/wp/v2/non-whitelisted';
+
+			$actual = $this->restAuthenticator->authenticate(null);
+			expect($actual)->toBeAnInstanceOf($this->wpError);
+		});
+
+		it('blocks request if not authenticated', function () {
 			allow('is_user_logged_in')->toBeCalled()->andReturn(false);
 
-			$actual = $this->restAuthenticator->authenticate(true);
-			expect($actual)->toBeAnInstanceOf($wpError);
+			$_SERVER['REQUEST_URI'] = '/wp/v2/posts';
+
+			$actual = $this->restAuthenticator->authenticate(null);
+			expect($actual)->toBeAnInstanceOf($this->wpError);
 		});
 	});
 });
