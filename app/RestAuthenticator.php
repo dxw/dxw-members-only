@@ -21,19 +21,24 @@ class RestAuthenticator implements \Dxw\Iguana\Registerable
 	 */
 	public function authenticate($errors)
 	{
-		$loggedIn = is_user_logged_in();
-		if ($loggedIn) {
-			foreach (self::ENDPOINT_ALLOWLIST as $allowed) {
-				if ($this->requestMatchesEndpoint($allowed)) {
-					return true;
-				}
+		if (!is_user_logged_in()) {
+			return new \WP_Error(
+				'rest_not_logged_in',
+				'You must be authenticated to access this endpoint.',
+				['status' => 401]
+			);
+		}
+
+		foreach (self::ENDPOINT_ALLOWLIST as $allowed) {
+			if ($this->requestMatchesEndpoint($allowed)) {
+				return true;
 			}
 		}
 
 		return new \WP_Error(
 			'rest_forbidden',
-			'You must be authenticated to access this REST API endpoint.',
-			['status' => 401]
+			'You do not have permission to access this endpoint.',
+			['status' => 403]
 		);
 	}
 
