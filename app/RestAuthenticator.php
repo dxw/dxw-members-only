@@ -4,12 +4,6 @@ namespace Dxw\MembersOnly;
 
 class RestAuthenticator implements \Dxw\Iguana\Registerable
 {
-	/** @var string[] */
-	private const ENDPOINT_ALLOWLIST = [
-		'/wp/v2/posts',
-		'/wp/v2/categories',
-	];
-
 	public function register(): void
 	{
 		add_filter('rest_authentication_errors', [$this, 'authenticate'], 10, 1);
@@ -29,8 +23,11 @@ class RestAuthenticator implements \Dxw\Iguana\Registerable
 			);
 		}
 
-		foreach (self::ENDPOINT_ALLOWLIST as $allowed) {
-			if ($this->requestMatchesEndpoint($allowed)) {
+		$endpoint_allow_list = explode("\n", (string) get_option('dxw_members_only_endpoint_allow_list'));
+		foreach ($endpoint_allow_list as $endpoint) {
+			$endpoint = trim($endpoint);
+
+			if (!empty($endpoint) && $this->requestMatchesEndpoint($endpoint)) {
 				return true;
 			}
 		}

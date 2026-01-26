@@ -26,6 +26,9 @@ describe(Dxw\MembersOnly\RestAuthenticator::class, function () {
 			$_SERVER['REQUEST_URI'] = '';
 			$_REQUEST['rest_route'] = '';
 
+			$allowed_endpoints = "/wp/v2/posts\n";
+			allow('get_option')->toBeCalled()->andReturn($allowed_endpoints);
+
 			$this->wpError = Double::instance([
 				'class' => '\WP_Error',
 			]);
