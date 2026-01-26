@@ -13,6 +13,7 @@ function dxw_members_only_metasettings(): void
 	  'list_type',
 	  'list_content',
 	  'ip_whitelist',
+	  'endpoint_allow_list',
 	  'referrer_allow_list',
 	  'redirect',
 	  'redirect_root',
@@ -68,6 +69,22 @@ function dxw_members_only_options_page()
 
     </table>
 
+    <h3><?php _e('REST Endpoint Allow list') ?></h3>
+    <p><?php _e('Enter a list of REST API endpoints that can be accessed when logged in.', 'dxwmembersonly') ?></p>
+
+    <table class="form-table">
+
+      <tr valign="top">
+        <th scope="row"><label for="dxw_members_only_rest_endpoint_allow_list"><?php _e('List of endpoints', 'dxwmembersonly') ?></label></th>
+        <td>
+          <textarea cols="30" rows="5" name="dxw_members_only_rest_endpoint_allow_list" id="dxw_members_only_rest_endpoint_allow_list" class="large-text code"><?php echo esc_html((string) get_option('dxw_members_only_rest_endpoint_allow_list')) ?></textarea>
+          <br>
+          <span class="description"><?php _e('One API endpoint (e.g. /wp/v2/posts) per line.', 'dxwmembersonly') ?></span>
+        </td>
+      </tr>
+
+    </table>
+
     <h3><?php _e('Referrer Allow list') ?></h3>
     <p><?php _e('Enter a list of internal referrers to whitelist.', 'dxwmembersonly') ?></p>
     <p><?php _e('This is for enabling certain plugins such as Nelio AB to function correctly, do not use unless required', 'dxwmembersonly') ?></p>
@@ -79,7 +96,7 @@ function dxw_members_only_options_page()
         <td>
           <textarea cols="30" rows="5" name="dxw_members_only_referrer_allow_list" id="dxw_members_only_referrer_allow_list" class="large-text code"><?php echo esc_html((string) get_option('dxw_members_only_referrer_allow_list')) ?></textarea>
           <br>
-          <span class="description"><?php _e('One address per line, do not include the domain (eg /admin.php?page=test)', 'dxwmembersonly') ?></span>
+          <span class="description"><?php _e('One address per line, do not include the domain (e.g. /admin.php?page=test)', 'dxwmembersonly') ?></span>
         </td>
       </tr>
 
