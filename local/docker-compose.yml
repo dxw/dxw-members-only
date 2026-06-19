@@ -4,7 +4,8 @@ services:
   wordpress:
     image: thedxw/wpc-wordpress:php8.2
     ports:
-      - "80:80"
+      - "127.0.0.1:80:80"
+      - "[::1]:80:80"
     links:
       - mysql
     volumes:
@@ -15,7 +16,8 @@ services:
   mysql:
     image: mariadb:10
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
+      - "[::1]:3306:3306"
     environment:
        MYSQL_ROOT_PASSWORD: foobar
        MYSQL_DATABASE: wordpress
