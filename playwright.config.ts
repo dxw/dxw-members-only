@@ -1,5 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const chromiumDevice = process.env.CI
+  ? { ...devices['Desktop Chrome'], channel: 'chrome' as const }
+  : { ...devices['Desktop Chrome'] };
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -36,7 +40,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: chromiumDevice,
     }
 
     /* Test against mobile viewports. */
