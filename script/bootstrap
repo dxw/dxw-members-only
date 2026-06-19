@@ -31,8 +31,8 @@ if [ -f package.json ]; then
   echo "==> Installing NPM dependencies..."
   if [ -z "$CI" ]; then
     npm install
+    npx playwright install chromium
   else
-    npm ci
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci
   fi
-  npx playwright install --with-deps
 fi
