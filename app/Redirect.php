@@ -49,6 +49,11 @@ class Redirect implements \Dxw\Iguana\Registerable
 			return;
 		}
 
+		// Always allow POST /wp-admin/admin-ajax.php with action=generate-password to allow password reset flow
+		if (\Missing\Strings::endsWith($path, 'wp-admin/admin-ajax.php') && isset($_POST['action']) && $_POST['action'] === 'generate-password') {
+			return;
+		}
+
 		// IP & referrer allow lists
 		if ($this->current_ip_in_whitelist() || $this->referrer_in_allow_list()) {
 			header('Cache-Control: private, max-age=' . $max_age);
