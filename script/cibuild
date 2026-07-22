@@ -10,7 +10,7 @@ script/test
 script/server -d
 
 # Wait for the MySQL container to be ready
-while ! docker compose -f local/docker-compose.yml exec wordpress mysqladmin ping -hmysql -pfoobar --silent >/dev/null; do
+while ! docker compose -f local/docker-compose.yml exec wordpress mysqladmin ping -hmysql -pfoobar --skip-ssl --silent >/dev/null; do
 	echo "===> Waiting for MySQL instance to be ready..."
 	sleep 5
 done
