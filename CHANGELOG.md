@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+[v5.1.1] - 2026-10-05
+
+### Changed
+
+- Update dxw/cidr to v4.0.0, which moves phpseclib from v2 to v3
+
 [v5.1.0] - 2026-07-22
 
 ### Fixed
