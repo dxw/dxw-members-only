@@ -2,8 +2,9 @@
 
 namespace Dxw\MembersOnly;
 
-class Redirect implements \Dxw\Iguana\Registerable
+final class Redirect implements \Dxw\Iguana\Registerable
 {
+	#[\Override]
 	public function register(): void
 	{
 		add_action('init', [$this, 'handle_request'], -99999999999, 0);
@@ -149,12 +150,12 @@ class Redirect implements \Dxw\Iguana\Registerable
 			$upload_dir = wp_upload_dir();
 			$baseurl = preg_replace('%^https?://[^/]+(/.*)$%', '$1', $upload_dir['baseurl']);
 			$basedir = $upload_dir['basedir'];
-			$file = preg_replace("[^{$baseurl}]", $basedir, $req);
-			$realFilePath = realpath($file);
-			$realUploadDir = realpath($basedir);
+			$file = (string) preg_replace("[^{$baseurl}]", $basedir, $req);
+			$realFilePath = (string) realpath($file);
+			$realUploadDir = (string) realpath($basedir);
 
 			if (is_file($file) && is_readable($file) && \Missing\Strings::startsWith($realFilePath, $realUploadDir.'/')) {
-				$ims_timestamp = gmdate('D, d M Y H:i:s T', filemtime($file));
+				$ims_timestamp = gmdate('D, d M Y H:i:s T', (int) filemtime($file));
 
 				if (array_key_exists('HTTP_IF_MODIFIED_SINCE', $_SERVER) && $ims_timestamp === $_SERVER['HTTP_IF_MODIFIED_SINCE']) {
 					## we don't set Etag so `If-None-Match:` doesn't need checking
@@ -170,7 +171,7 @@ class Redirect implements \Dxw\Iguana\Registerable
 
 					header('Accept-Ranges: none');
 					header('Content-Type: ' . $type);
-					header('Content-Length: ' . filesize($file));
+					header('Content-Length: ' . (int) filesize($file));
 					header('Last-Modified: ' . $ims_timestamp);
 
 					header('X-Accel-Buffering: no');
