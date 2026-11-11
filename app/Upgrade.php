@@ -2,7 +2,7 @@
 
 namespace Dxw\MembersOnly;
 
-class Upgrade
+final class Upgrade
 {
 	/*
 	* This plugin was previously known as new-members-only, and options were

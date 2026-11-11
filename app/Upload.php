@@ -2,8 +2,9 @@
 
 namespace Dxw\MembersOnly;
 
-class Upload implements \Dxw\Iguana\Registerable
+final class Upload implements \Dxw\Iguana\Registerable
 {
+	#[\Override]
 	public function register(): void
 	{
 		add_filter('attachment_fields_to_edit', [$this, 'add_fields'], 10, 2);
@@ -28,7 +29,7 @@ class Upload implements \Dxw\Iguana\Registerable
 	public function save_fields(array $post, array $attachment): array
 	{
 		if (isset($attachment['dmo_add_to_list']) && $attachment['dmo_add_to_list']) {
-			$url = parse_url((string) $attachment['url'], PHP_URL_PATH);
+			$url = (string) parse_url((string) $attachment['url'], PHP_URL_PATH);
 
 			$list_content = (string) get_option('dxw_members_only_list_content');
 			$list_content .= "\n" . $url;
