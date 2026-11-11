@@ -19,6 +19,12 @@
     </ignoreFiles>
   </projectFiles>
   <issueHandlers>
+    <!-- Suppress upstream complaints about docblocks -->
+    <InvalidDocblock>
+      <errorLevel type="suppress">
+        <directory name="vendor"/>
+      </errorLevel>
+    </InvalidDocblock>
   </issueHandlers>
   <plugins>
     <pluginClass class="PsalmWordPress\Plugin" />
