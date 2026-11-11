@@ -1,6 +1,6 @@
 <?php
 
-class dmometasettings
+final class dmometasettings
 {
 	public string $file;
 	public string $plugin;
